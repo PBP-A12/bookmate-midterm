@@ -26,6 +26,8 @@ Modul ini akan menampilkan profil, baik dirinya sendiri maupun profil pengguna l
 Modul ini berisi rekomendasi pengguna lain yang cocok dengan pengguna berdasarkan  buku yang sudah ia review. Pengguna bisa memilih untuk menerima rekomendasi (sehingga di-match) maupun tidak. 
 ## 5. Dashboard Buku 
 Modul ini berisi informasi tentang suatu buku, seperti cover, judul, deskripsi, dan lain-lain, serta terdapat pilihan untuk memberikan review buku. 
+## 6. Request Buku
+Modul ini berisi form untuk request menambahkan buku ke database. Form ini akan menampilkan juga list buku yang sudah pernah di-request user tersebut. 
 
 # Sumber Dataset Katalog Buku
 Kami menggunakan dataset katalog yang bersumber di link berikut
