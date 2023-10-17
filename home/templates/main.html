@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <p>Ini adalah landing page.</p>
+
+    {% if user.is_authenticated %}
+    <p>Hi {{ user.username }}!</p>
+    <p><a href="/auth/logout">Log Out</a></p>
+    {% else %}
+    <p>You are not logged in</p>
+    <a href="/auth/login">Log In</a> |
+    <a href="/auth/register">Sign Up</a>
+    {% endif %}
+</div>
+{% endblock content %}
