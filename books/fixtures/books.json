@@ -1,0 +1,1622 @@
+[
+    {
+        "pk": 1,
+        "model": "books.book",
+        "fields": {
+            "title": "The Declaration of Independence of the United States of America",
+            "author": "Thomas Jefferson",
+            "year": 1743,
+            "subjects": [
+                104,
+                111
+            ]
+        }
+    },
+    {
+        "pk": 2,
+        "model": "books.book",
+        "fields": {
+            "title": "Give Me Liberty or Give Me Death",
+            "author": "Patrick Henry",
+            "year": 1736,
+            "subjects": [
+                150,
+                218,
+                41
+            ]
+        }
+    },
+    {
+        "pk": 3,
+        "model": "books.book",
+        "fields": {
+            "title": "The Hunting of the Snark: An Agony in Eight Fits",
+            "author": "Lewis Carroll",
+            "year": 1832,
+            "subjects": [
+                117
+            ]
+        }
+    },
+    {
+        "pk": 4,
+        "model": "books.book",
+        "fields": {
+            "title": "Peter Pan",
+            "author": "J. M. (James Matthew) Barrie",
+            "year": 1860,
+            "subjects": [
+                63,
+                336,
+                125,
+                203,
+                61
+            ]
+        }
+    },
+    {
+        "pk": 5,
+        "model": "books.book",
+        "fields": {
+            "title": "Paradise Lost",
+            "author": "John Milton",
+            "year": 1608,
+            "subjects": [
+                6,
+                34,
+                308,
+                143
+            ]
+        }
+    },
+    {
+        "pk": 6,
+        "model": "books.book",
+        "fields": {
+            "title": "Far from the Madding Crowd",
+            "author": "Thomas Hardy",
+            "year": 1840,
+            "subjects": [
+                235,
+                191,
+                295,
+                2,
+                205,
+                156,
+                176
+            ]
+        }
+    },
+    {
+        "pk": 7,
+        "model": "books.book",
+        "fields": {
+            "title": "Herland",
+            "author": "Charlotte Perkins Gilman",
+            "year": 1860,
+            "subjects": [
+                256,
+                245,
+                291,
+                106
+            ]
+        }
+    },
+    {
+        "pk": 8,
+        "model": "books.book",
+        "fields": {
+            "title": "The Scarlet Letter",
+            "author": "Nathaniel Hawthorne",
+            "year": 1804,
+            "subjects": [
+                229,
+                211,
+                214,
+                138,
+                114,
+                37,
+                295,
+                266,
+                281,
+                324,
+                82
+            ]
+        }
+    },
+    {
+        "pk": 9,
+        "model": "books.book",
+        "fields": {
+            "title": "Zen and the Art of the Internet",
+            "author": "Brendan P. Kehoe",
+            "year": 1970,
+            "subjects": [
+                15,
+                334,
+                321,
+                31
+            ]
+        }
+    },
+    {
+        "pk": 10,
+        "model": "books.book",
+        "fields": {
+            "title": "The Time Machine",
+            "author": "H. G. (Herbert George) Wells",
+            "year": 1866,
+            "subjects": [
+                122,
+                282,
+                309
+            ]
+        }
+    },
+    {
+        "pk": 11,
+        "model": "books.book",
+        "fields": {
+            "title": "The War of the Worlds",
+            "author": "H. G. (Herbert George) Wells",
+            "year": 1866,
+            "subjects": [
+                122,
+                144,
+                305,
+                55,
+                297,
+                29,
+                180
+            ]
+        }
+    },
+    {
+        "pk": 12,
+        "model": "books.book",
+        "fields": {
+            "title": "The Legend of Sleepy Hollow",
+            "author": "Washington Irving",
+            "year": 1783,
+            "subjects": [
+                141,
+                185
+            ]
+        }
+    },
+    {
+        "pk": 13,
+        "model": "books.book",
+        "fields": {
+            "title": "The Song of the Lark",
+            "author": "Willa Cather",
+            "year": 1873,
+            "subjects": [
+                312,
+                4,
+                284,
+                326,
+                198,
+                136,
+                276,
+                97,
+                137
+            ]
+        }
+    },
+    {
+        "pk": 14,
+        "model": "books.book",
+        "fields": {
+            "title": "Anne of Green Gables",
+            "author": "L. M. (Lucy Maud) Montgomery",
+            "year": 1874,
+            "subjects": [
+                14,
+                75,
+                251,
+                284,
+                140,
+                51,
+                286,
+                316,
+                124
+            ]
+        }
+    },
+    {
+        "pk": 15,
+        "model": "books.book",
+        "fields": {
+            "title": "Anne of Avonlea",
+            "author": "L. M. (Lucy Maud) Montgomery",
+            "year": 1874,
+            "subjects": [
+                14,
+                75,
+                91,
+                286,
+                194,
+                124
+            ]
+        }
+    },
+    {
+        "pk": 16,
+        "model": "books.book",
+        "fields": {
+            "title": "Anne of the Island",
+            "author": "L. M. (Lucy Maud) Montgomery",
+            "year": 1874,
+            "subjects": [
+                14,
+                286,
+                26,
+                194,
+                148,
+                87,
+                90,
+                124
+            ]
+        }
+    },
+    {
+        "pk": 17,
+        "model": "books.book",
+        "fields": {
+            "title": "The Marvelous Land of Oz",
+            "author": "L. Frank (Lyman Frank) Baum",
+            "year": 1856,
+            "subjects": [
+                181,
+                63,
+                323,
+                313,
+                174,
+                177,
+                134,
+                287,
+                167,
+                292,
+                145,
+                84
+            ]
+        }
+    },
+    {
+        "pk": 18,
+        "model": "books.book",
+        "fields": {
+            "title": "The Wonderful Wizard of Oz",
+            "author": "L. Frank (Lyman Frank) Baum",
+            "year": 1856,
+            "subjects": [
+                181,
+                63,
+                123,
+                3,
+                158,
+                208,
+                200,
+                253,
+                27,
+                18,
+                59,
+                145,
+                28,
+                285
+            ]
+        }
+    },
+    {
+        "pk": 19,
+        "model": "books.book",
+        "fields": {
+            "title": "Paradise Regained",
+            "author": "John Milton",
+            "year": 1608,
+            "subjects": [
+                47,
+                126,
+                103,
+                25
+            ]
+        }
+    },
+    {
+        "pk": 20,
+        "model": "books.book",
+        "fields": {
+            "title": "A Princess of Mars",
+            "author": "Edgar Rice Burroughs",
+            "year": 1875,
+            "subjects": [
+                122,
+                55,
+                268,
+                270,
+                30
+            ]
+        }
+    },
+    {
+        "pk": 21,
+        "model": "books.book",
+        "fields": {
+            "title": "The Gods of Mars",
+            "author": "Edgar Rice Burroughs",
+            "year": 1875,
+            "subjects": [
+                122,
+                55,
+                180,
+                270,
+                30
+            ]
+        }
+    },
+    {
+        "pk": 22,
+        "model": "books.book",
+        "fields": {
+            "title": "The warlord of Mars",
+            "author": "Edgar Rice Burroughs",
+            "year": 1875,
+            "subjects": [
+                122,
+                55,
+                270,
+                30
+            ]
+        }
+    },
+    {
+        "pk": 23,
+        "model": "books.book",
+        "fields": {
+            "title": "On the Duty of Civil Disobedience",
+            "author": "Henry David Thoreau",
+            "year": 1817,
+            "subjects": [
+                230,
+                130
+            ]
+        }
+    },
+    {
+        "pk": 24,
+        "model": "books.book",
+        "fields": {
+            "title": "The Red Badge of Courage: An Episode of the American Civil War",
+            "author": "Stephen Crane",
+            "year": 1871,
+            "subjects": [
+                211,
+                144,
+                95,
+                296,
+                46
+            ]
+        }
+    },
+    {
+        "pk": 25,
+        "model": "books.book",
+        "fields": {
+            "title": "The House of the Seven Gables",
+            "author": "Nathaniel Hawthorne",
+            "year": 1804,
+            "subjects": [
+                211,
+                112,
+                207,
+                213,
+                267
+            ]
+        }
+    },
+    {
+        "pk": 26,
+        "model": "books.book",
+        "fields": {
+            "title": "Tarzan of the Apes",
+            "author": "Edgar Rice Burroughs",
+            "year": 1875,
+            "subjects": [
+                22,
+                303,
+                206,
+                32,
+                290,
+                195
+            ]
+        }
+    },
+    {
+        "pk": 27,
+        "model": "books.book",
+        "fields": {
+            "title": "The Return of Tarzan",
+            "author": "Edgar Rice Burroughs",
+            "year": 1875,
+            "subjects": [
+                22,
+                206,
+                32
+            ]
+        }
+    },
+    {
+        "pk": 28,
+        "model": "books.book",
+        "fields": {
+            "title": "Ivanhoe: A Romance",
+            "author": "Walter Scott",
+            "year": 1771,
+            "subjects": [
+                211,
+                215,
+                191,
+                295,
+                164,
+                239,
+                109,
+                314,
+                227
+            ]
+        }
+    },
+    {
+        "pk": 29,
+        "model": "books.book",
+        "fields": {
+            "title": "The Beasts of Tarzan",
+            "author": "Edgar Rice Burroughs",
+            "year": 1875,
+            "subjects": [
+                22,
+                206,
+                159,
+                32
+            ]
+        }
+    },
+    {
+        "pk": 30,
+        "model": "books.book",
+        "fields": {
+            "title": "The Son of Tarzan",
+            "author": "Edgar Rice Burroughs",
+            "year": 1875,
+            "subjects": [
+                22,
+                206,
+                32
+            ]
+        }
+    },
+    {
+        "pk": 31,
+        "model": "books.book",
+        "fields": {
+            "title": "Tom Sawyer Abroad",
+            "author": "Mark Twain",
+            "year": 1835,
+            "subjects": [
+                32,
+                118,
+                73,
+                99
+            ]
+        }
+    },
+    {
+        "pk": 32,
+        "model": "books.book",
+        "fields": {
+            "title": "Tarzan and the Jewels of Opar",
+            "author": "Edgar Rice Burroughs",
+            "year": 1875,
+            "subjects": [
+                22,
+                206,
+                32
+            ]
+        }
+    },
+    {
+        "pk": 33,
+        "model": "books.book",
+        "fields": {
+            "title": "The Prisoner of Zenda",
+            "author": "Anthony Hope",
+            "year": 1863,
+            "subjects": [
+                279,
+                32,
+                188
+            ]
+        }
+    },
+    {
+        "pk": 34,
+        "model": "books.book",
+        "fields": {
+            "title": "The Monster Men",
+            "author": "Edgar Rice Burroughs",
+            "year": 1875,
+            "subjects": [
+                122,
+                206
+            ]
+        }
+    },
+    {
+        "pk": 35,
+        "model": "books.book",
+        "fields": {
+            "title": "Flatland: A Romance of Many Dimensions",
+            "author": "Edwin Abbott Abbott",
+            "year": 1838,
+            "subjects": [
+                42
+            ]
+        }
+    },
+    {
+        "pk": 36,
+        "model": "books.book",
+        "fields": {
+            "title": "A Tale of Two Cities",
+            "author": "Charles Dickens",
+            "year": 1812,
+            "subjects": [
+                211,
+                21,
+                259,
+                144,
+                78,
+                79,
+                262,
+                244,
+                271
+            ]
+        }
+    },
+    {
+        "pk": 37,
+        "model": "books.book",
+        "fields": {
+            "title": "Collected Articles of Frederick Douglass",
+            "author": "Frederick Douglass",
+            "year": 1818,
+            "subjects": [
+                217,
+                189,
+                171,
+                293,
+                11
+            ]
+        }
+    },
+    {
+        "pk": 38,
+        "model": "books.book",
+        "fields": {
+            "title": "The Complete Works of William Shakespeare",
+            "author": "William Shakespeare",
+            "year": 1564,
+            "subjects": [
+                121
+            ]
+        }
+    },
+    {
+        "pk": 39,
+        "model": "books.book",
+        "fields": {
+            "title": "Around the World in Eighty Days",
+            "author": "Jules Verne",
+            "year": 1828,
+            "subjects": [
+                32,
+                10
+            ]
+        }
+    },
+    {
+        "pk": 40,
+        "model": "books.book",
+        "fields": {
+            "title": "Persuasion",
+            "author": "Jane Austen",
+            "year": 1775,
+            "subjects": [
+                100,
+                138,
+                4,
+                275,
+                43,
+                102,
+                224,
+                219,
+                191,
+                233
+            ]
+        }
+    },
+    {
+        "pk": 41,
+        "model": "books.book",
+        "fields": {
+            "title": "Jungle Tales of Tarzan",
+            "author": "Edgar Rice Burroughs",
+            "year": 1875,
+            "subjects": [
+                22,
+                303,
+                206,
+                48,
+                32,
+                265
+            ]
+        }
+    },
+    {
+        "pk": 42,
+        "model": "books.book",
+        "fields": {
+            "title": "The Return of Sherlock Holmes",
+            "author": "Arthur Conan Doyle",
+            "year": 1859,
+            "subjects": [
+                7,
+                247
+            ]
+        }
+    },
+    {
+        "pk": 43,
+        "model": "books.book",
+        "fields": {
+            "title": "The Secret Garden",
+            "author": "Frances Hodgson Burnett",
+            "year": 1849,
+            "subjects": [
+                135,
+                187,
+                8,
+                142
+            ]
+        }
+    },
+    {
+        "pk": 44,
+        "model": "books.book",
+        "fields": {
+            "title": "A Tramp Abroad",
+            "author": "Mark Twain",
+            "year": 1835,
+            "subjects": [
+                64,
+                52,
+                288,
+                201
+            ]
+        }
+    },
+    {
+        "pk": 45,
+        "model": "books.book",
+        "fields": {
+            "title": "Northanger Abbey",
+            "author": "Jane Austen",
+            "year": 1775,
+            "subjects": [
+                100,
+                320,
+                264,
+                4,
+                191,
+                69,
+                212,
+                160,
+                12,
+                304
+            ]
+        }
+    },
+    {
+        "pk": 46,
+        "model": "books.book",
+        "fields": {
+            "title": "The Return of the Native",
+            "author": "Thomas Hardy",
+            "year": 1840,
+            "subjects": [
+                229,
+                235,
+                191,
+                327,
+                176,
+                258,
+                222,
+                132
+            ]
+        }
+    },
+    {
+        "pk": 47,
+        "model": "books.book",
+        "fields": {
+            "title": "The Poison Belt",
+            "author": "Arthur Conan Doyle",
+            "year": 1859,
+            "subjects": [
+                122,
+                152
+            ]
+        }
+    },
+    {
+        "pk": 48,
+        "model": "books.book",
+        "fields": {
+            "title": "The Arabian Nights Entertainments",
+            "author": "Andrew Lang",
+            "year": 1844,
+            "subjects": [
+                139,
+                36,
+                196,
+                146,
+                149,
+                76
+            ]
+        }
+    },
+    {
+        "pk": 49,
+        "model": "books.book",
+        "fields": {
+            "title": "Orthodoxy",
+            "author": "G. K. (Gilbert Keith) Chesterton",
+            "year": 1874,
+            "subjects": [
+                67,
+                58,
+                299
+            ]
+        }
+    },
+    {
+        "pk": 50,
+        "model": "books.book",
+        "fields": {
+            "title": "The Damnation of Theron Ware",
+            "author": "Harold Frederic",
+            "year": 1856,
+            "subjects": [
+                138,
+                37,
+                329,
+                197,
+                129
+            ]
+        }
+    },
+    {
+        "pk": 51,
+        "model": "books.book",
+        "fields": {
+            "title": "The Lost World",
+            "author": "Arthur Conan Doyle",
+            "year": 1859,
+            "subjects": [
+                152,
+                206,
+                272,
+                241,
+                80
+            ]
+        }
+    },
+    {
+        "pk": 52,
+        "model": "books.book",
+        "fields": {
+            "title": "The Jungle",
+            "author": "Upton Sinclair",
+            "year": 1878,
+            "subjects": [
+                38,
+                317,
+                216,
+                110,
+                186,
+                101,
+                326
+            ]
+        }
+    },
+    {
+        "pk": 53,
+        "model": "books.book",
+        "fields": {
+            "title": "Mansfield Park",
+            "author": "Jane Austen",
+            "year": 1775,
+            "subjects": [
+                264,
+                4,
+                191,
+                112,
+                89,
+                45,
+                133,
+                255,
+                168
+            ]
+        }
+    },
+    {
+        "pk": 54,
+        "model": "books.book",
+        "fields": {
+            "title": "The Mayor of Casterbridge",
+            "author": "Thomas Hardy",
+            "year": 1840,
+            "subjects": [
+                138,
+                172,
+                223,
+                176,
+                228,
+                13,
+                62
+            ]
+        }
+    },
+    {
+        "pk": 55,
+        "model": "books.book",
+        "fields": {
+            "title": "The Voyage Out",
+            "author": "Virginia Woolf",
+            "year": 1882,
+            "subjects": [
+                4,
+                191,
+                284,
+                234,
+                53,
+                249
+            ]
+        }
+    },
+    {
+        "pk": 56,
+        "model": "books.book",
+        "fields": {
+            "title": "Middlemarch",
+            "author": "George Eliot",
+            "year": 1819,
+            "subjects": [
+                235,
+                315,
+                264,
+                4,
+                191,
+                112,
+                170,
+                284
+            ]
+        }
+    },
+    {
+        "pk": 57,
+        "model": "books.book",
+        "fields": {
+            "title": "Common Sense",
+            "author": "Thomas Paine",
+            "year": 1737,
+            "subjects": [
+                72,
+                325,
+                242
+            ]
+        }
+    },
+    {
+        "pk": 58,
+        "model": "books.book",
+        "fields": {
+            "title": "The Lost Continent",
+            "author": "Edgar Rice Burroughs",
+            "year": 1875,
+            "subjects": [
+                122,
+                206,
+                264
+            ]
+        }
+    },
+    {
+        "pk": 59,
+        "model": "books.book",
+        "fields": {
+            "title": "The Rime of the Ancient Mariner",
+            "author": "Samuel Taylor Coleridge",
+            "year": 1772,
+            "subjects": [
+                311
+            ]
+        }
+    },
+    {
+        "pk": 60,
+        "model": "books.book",
+        "fields": {
+            "title": "Jude the Obscure",
+            "author": "Thomas Hardy",
+            "year": 1840,
+            "subjects": [
+                229,
+                235,
+                191,
+                266,
+                176,
+                151,
+                105,
+                5
+            ]
+        }
+    },
+    {
+        "pk": 61,
+        "model": "books.book",
+        "fields": {
+            "title": "The Rise of Silas Lapham",
+            "author": "William Dean Howells",
+            "year": 1837,
+            "subjects": [
+                138,
+                112,
+                236,
+                119,
+                127,
+                252
+            ]
+        }
+    },
+    {
+        "pk": 62,
+        "model": "books.book",
+        "fields": {
+            "title": "The Moonstone",
+            "author": "Wilkie Collins",
+            "year": 1824,
+            "subjects": [
+                264,
+                89,
+                163,
+                86,
+                39,
+                17
+            ]
+        }
+    },
+    {
+        "pk": 63,
+        "model": "books.book",
+        "fields": {
+            "title": "Emma",
+            "author": "Jane Austen",
+            "year": 1775,
+            "subjects": [
+                64,
+                264,
+                4,
+                191,
+                172,
+                284,
+                327,
+                278
+            ]
+        }
+    },
+    {
+        "pk": 64,
+        "model": "books.book",
+        "fields": {
+            "title": "The island of Doctor Moreau",
+            "author": "H. G. (Herbert George) Wells",
+            "year": 1866,
+            "subjects": [
+                122,
+                202,
+                153,
+                75,
+                35
+            ]
+        }
+    },
+    {
+        "pk": 65,
+        "model": "books.book",
+        "fields": {
+            "title": "Sense and Sensibility",
+            "author": "Jane Austen",
+            "year": 1775,
+            "subjects": [
+                100,
+                131,
+                264,
+                4,
+                191,
+                226,
+                112,
+                327,
+                169,
+                12,
+                233
+            ]
+        }
+    },
+    {
+        "pk": 66,
+        "model": "books.book",
+        "fields": {
+            "title": "Flower Fables",
+            "author": "Louisa May Alcott",
+            "year": 1832,
+            "subjects": [
+                162,
+                85,
+                9,
+                221,
+                232,
+                190
+            ]
+        }
+    },
+    {
+        "pk": 67,
+        "model": "books.book",
+        "fields": {
+            "title": "Twenty Thousand Leagues under the Sea",
+            "author": "Jules Verne",
+            "year": 1828,
+            "subjects": [
+                122,
+                330,
+                261,
+                32,
+                57
+            ]
+        }
+    },
+    {
+        "pk": 68,
+        "model": "books.book",
+        "fields": {
+            "title": "McTeague: A Story of San Francisco",
+            "author": "Frank Norris",
+            "year": 1870,
+            "subjects": [
+                235,
+                138,
+                170,
+                65,
+                113,
+                33,
+                307
+            ]
+        }
+    },
+    {
+        "pk": 69,
+        "model": "books.book",
+        "fields": {
+            "title": "Summer",
+            "author": "Edith Wharton",
+            "year": 1862,
+            "subjects": [
+                4,
+                191,
+                319,
+                60,
+                199
+            ]
+        }
+    },
+    {
+        "pk": 70,
+        "model": "books.book",
+        "fields": {
+            "title": "American Hand Book of the Daguerreotype",
+            "author": "S. D. (Samuel Dwight) Humphrey",
+            "year": 1823,
+            "subjects": [
+                175,
+                333
+            ]
+        }
+    },
+    {
+        "pk": 71,
+        "model": "books.book",
+        "fields": {
+            "title": "The History and Practice of the Art of Photography",
+            "author": "Henry Hunt Snelling",
+            "year": 1816,
+            "subjects": [
+                175,
+                333
+            ]
+        }
+    },
+    {
+        "pk": 72,
+        "model": "books.book",
+        "fields": {
+            "title": "The Haunted Hotel: A Mystery of Modern Venice",
+            "author": "Wilkie Collins",
+            "year": 1824,
+            "subjects": [
+                263,
+                166,
+                238
+            ]
+        }
+    },
+    {
+        "pk": 73,
+        "model": "books.book",
+        "fields": {
+            "title": "Charlotte Temple",
+            "author": "Mrs. Rowson",
+            "year": 1762,
+            "subjects": [
+                283,
+                179,
+                108,
+                235,
+                138,
+                266,
+                210,
+                161,
+                328,
+                92,
+                277,
+                183
+            ]
+        }
+    },
+    {
+        "pk": 74,
+        "model": "books.book",
+        "fields": {
+            "title": "The Haunted Bookshop",
+            "author": "Christopher Morley",
+            "year": 1890,
+            "subjects": [
+                107,
+                332,
+                50
+            ]
+        }
+    },
+    {
+        "pk": 75,
+        "model": "books.book",
+        "fields": {
+            "title": "The Picture of Dorian Gray",
+            "author": "Oscar Wilde",
+            "year": 1854,
+            "subjects": [
+                235,
+                88,
+                83,
+                24,
+                40,
+                302,
+                193,
+                207
+            ]
+        }
+    },
+    {
+        "pk": 76,
+        "model": "books.book",
+        "fields": {
+            "title": "The Phantom of the Opera",
+            "author": "Gaston Leroux",
+            "year": 1868,
+            "subjects": [
+                1,
+                312,
+                276,
+                322,
+                310,
+                165,
+                231
+            ]
+        }
+    },
+    {
+        "pk": 77,
+        "model": "books.book",
+        "fields": {
+            "title": "Roderick Hudson",
+            "author": "Henry James",
+            "year": 1843,
+            "subjects": [
+                60,
+                254,
+                44,
+                154
+            ]
+        }
+    },
+    {
+        "pk": 78,
+        "model": "books.book",
+        "fields": {
+            "title": "The American",
+            "author": "Henry James",
+            "year": 1843,
+            "subjects": [
+                138,
+                191,
+                77,
+                289,
+                322,
+                173,
+                225,
+                335,
+                204
+            ]
+        }
+    },
+    {
+        "pk": 79,
+        "model": "books.book",
+        "fields": {
+            "title": "Confidence",
+            "author": "Henry James",
+            "year": 1843,
+            "subjects": [
+                19,
+                60,
+                93,
+                288
+            ]
+        }
+    },
+    {
+        "pk": 80,
+        "model": "books.book",
+        "fields": {
+            "title": "The Europeans",
+            "author": "Henry James",
+            "year": 1843,
+            "subjects": [
+                64,
+                112,
+                182,
+                236,
+                237,
+                81
+            ]
+        }
+    },
+    {
+        "pk": 81,
+        "model": "books.book",
+        "fields": {
+            "title": "My Bondage and My Freedom",
+            "author": "Frederick Douglass",
+            "year": 1818,
+            "subjects": [
+                217,
+                240,
+                96,
+                243,
+                155,
+                192,
+                248
+            ]
+        }
+    },
+    {
+        "pk": 82,
+        "model": "books.book",
+        "fields": {
+            "title": "The Innocence of Father Brown",
+            "author": "G. K. (Gilbert Keith) Chesterton",
+            "year": 1874,
+            "subjects": [
+                264,
+                37,
+                247,
+                306,
+                16
+            ]
+        }
+    },
+    {
+        "pk": 83,
+        "model": "books.book",
+        "fields": {
+            "title": "The Spell of the Yukon and Other Verses",
+            "author": "Robert W. (Robert William) Service",
+            "year": 1874,
+            "subjects": [
+                147
+            ]
+        }
+    },
+    {
+        "pk": 84,
+        "model": "books.book",
+        "fields": {
+            "title": "Daisy Miller: A Study",
+            "author": "Henry James",
+            "year": 1843,
+            "subjects": [
+                138,
+                4,
+                52,
+                288
+            ]
+        }
+    },
+    {
+        "pk": 85,
+        "model": "books.book",
+        "fields": {
+            "title": "The Turn of the Screw",
+            "author": "Henry James",
+            "year": 1843,
+            "subjects": [
+                264,
+                138,
+                298,
+                120,
+                70
+            ]
+        }
+    },
+    {
+        "pk": 86,
+        "model": "books.book",
+        "fields": {
+            "title": "An International Episode",
+            "author": "Henry James",
+            "year": 1843,
+            "subjects": [
+                209,
+                294,
+                257,
+                66,
+                269
+            ]
+        }
+    },
+    {
+        "pk": 87,
+        "model": "books.book",
+        "fields": {
+            "title": "The Aspern Papers",
+            "author": "Henry James",
+            "year": 1843,
+            "subjects": [
+                263,
+                138,
+                60,
+                157,
+                128
+            ]
+        }
+    },
+    {
+        "pk": 88,
+        "model": "books.book",
+        "fields": {
+            "title": "The Man from Snowy River",
+            "author": "A. B. (Andrew Barton) Paterson",
+            "year": 1864,
+            "subjects": [
+                318
+            ]
+        }
+    },
+    {
+        "pk": 89,
+        "model": "books.book",
+        "fields": {
+            "title": "The call of the wild",
+            "author": "Jack London",
+            "year": 1876,
+            "subjects": [
+                178,
+                32,
+                71,
+                98,
+                49,
+                74,
+                274,
+                20
+            ]
+        }
+    },
+    {
+        "pk": 90,
+        "model": "books.book",
+        "fields": {
+            "title": "Sons and Lovers",
+            "author": "D. H. (David Herbert) Lawrence",
+            "year": 1885,
+            "subjects": [
+                116,
+                264,
+                112,
+                284,
+                260,
+                220
+            ]
+        }
+    },
+    {
+        "pk": 91,
+        "model": "books.book",
+        "fields": {
+            "title": "Heart of Darkness",
+            "author": "Joseph Conrad",
+            "year": 1857,
+            "subjects": [
+                303,
+                184,
+                300,
+                94,
+                56,
+                138
+            ]
+        }
+    },
+    {
+        "pk": 92,
+        "model": "books.book",
+        "fields": {
+            "title": "The Secret Sharer",
+            "author": "Joseph Conrad",
+            "year": 1857,
+            "subjects": [
+                261,
+                138,
+                219,
+                115
+            ]
+        }
+    },
+    {
+        "pk": 93,
+        "model": "books.book",
+        "fields": {
+            "title": "The Moon and Sixpence",
+            "author": "W. Somerset (William Somerset) Maugham",
+            "year": 1874,
+            "subjects": [
+                264,
+                138,
+                331,
+                280
+            ]
+        }
+    },
+    {
+        "pk": 94,
+        "model": "books.book",
+        "fields": {
+            "title": "The Wisdom of Father Brown",
+            "author": "G. K. (Gilbert Keith) Chesterton",
+            "year": 1874,
+            "subjects": [
+                264,
+                37,
+                247,
+                306,
+                16
+            ]
+        }
+    },
+    {
+        "pk": 95,
+        "model": "books.book",
+        "fields": {
+            "title": "A pair of blue eyes",
+            "author": "Thomas Hardy",
+            "year": 1840,
+            "subjects": [
+                235,
+                295,
+                176,
+                335,
+                161
+            ]
+        }
+    },
+    {
+        "pk": 96,
+        "model": "books.book",
+        "fields": {
+            "title": "At the Back of the North Wind",
+            "author": "George MacDonald",
+            "year": 1824,
+            "subjects": [
+                139
+            ]
+        }
+    },
+    {
+        "pk": 97,
+        "model": "books.book",
+        "fields": {
+            "title": "Sister Carrie: A Novel",
+            "author": "Theodore Dreiser",
+            "year": 1871,
+            "subjects": [
+                108,
+                235,
+                4,
+                326,
+                23
+            ]
+        }
+    },
+    {
+        "pk": 98,
+        "model": "books.book",
+        "fields": {
+            "title": "Child Christopher and Goldilind the Fair",
+            "author": "William Morris",
+            "year": 1834,
+            "subjects": [
+                206
+            ]
+        }
+    },
+    {
+        "pk": 99,
+        "model": "books.book",
+        "fields": {
+            "title": "The Jungle Book",
+            "author": "Rudyard Kipling",
+            "year": 1865,
+            "subjects": [
+                162,
+                54,
+                48,
+                273,
+                159,
+                250,
+                68,
+                301,
+                246
+            ]
+        }
+    },
+    {
+        "pk": 100,
+        "model": "books.book",
+        "fields": {
+            "title": "Dear Enemy",
+            "author": "Jean Webster",
+            "year": 1876,
+            "subjects": [
+                14
+            ]
+        }
+    }
+]
