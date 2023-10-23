@@ -1,9 +1,11 @@
 from django.http import HttpResponse
-from django.core import serializers
 
+import json 
 from .models import Book 
+from .serializers import BookSerializer
 
 # Create your views here.
 def get_books(request): 
-    data = Book.objects.all()
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    queryset = Book.objects.all()
+    res = BookSerializer(queryset, many=True)
+    return HttpResponse(json.dumps(res.data, indent=4), content_type='application/json')
