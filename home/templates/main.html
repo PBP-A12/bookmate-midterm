@@ -13,6 +13,10 @@
                     <a class="underline hover:text-blue-600" href="{% url 'authentication:logout' %}">Log Out</a>
                 </div>
             </div>
+            <div>
+                <input id="book-search" type="text" placeholder="search your book here..">
+                <p id="book-search-result"></p>
+            </div>
         </section>
     </div>
     {% else %}
@@ -31,4 +35,32 @@
     </div>
     {% endif %}
 </div>
+
+<script>
+    async function getBooksByQuery(query) {
+        let url = "{% url 'books:get_books_by_query' %}?search=" + query;
+        console.log(url);
+        return fetch("{% url 'books:get_books_by_query' %}?search=" + query)
+        .then((res) => res.json())
+    }
+
+    async function refreshBooks(query) {
+        const books = await getBooksByQuery(query);
+        
+        let bookList = document.getElementById('book-search-result');
+        bookList.innerHTML = "";
+        for (let i = 0; i < books.length; i++) {
+            if (i > 10) break; 
+            console.log(books[i].title);
+            bookList.innerHTML += "<p>" + books[i].title + "</p>";
+        }
+    }
+    
+    document.getElementById('book-search').addEventListener('keyup', (e) => {
+        const searchString = e.target.value.toLowerCase();
+        // document.getElementById('book-search-result').innerHTML = searchString;
+        refreshBooks(searchString); 
+    }); 
+
+</script>
 {% endblock content %}
