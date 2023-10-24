@@ -10,7 +10,7 @@
             <div class="text-center">
                 <p class="text-2xl">What's up?</p>
                 <div>
-                    <a class="underline hover:text-blue-600" href="/auth/logout">Log Out</a>
+                    <a class="underline hover:text-blue-600" href="{% url 'authentication:logout' %}">Log Out</a>
                 </div>
             </div>
         </section>
@@ -23,8 +23,8 @@
             <div class="text-center">
                 <p class="text-2xl">but you are not logged in..</p>
                 <div>
-                    <a class="underline hover:text-blue-600" href="/auth/login">Log In</a> |
-                    <a class="underline hover:text-blue-600" href="/auth/register">Sign Up</a>
+                    <a class="underline hover:text-blue-600" href="{% url 'authentication:login' %}">Log In</a> |
+                    <a class="underline hover:text-blue-600" href="{% url 'authentication:register' %}">Sign Up</a>
                 </div>
             </div>
         </section>
