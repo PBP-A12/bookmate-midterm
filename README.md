@@ -51,12 +51,20 @@ Pastikan Python dan pip sudah terinstal. Jika belum, unduh Python dari situs web
 ### Instalasi
 Untuk menginstal BookMate, ikuti langkah-langkah berikut:
 
-1. Clone repositori ke lokal.
-2. Buka terminal dan arahkan ke direktori root proyek.
-3. Jalankan perintah berikut untuk menginstal *package* yang diperlukan:
+1. Clone repositori ke lokal. 
+    ```
+    git clone https://github.com/PBP-A12/bookmate-midterm.git
+    cd bookmate-midterm
+    ```
+2. Jalankan perintah berikut untuk menginstal *package* yang diperlukan:
     ```
     pip install -r requirements.txt
     ```
+3. Jalankan perintah berikut untuk mengaktifkan tailwind
+   ```
+   python manage.py tailwind install
+   python manage.py tailwind start 
+   ```
 
 ### Memulai Fitur Baru 
 Untuk memulai fitur baru, ikuti langkah-langkah berikut:
