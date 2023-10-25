@@ -3,10 +3,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 
 from django.http import HttpResponseRedirect
-
 from django.shortcuts import render, redirect
-
 from django.urls import reverse
+from .models import Member
 
 # Create your views here.
 def register(request): 
@@ -14,10 +13,18 @@ def register(request):
 
     if request.method == "POST":
         form = UserCreationForm(request.POST)
+        print(form)
+        print(form.is_valid())
+
         if form.is_valid():
-            form.save()
+            account = form.save()
+            member = Member(account=account)
+            member.save()
+
+
             messages.success(request, 'Your account has been successfully created!')
             return redirect('authentication:login')
+        
     context = {'form': form}
     return render(request, 'register.html', context)
 
@@ -31,6 +38,7 @@ def login_user(request):
             response = HttpResponseRedirect(reverse("home:show_main")) 
             return response
         else:
+            print("incorrect")
             messages.info(request, 'Sorry, incorrect username or password. Please try again.')
     context = {}
     return render(request, 'login.html', context)
