@@ -4,7 +4,7 @@
 <div>
     {% if user.is_authenticated %}
     <div class="container mx-auto">
-        <section class="flex flex-col items-center justify-center h-screen">
+        <section class="flex flex-col items-center justify-center my-14 min-h-screen ">
             <h1 class="text-5xl">Hi {{ user.username }}!</h1>
             <br>
             <div class="text-center">
@@ -13,11 +13,11 @@
                     <a class="underline hover:text-blue-600" href="{% url 'authentication:logout' %}">Log Out</a>
                 </div>
             </div>
-            <div class="w-1/2 ">
-                <input class="w-full" id="book-search" type="text" placeholder="search your book here..">
-                <p id="book-search-result"></p>
-            </div>
+            <br> 
+            <input class="w-1/2" id="book-search" type="text" placeholder="search your book here..">
+            <div id="book-search-result" class="grid grid-cols-4 gap-4 pt-3">
         </section>
+    </div>
     </div>
     {% else %}
     <div class="container mx-auto">
@@ -50,15 +50,14 @@
         let bookList = document.getElementById('book-search-result');
         bookList.innerHTML = "";
         for (let i = 0; i < books.length; i++) {
-            if (i > 10) break; 
+            if (i >= 20) break; 
             console.log(books[i].title);
-            bookList.innerHTML += "<p>" + books[i].title + "</p>";
+            bookList.innerHTML += "<div class='border rounded h-48 p-3'>" + books[i].title + "</div>";
         }
     }
     
-    document.getElementById('book-search').addEventListener('keyup', (e) => {
+    document.getElementById('book-search').addEventListener('keyup', (e) => {    
         const searchString = e.target.value.toLowerCase();
-        // document.getElementById('book-search-result').innerHTML = searchString;
         refreshBooks(searchString); 
     }); 
 
