@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'books',
     'authentication',
     'home',
+    'match'
 ]
 
 MIDDLEWARE = [

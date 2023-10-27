@@ -22,5 +22,6 @@ urlpatterns = [
     path('api/books/', include('books.urls')), 
     path('auth/', include('authentication.urls')),
     path('', include('home.urls')),
+    path('match/', include('match.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
 ]
