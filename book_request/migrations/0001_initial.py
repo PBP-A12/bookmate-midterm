@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('authentication', '0002_load_fixtures'),
+        ('authentication', '0002_auto_20231023_1255'),
     ]
 
     operations = [

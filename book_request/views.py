@@ -50,38 +50,49 @@ def show_book(request):
 def requesting(request):
     if request.method == 'POST':
         title = request.POST.get('title')
+        print("AHHHHHH",title)
+        author = request.POST.get('author')
+        year = request.POST.get('year')
+        language = request.POST.get('language')
+        subject = request.POST.getlist('subjects')
+        user = Member.objects.get(account=request.user)
+        if title != None or author != None or year != None or language != None or subject != None:
+            existing_book = BookRequest.objects.filter(title=title, author=author, year=year, language=language, subjects__name__in=subject).exists()
+            if existing_book:
+                messages.info(request, 'This book has already been requested.')
+            else:
+                book = BookRequest(member=user,title=title, author=author, year=year, language=language )
+                book.subjects.set(subject.toString())
+                book.save()
+    else:
+        messages.info(request, 'Please fill in all the fields.')
+    return HttpResponseRedirect('book_request:show_request')
+
+@csrf_exempt
+def edit_book(request):
+    if request.method == 'POST':
+        id = request.POST.get("id")
+        title = request.POST.get('title')
         author = request.POST.get('author')
         year = request.POST.get('year')
         language = request.POST.get('language')
         subjects = request.POST.get('subjects')
-        books = BookRequest.objects.all()
-        if title != '' and author != '' and year != '' and language != '' and subjects != '':
-            existing_book = BookRequest.objects.filter(title=title, author=author, year=year, language=language, subjects=subjects)
-            if existing_book:
-                messages.info(request, 'This book has already been requested.')
-            else:
-                book = BookRequest(title=title, author=author, year=year, language=language, subjects=subjects)
-                book.save()
-        else:
-            messages.info(request, 'Please fill in all the fields.')
-    return HttpResponseRedirect('book_request:show_request')
-
-def edit_book(request,id):
-    if request.method == 'POST':
         book = BookRequest.objects.get(pk=id)
-        book.title = request.POST.get('title')
-        book.author = request.POST.get('author')
-        book.year = request.POST.get('year')
-        book.language = request.POST.get('language')
-        book.subjects = request.POST.get('subjects')
+        book.title = title
+        book.author = author
+        book.year = year
+        book.language = language
+        book.subjects.set(subjects)
         book.save()
-    return HttpResponseRedirect('book_request:show_request')
+    return HttpResponse(b'CREATED', status=201)
 
-def delete_book(request,id):
-    if request.method == 'POST':
+@csrf_exempt
+def delete_book(request):
+    if request.method == 'DELETE':
+        id = request.DELETE.get('id')
         book = BookRequest.objects.get(pk=id)
         book.delete()
-    return HttpResponseRedirect('book_request:show_request')
+    return HttpResponse(b'CREATED', status=201)
 
 def get_request_json_user(request):
     data = serializers.serialize('json', BookRequest.objects.filter(member=request.user))

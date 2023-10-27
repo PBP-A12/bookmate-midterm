@@ -9,7 +9,7 @@ class Subject(models.Model) :
         return self.name
 
 class Member(models.Model) : 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    account = models.OneToOneField(User, on_delete=models.CASCADE)
     subjects = models.ManyToManyField(Subject, related_name="members")
 
     def __str__(self): 

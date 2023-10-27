@@ -6,7 +6,7 @@
 <!-- Code block starts -->
 <dh-component>
             
-    <div class="py-12 bg-gray-700 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0" id="modal">
+    <div class="py-12 bg-gray-700 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0" id="modal" aria-hidden="true" hidden>
         <div role="alert" class="container mx-auto w-11/12 md:w-2/3 max-w-lg">
             <div class="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
                 <div class="w-full flex justify-start text-gray-600 mb-3">
@@ -17,16 +17,16 @@
                     </svg>
                     <h1 class="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">Request a Book</h1>
                 </div>
-                <form method="post" action="{%url 'book_request:requesting'%}">
+                <form method="post" id="request-form">
                     {% csrf_token %}
-                    <label for="Rname" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Title</label>
-                    <input id="Rname" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Title" />
-                    <label for="Rauthor" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Author</label>
-                    <input id="Rauthor" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Author" />
-                    <label for="Ryear" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Year</label>
-                    <input id="Ryear" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Year" />
-                    <label for="Rlanguage" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Language</label>
-                    <input id="Rlanguage" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Language" />
+                    <label for="title" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Title</label>
+                    <input name="title" type="text" id="title" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Title"></input>
+                    <label for="author" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Author</label>
+                    <input name="author" type="text" id="author" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Author"></input>
+                    <label for="year" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Year</label>
+                    <input name="year" type="number" id="year" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Year"></input>
+                    <label for="language" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Language</label>
+                    <input name="language" type="text" id="language" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Language"></input>
                     <label for="subject" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Subjects</label>
                     <br>
                     <select id="subject" name="subject" class="block w-full mt-1 form-multiselect" multiple="true">
@@ -36,9 +36,9 @@
                         {% endfor %}
                     </select>
                     <div class="flex items-center justify-start w-full">
-                        <button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm" type="submit">Submit</button>
-                        <button class="focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm" onclick="modalHandler()">Cancel</button>
+                        <button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm" type="buttpn" onclick="request()">Submit</button>
                     </div>
+                    <button class="focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm" onclick="modalHandler()">Cancel</button>
                 </form>
                 <button class="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onclick="modalHandler()" aria-label="close modal" role="button">
                     <svg  xmlns="http://www.w3.org/2000/svg"  class="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -99,6 +99,17 @@
         select.addEventListener('mousemove', function(e){
             e.preventDefault();
         });
+        function request() {
+            fetch("{% url 'book_request:requesting' %}", {
+                method: "POST",
+                body: new FormData(document.getElementById('request-form'))
+            })
+                .then(refreshProducts)
+                .catch((error) => console.error("Error adding product: ", error));
+    
+            document.getElementById("request-form").reset();
+            return false;
+        }
         
     </script>
     
@@ -128,7 +139,7 @@
     <h1>All Requests: </h1>
     {% if all_books %}
         <table>
-            <div id="header">
+            <thead id="header">
                 <tr>
                     <th>Title</th>
                     <th>Author</th>
@@ -137,11 +148,13 @@
                     <th>Subjects</th>
                     <th>Date Requested</th>
                 </tr>
-            </div>
-            <div id="all_requests">
-                {% for book in all_books %}
-                {% endfor %}
-            </div>
+            </thead>
+            <tbody id="all_requests">
+                <tr>
+                    {% for book in all_books %}
+                    {% endfor %}
+                </tr>
+            </tbody>
         </table>
     {% else %}
         <p>No book requests at this time.</p>
@@ -163,12 +176,13 @@
             products.forEach((item) => {
                 htmlString += `
                     <tr>
-                        <td>${item.field.title}</td>
-                        <td>${item.field.author}</td>
-                        <td>${item.field.year}</td>
-                        <td>${item.field.language}</td>
-                        <td>${item.field.subjects}</td>
-                        <td>${item.field.date_requested}</td>
+                        <td>${item.fields.title}</td>
+                        <td>${item.fields.author}</td>
+                        <td>${item.fields.year}</td>
+                        <td>${item.fields.language}</td>
+                        <td>${item.fields.subjects}</td>
+                        <td>${item.fields.date_requested}</td>
+                        <td><button onclick=deleteBook(${item.pk})>Cancel</button></td>
                     </tr>
                 `;
 
@@ -180,21 +194,58 @@
             const products = await getRequests();
             let htmlString = "";
             products.forEach((item) => {
-                htmlString += `
+                if (item.fields.member == "{{ user.username }}") {
+                    htmlString += `
                     <tr>
-                        <td>${item.title}</td>
-                        <td>${item.author}</td>
-                        <td>${item.year}</td>
-                        <td>${item.language}</td>
-                        <td>${item.subjects}</td>
-                        <td>${item.date_requested}</td>
+                        <td>${item.fields.title}</td>
+                        <td>${item.fields.author}</td>
+                        <td>${item.fields.year}</td>
+                        <td>${item.fields.language}</td>
+                        <td>${item.fields.subjects}</td>
+                        <td>${item.fields.date_requested}</td>
+                        <td><button onclick=editBook(${item.pk})>Cancel</button></td>
+                        <td><button onclick=deleteBook(${item.pk})>Cancel</button></td>
                     </tr>
                 `;
+                }
+                else{
+                    htmlString += `
+                        <tr>
+                            <td>${item.fields.title}</td>
+                            <td>${item.fields.author}</td>
+                            <td>${item.fields.year}</td>
+                            <td>${item.fields.language}</td>
+                            <td>${item.fields.subjects}</td>
+                            <td>${item.fields.date_requested}</td>
+                        </tr>
+                    `;
+                }
 
             })
             document.getElementById("all_requests").innerHTML = htmlString;
 
         }
+        function editBook(id) {
+            const formData = new FormData()
+            formData.append("id", id)
+            fetch("{% url 'book_request:edit_book' %}",{
+                method: "POST",
+                body: formData
+            }).then(refreshProducts)
+
+            return false
+        }
+        function deleteBook(id) {
+            const formData = new FormData()
+            formData.append("id", id)
+            fetch("{% url 'book_request:delete_book' %}",{
+                method: "POST",
+                body: formData
+            }).then(refreshProducts)
+
+            return false
+        }
+
         window.onload = function() {
             refreshUserRequest();
             refreshAllRequests();
