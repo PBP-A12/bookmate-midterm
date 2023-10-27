@@ -16,7 +16,10 @@ class Member(models.Model) :
 
     match_sent = models.ManyToManyField("self", blank=True, default=None)   #  match yang dikirim oleh member ini ke orang lain 
     match_received = models.ManyToManyField("self",  blank=True, default=None)   # match yang diterima oleh member ini dari orang lain
-    
+    # akses review dan request pake related_name dari models masing2 aja
+    # https://stackoverflow.com/questions/2642613/what-is-related-name-used-for
+    # reviews     
+    # requests 
 
     def __str__(self): 
         return self.account.username
