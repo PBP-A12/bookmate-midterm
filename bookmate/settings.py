@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'books',
     'authentication',
     'home',
+    'dashboardbuku',
+    
 ]
 
 MIDDLEWARE = [
@@ -135,3 +137,5 @@ TAILWIND_APP_NAME = 'theme'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+NPM_BIN_PATH = "C:/Users/User/AppData/Roaming/npm/node_modules"
