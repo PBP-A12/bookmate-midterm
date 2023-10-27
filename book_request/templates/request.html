@@ -1,58 +1,206 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="bg-gray-100 p-4">
-        <h1 class="text-2xl font-bold mb-4">Request a Book</h1>
-        <form action="{% url 'add_product_ajax' %}" method="POST">
-            {% csrf_token %}
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="title">
-                    Title:
-                </label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="title" type="text" name="title" required>
+<div id="add-request">
+    
+<!-- Code block starts -->
+<dh-component>
+            
+    <div class="py-12 bg-gray-700 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0" id="modal">
+        <div role="alert" class="container mx-auto w-11/12 md:w-2/3 max-w-lg">
+            <div class="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
+                <div class="w-full flex justify-start text-gray-600 mb-3">
+                    <svg  xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-wallet" width="52" height="52" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" />
+                        <path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12" />
+                        <path d="M20 12v4h-4a2 2 0 0 1 0 -4h4" />
+                    </svg>
+                    <h1 class="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">Request a Book</h1>
+                </div>
+                <form method="post" action="{%url 'book_request:requesting'%}">
+                    {% csrf_token %}
+                    <label for="Rname" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Title</label>
+                    <input id="Rname" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Title" />
+                    <label for="Rauthor" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Author</label>
+                    <input id="Rauthor" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Author" />
+                    <label for="Ryear" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Year</label>
+                    <input id="Ryear" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Year" />
+                    <label for="Rlanguage" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Language</label>
+                    <input id="Rlanguage" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Language" />
+                    <label for="subject" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Subjects</label>
+                    <br>
+                    <select id="subject" name="subject" class="block w-full mt-1 form-multiselect" multiple="true">
+                        <option value="" disabled selected>Select an option</option>
+                        {% for genre in subjects %}
+                            <option value="{{ genre }}">{{ genre }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="flex items-center justify-start w-full">
+                        <button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm" type="submit">Submit</button>
+                        <button class="focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm" onclick="modalHandler()">Cancel</button>
+                    </div>
+                </form>
+                <button class="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onclick="modalHandler()" aria-label="close modal" role="button">
+                    <svg  xmlns="http://www.w3.org/2000/svg"  class="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" />
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
             </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="author">
-                    Author:
-                </label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="author" type="text" name="author" required>
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="isbn">
-                    ISBN:
-                </label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="isbn" type="text" name="isbn" required>
-            </div>
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-                Submit
-            </button>
-        </form>
+        </div>
     </div>
-    <div class="bg-gray-100 p-4 mt-4">
-        <h1 class="text-2xl font-bold mb-4">Requested Books</h1>
-        <table class="table-auto">
-            <thead>
-                <tr>
-                    <th class="px-4 py-2">Title</th>
-                    <th class="px-4 py-2">Language</th>
-                    <th class="px-4 py-2">Author</th>
-                    <th class="px-4 py-2">Year</th>
-                    <th class="px-4 py-2">Subject</th>
+    <div class="w-full flex justify-center py-12" id="button">
+        <button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 mx-auto transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm" onclick="modalHandler(true)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                <line x1="25" y1="10" x2="25" y2="40" stroke="white" stroke-width="3"/>
+                <line x1="10" y1="25" x2="40" y2="25" stroke="white" stroke-width="3"/>
+            </svg>            
+        </button>
+    </div>
+    <script>
+        let modal = document.getElementById("modal");
+        function modalHandler(val) {
+            if (val) {
+                fadeIn(modal);
+            } else {
+                fadeOut(modal);
+            }
+        }
+        function fadeOut(el) {
+            el.style.opacity = 1;
+            (function fade() {
+                if ((el.style.opacity -= 0.1) < 0) {
+                    el.style.display = "none";
+                } else {
+                    requestAnimationFrame(fade);
+                }
+            })();
+        }
+        function fadeIn(el, display) {
+            el.style.opacity = 0;
+            el.style.display = display || "flex";
+            (function fade() {
+                let val = parseFloat(el.style.opacity);
+                if (!((val += 0.2) > 1)) {
+                    el.style.opacity = val;
+                    requestAnimationFrame(fade);
+                }
+            })();
+        }
+        var select = document.getElementById('subject');
+        select.addEventListener('mousedown', function(e){
+            e.preventDefault();
+            var scroll = this.scrollTop;
+            e.target.selected = !e.target.selected;
+            setTimeout(function(){select.scrollTop = scroll;}, 0);
+            this.focus();
+        });
+        select.addEventListener('mousemove', function(e){
+            e.preventDefault();
+        });
+        
+    </script>
+    
+</dh-component>
+</div>
+<h1>My Requests: </h1>
+{% if user_books %}
+<table>
+    <div id="header">
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+                    <th>Year</th>
+                    <th>Language</th>
+                    <th>Subjects</th>
+                    <th>Date Requested</th>
                 </tr>
-            </thead>
-            <tbody>
-                {% for book in requested_books %}
-                    <tr>
-                        <td class="border px-4 py-2">{{ book.title }}</td>
-                        <td class="border px-4 py-2">{{ book.author }}</td>
-                        <td class="border px-4 py-2">{{ book.isbn }}</td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td class="border px-4 py-2" colspan="3">No requested books yet.</td>
-                    </tr>
+            </div>
+            <div id="user_request">
+                {% for book in user_books %}
                 {% endfor %}
-            </tbody>
+            </div>
         </table>
-    </div>
+    {% else %}
+        <p>No book requests at this time.</p>
+    {% endif %}
+    <h1>All Requests: </h1>
+    {% if all_books %}
+        <table>
+            <div id="header">
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Year</th>
+                    <th>Language</th>
+                    <th>Subjects</th>
+                    <th>Date Requested</th>
+                </tr>
+            </div>
+            <div id="all_requests">
+                {% for book in all_books %}
+                {% endfor %}
+            </div>
+        </table>
+    {% else %}
+        <p>No book requests at this time.</p>
+    {% endif %}
+    <script>
+        async function getUserRequest() {
+            return fetch("{% url 'book_request:get_request_json_user' %}").then((res) => res.json());
+        }
+        async function getRequests() {
+            return fetch("{% url 'book_request:get_requests_json' %}").then((res) => res.json());
+        }
+        async function getSubjects() {
+            return fetch("{% url 'book_request:get_subjects_json' %}").then((res) => res.json());
+        }
+        async function refreshUserRequest() {
+            document.getElementById("user_request").innerHTML = "";
+            const products = await getUserRequest();
+            let htmlString = "";
+            products.forEach((item) => {
+                htmlString += `
+                    <tr>
+                        <td>${item.field.title}</td>
+                        <td>${item.field.author}</td>
+                        <td>${item.field.year}</td>
+                        <td>${item.field.language}</td>
+                        <td>${item.field.subjects}</td>
+                        <td>${item.field.date_requested}</td>
+                    </tr>
+                `;
+
+            })
+            document.getElementById("user_request").innerHTML = htmlString;
+        }
+        async function refreshAllRequests() {
+            document.getElementById("all_requests").innerHTML = "";
+            const products = await getRequests();
+            let htmlString = "";
+            products.forEach((item) => {
+                htmlString += `
+                    <tr>
+                        <td>${item.title}</td>
+                        <td>${item.author}</td>
+                        <td>${item.year}</td>
+                        <td>${item.language}</td>
+                        <td>${item.subjects}</td>
+                        <td>${item.date_requested}</td>
+                    </tr>
+                `;
+
+            })
+            document.getElementById("all_requests").innerHTML = htmlString;
+
+        }
+        window.onload = function() {
+            refreshUserRequest();
+            refreshAllRequests();
+        }
+    </script>
+
 {% endblock %}
+
+

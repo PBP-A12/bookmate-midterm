@@ -1,76 +1,96 @@
 from django.shortcuts import render, redirect
 import datetime
 from django.http import HttpResponseNotFound, HttpResponseRedirect
-from book_request.forms import ProductForm
+from .forms import ProductForm
 from django.urls import reverse
-from book_request.models import Book
+from book_request.models import BookRequest
+from authentication.models import Member, Subject
 from django.http import HttpResponse
 from django.core import serializers
 from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages  
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+
 # Create your views here.
 
 @login_required
 def show_book(request):
-    Books = Book.objects.all()
+    member = Member.objects.get(account=request.user)
+    sort_by = request.GET.get('sortby')
+    subjects = Subject.objects.all()
+    subjects = subjects.values_list('name', flat=True)
+    order = request.GET.get('order', 'asc') # default to ascending order if not specified
+    if sort_by:
+        if order == 'asc':
+            all_books = BookRequest.objects.all().order_by(sort_by)
+            user_books = BookRequest.objects.filter(member=member).order_by(sort_by)
+        elif order == 'desc':
+            all_books = BookRequest.objects.all().order_by(f'-{sort_by}')
+            user_books = BookRequest.objects.filter(member=member).order_by(f'-{sort_by}')
+    else:
+        all_books = BookRequest.objects.all()
+        user_books = BookRequest.objects.filter(member=member)
     context = {
-        'name': '',
+        'user': request.user.username,
         'title': '',
-        'lang': '',
-        'first_name': '',
-        'last_name': '',
+        'author': '',
         'year': '',
+        'language': '',
         'subject': '',
-        'bookshelves': '',
+        'date_requested': '',
+        'all_books': all_books,
+        'user_requested': user_books,
+        'subjects': subjects,
     }
     return render(request, 'request.html', context)
 
-def show_xml(request):
-    data = Book.objects.all()
-    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
-
-def show_json(request):
-    data = Book.objects.all()
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
-
-def show_xml_by_id(request, id):
-    data = Book.objects.filter(pk=id)
-    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
-
-def show_json_by_id(request, id):
-    data = Book.objects.filter(pk=id)
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
-
-def get_product_json(request):
-    product_item = Book.objects.filter(user=request.user)
-    return HttpResponse(serializers.serialize('json', product_item))
-
 @csrf_exempt
-def add_book_ajax(request):
+def requesting(request):
     if request.method == 'POST':
-        name = request.POST.get("name")
-        title = request.POST.get("title")
-        lang = request.POST.get("lang")
-        first_name = request.POST.get("first_name")
-        last_name = request.POST.get("last_name")
-        year = request.POST.get("year")
-        subject = request.POST.get("subject")
-        bookshelves = request.POST.get("bookshelves")
-        user = request.user
-
-        books = Book.objects.all()
-        existing_book = books.filter(name=name).first()
-        if existing_book:
-            return HttpResponse(b"EXIST", status=409) #edit this line
+        title = request.POST.get('title')
+        author = request.POST.get('author')
+        year = request.POST.get('year')
+        language = request.POST.get('language')
+        subjects = request.POST.get('subjects')
+        books = BookRequest.objects.all()
+        if title != '' and author != '' and year != '' and language != '' and subjects != '':
+            existing_book = BookRequest.objects.filter(title=title, author=author, year=year, language=language, subjects=subjects)
+            if existing_book:
+                messages.info(request, 'This book has already been requested.')
+            else:
+                book = BookRequest(title=title, author=author, year=year, language=language, subjects=subjects)
+                book.save()
         else:
-            new_product = Book(name=name, title=title, lang=lang, first_name=first_name, last_name=last_name, year=year, subject=subject, bookshelves=bookshelves, user=user)
-            new_product.save()
+            messages.info(request, 'Please fill in all the fields.')
+    return HttpResponseRedirect('book_request:show_request')
 
-        return HttpResponse(b"CREATED", status=201)
+def edit_book(request,id):
+    if request.method == 'POST':
+        book = BookRequest.objects.get(pk=id)
+        book.title = request.POST.get('title')
+        book.author = request.POST.get('author')
+        book.year = request.POST.get('year')
+        book.language = request.POST.get('language')
+        book.subjects = request.POST.get('subjects')
+        book.save()
+    return HttpResponseRedirect('book_request:show_request')
 
-    return HttpResponseNotFound()
+def delete_book(request,id):
+    if request.method == 'POST':
+        book = BookRequest.objects.get(pk=id)
+        book.delete()
+    return HttpResponseRedirect('book_request:show_request')
+
+def get_request_json_user(request):
+    data = serializers.serialize('json', BookRequest.objects.filter(member=request.user))
+    return HttpResponse(data, content_type='application/json')
+
+def get_requests_json(request):
+    data = serializers.serialize('json', BookRequest.objects.all())
+    return HttpResponse(data, content_type='application/json')
+
+def get_subjects_json(request):
+    data = serializers.serialize('json', Subject.objects.all())
+    return HttpResponse(data, content_type='application/json')

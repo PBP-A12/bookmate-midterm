@@ -1,15 +1,13 @@
 from django.db import models
+from authentication.models import Member
+from authentication.models import Subject
 
 # Create your models here.
-
-class Book(models.Model):
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name="requests")
+class BookRequest(models.Model):
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="requests")
     title = models.CharField(max_length=255)
-    lang = models.CharField(max_length=255)
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
+    author = models.CharField(max_length=255)
     year = models.IntegerField()
-    subject = models.TextField()
-    bookshelves = models.TextField()
-    def __str__(self):
-        return self.title
+    language = models.CharField(max_length=255)
+    subjects = models.ManyToManyField(Subject)
+    date_requested = models.DateField(auto_now_add=True)

@@ -1,7 +1,7 @@
 from django.forms import ModelForm
-from book_request.models import Book
+from .models import BookRequest
 
 class ProductForm(ModelForm):
     class Meta:
-        model = Book
-        fields = ["user", "title", "lang", "first_name","last_name", "year","subject","bookshelves"]
+        model = BookRequest
+        fields = ['title', 'author', 'year', 'language', 'subjects']

@@ -1,14 +1,14 @@
 from django.urls import include, path
-from book_request.views import show_book, show_xml, show_json, show_xml_by_id, show_json_by_id, get_product_json, add_book_ajax
+from book_request.views import show_book, get_request_json_user, requesting, get_requests_json, edit_book, delete_book, get_subjects_json
 app_name = 'book_request'
 
 urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
-    path('/request', show_book, name='show_request'),
-    path('/xml', show_xml, name='show_xml'),
-    path('/json', show_json, name='show_json'),
-    path('/xml/<int:id>', show_xml_by_id, name='show_xml_by_id'),
-    path('/json/<int:id>', show_json_by_id, name='show_json_by_id'),
-    path('/get_product_json', get_product_json, name='get_product_json'),
-    path('/add_book_ajax', add_book_ajax, name='add_book_ajax'),
+    path('', show_book, name='show_request'),
+    path('requesting/', requesting, name='requesting'),
+    path('get_request_json_user/', get_request_json_user, name='get_request_json_user'),
+    path('get_requests_json/', get_requests_json, name='get_requests_json'),
+    path('edit_book/<int:id>', edit_book, name='edit_book'),
+    path('delete_book/<int:id>', delete_book, name='delete_book'),
+    path('get_subjects_json/', get_subjects_json, name='get_subjects_json'),
 ]
