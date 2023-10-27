@@ -14,5 +14,9 @@ class Member(models.Model) :
     account = models.OneToOneField(User, on_delete=models.CASCADE)                                      # username, email, dll menggunakan model User bawaan Django
     interest_subjects = models.ManyToManyField(Subject, related_name="interested_members", blank=True, default=None)  # subject-subject yang member sukai
 
+    match_sent = models.ManyToManyField("self", related_name="match_requesters", blank=True, default=None)   #  match yang dikirim oleh member ini ke orang lain 
+    match_received = models.ManyToManyField("self", related_name="match_requestees", blank=True, default=None)   # match yang diterima oleh member ini dari orang lain
+    
+
     def __str__(self): 
         return self.account.username

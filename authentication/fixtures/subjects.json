@@ -691,5 +691,12 @@
         "fields": {
             "name": "americans foreign countries fiction"
         }
+    }, 
+    {
+        "pk": 100,
+        "model": "authentication.subject",
+        "fields": {
+            "name": "fathers and sons fiction"
+        }
     }
 ]
