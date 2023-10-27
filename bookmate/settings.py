@@ -50,8 +50,6 @@ INSTALLED_APPS = [
     'books',
     'authentication',
     'home',
-    'tailwind',
-    'django_browser_reload',
     'book_request'
 ]
 
