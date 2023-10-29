@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.core import serializers
 
 from .models import Member
+from user.models import Profile
 
 # Create your views here.
 def register(request): 
@@ -18,8 +19,13 @@ def register(request):
 
         if form.is_valid():
             account = form.save()
+            
             member = Member(account=account)
             member.save()
+
+            # create profile 
+            profile = Profile(member=member, age=0, bio="")
+            profile.save()
 
             messages.success(request, 'Your account has been successfully created!')
             return redirect('authentication:login')
