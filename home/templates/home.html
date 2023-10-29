@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mx-auto min-h-screen">
+    <section class="flex flex-col align-center justify-center content-center h-screen my-10">
+        <div class="flex flex-col items-center content-center gap-6 ">
+            <div class="text-center text-xl">Halo <span class="text-[#C44B6A] font-semibold">{{user.username}}</span>!</div>
+            {% load static %}
+            <img src="{% static 'main-match-bg.png' %}" alt="">
+            
+            {% if home == 1 or home == 2 %}
+            <h1 class="text-[#C44B6A] font-bold text-3xl text-center">
+                Lengkapi Profilmu, Kisahkan Preferensimu,
+                Temukan Pasanganmu!
+            </h1>
+            {% elif home == 3 %}
+            <h1 class="text-[#C44B6A] font-bold text-4xl text-center">
+                Siap Untuk Berkisah? Mulailah Match!
+            </h1>
+            {% endif %}
+            
+            <div class="flex gap-2">
+                {% if home == 1 %}
+                <a href="{% url 'authentication:register' %}" ">
+                    <button class="w-40 rounded-2xl px-3 py-1 border-2 border-black text-black transition transform ease-in-out duration-400 hover:scale-[1.05]">Lengkapi Profile</button>
+                </a>
+                {% load static %}
+                <img src="{% static 'arrow.svg' %}" alt="">
+                <a href="{% url 'dashboardbuku:show_book' %}" ">
+                    <button class="w-40 rounded-2xl px-3 py-1 border-2 border-black text-black transition transform ease-in-out duration-400 hover:scale-[1.05]">Review Buku</button>
+                </a>
+                {% load static %}
+                <img src="{% static 'arrow.svg' %}" alt="">
+                <a href="{% url 'match:show_match' %}" ">
+                    <button class="w-40 rounded-2xl px-3 py-1 border-2 border-[#C44B6A] text-[#C44B6A] transition transform ease-in-out duration-400 hover:scale-[1.05]">Match!</button>
+                </a>
+                {% elif home == 2 %} 
+                <a href="{% url 'dashboardbuku:show_book' %}" ">
+                    <button class="w-40 rounded-2xl px-3 py-1 border-2 border-black text-black transition transform ease-in-out duration-400 hover:scale-[1.05]">Review Buku</button>
+                </a>
+                {% load static %}
+                <img src="{% static 'arrow.svg' %}" alt="">
+                <a href="{% url 'match:show_match' %}" ">
+                    <button class="w-40 rounded-2xl px-3 py-1 border-2 border-[#C44B6A] text-[#C44B6A] transition transform ease-in-out duration-400 hover:scale-[1.05]">Match!</button>
+                </a>
+                {% elif home == 3 %}
+                <a href="{% url  'match:show_match' %}" ">
+                    <button class="w-40 rounded-2xl px-3 py-1 border-2 border-[#C44B6A] text-[#C44B6A] transition transform ease-in-out duration-400 hover:scale-[1.05]">Match Sekarang!</button>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        
+        
+        <!-- </div>
+            
+            <div class="text-center">
+                <h1 class="text-4xl">Hi {{ user.username }}!</h1>
+                <p class="text-2xl">What's up?</p>
+                <div>
+                    <a class="underline hover:text-blue-600" href="{% url 'authentication:logout' %}">Log Out</a>
+                </div>
+            </div>
+            <br> 
+            <input class="w-1/2 p-3 rounded-xl" id="book-search" type="text" placeholder="search your book here..">
+            <div id="book-search-result" class="grid grid-cols-4 gap-4 pt-3">
+            </div> -->
+    </section>
+    <section class="h-screen flex flex-col content-center items-center justify-center w-full ">
+        <h1 class="text-3xl">Recommended Books</h1>
+        <br>
+        <div id="random-book" class="h-96 w-96 border-4 border-black rounded-md p-3 flex flex-col items-center justify-center text-center gap-3 transition transform ease-in-out duration-400 hover:scale-[1.05] hover:cursor-pointer">
+    </section>
+</div>
+
+
+<script>
+    // async function getBooksByQuery(query) {
+    //     let url = "{% url 'books:get_books_by_query' %}?search=" + query;
+    //     console.log(url);
+    //     return fetch("{% url 'books:get_books_by_query' %}?search=" + query)
+    //     .then((res) => res.json())
+    // }
+
+    // async function refreshBooks(query) {
+    //     const books = await getBooksByQuery(query);
+        
+    //     let bookList = document.getElementById('book-search-result');
+    //     bookList.innerHTML = "";
+    //     for (let i = 0; i < books.length; i++) {
+    //         if (i >= 20) break; 
+    //         console.log(books[i].title);
+    //         bookList.innerHTML += 
+    //         "<div class='border rounded h-48 p-3 bg-white hover:cursor-pointer hover:shadow-lg'>" 
+    //             + books[i].title 
+    //             + "</div>";
+    //     }
+    // }
+    
+    // document.getElementById('book-search').addEventListener('keyup', (e) => {    
+    //     const searchString = e.target.value.toLowerCase();
+    //     refreshBooks(searchString); 
+    // }); 
+
+    async function getRandomBook() {
+        let url = "{% url 'home:get_any_recommended_book' %}";
+        return fetch(url)
+        .then((res) => res.json())
+    }
+
+    
+    async function refreshRandomBook() {
+    // Replace this URL with your own API endpoint for fetching random books
+        const book = await getRandomBook();
+        console.log(book)
+        if (book) {
+            const randomBookElement = document.getElementById('random-book');
+            data = `<p class="text-2xl">${book.title}</p>`
+            data += `<p class="text-md">by ${book.author}</p>`
+            data += `<div class='flex flex-col items-center flex-warp gap-2 text-sm'>`
+            for (let i = 0; i < book.subjects.length; i++) {
+                data += `<div class="border-2 border-black grow-0 h-min rounded-lg px-1.5 w-fit">${book.subjects[i]}</div>`
+            }
+            data += '</div>'
+            randomBookElement.innerHTML = data; 
+        }
+    }
+
+    // Call the function initially
+    document.getElementById('random-book').addEventListener('click', (e) => {    
+        window.location.href = "{% url 'dashboardbuku:show_book' %}";
+    }); 
+
+    refreshRandomBook();
+
+    // Call the function every x seconds (e.g., every 5 seconds)
+    const intervalSeconds = 3; // Change this value to set the interval in seconds
+    setInterval(refreshRandomBook, intervalSeconds * 1000);
+</script>
+
+{% endblock content %}

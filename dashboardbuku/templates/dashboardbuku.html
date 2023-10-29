@@ -32,7 +32,7 @@
             <p class="font-poppins text-sm">{{subject}}</p>
             {% endfor %}
         </div>
-        <a href="{% url 'dashboardbuku:add_review_ajax' book.id %}"><button class="text-center bg-black hover:bg-slate-800 text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow ">Review</button></a>
+        <a href="{% url 'dashboardbuku:add_review_ajax' book.id %}"><button class="text-center bg-red-500 hover:bg-red-800 text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow ">Review</button></a>
     </div> 
     <br>
     {% endfor %}

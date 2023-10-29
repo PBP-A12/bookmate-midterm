@@ -13,17 +13,19 @@ def register(request):
 
     if request.method == "POST":
         form = UserCreationForm(request.POST)
-        print(form)
-        print(form.is_valid())
 
         if form.is_valid():
             account = form.save()
             member = Member(account=account)
             member.save()
 
-
             messages.success(request, 'Your account has been successfully created!')
             return redirect('authentication:login')
+        
+        else:
+            print(form.fields)
+            context = {'form': form}
+            return render(request, 'register.html', context)
         
     context = {'form': form}
     return render(request, 'register.html', context)
