@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'home',
     'book_request', 
     'dashboardbuku',
-    'user'
+    'user',
     'match'
 ]
 
