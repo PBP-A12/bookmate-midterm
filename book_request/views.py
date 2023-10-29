@@ -12,7 +12,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages  
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-
+from .serializers import BookRequestSerializer
+import json
 # Create your views here.
 
 @login_required
@@ -21,7 +22,7 @@ def show_book(request):
     sort_by = request.GET.get('sortby')
     subjects = Subject.objects.all()
     subjects = subjects.values_list('name', flat=True)
-    order = request.GET.get('order', 'asc') # default to ascending order if not specified
+    order = request.GET.get('sortorder', 'asc') # default to ascending order if not specified
     if sort_by:
         if order == 'asc':
             all_books = BookRequest.objects.all().order_by(sort_by)
@@ -32,16 +33,22 @@ def show_book(request):
     else:
         all_books = BookRequest.objects.all()
         user_books = BookRequest.objects.filter(member=member)
+    print(BookRequestSerializer(all_books, many=True))
+    all_books_serialized  = json.dumps(BookRequestSerializer(all_books, many=True).data) 
+    user_books_serialized  = json.dumps(BookRequestSerializer(user_books, many=True).data)
+    user_book_deserialized = json.loads(user_books_serialized)
+    for book in user_book_deserialized:
+        print(book['subjects'])
     context = {
-        'user': request.user.username,
+        'user': request.user,
         'title': '',
         'author': '',
         'year': '',
         'language': '',
         'subject': '',
         'date_requested': '',
-        'all_books': all_books,
-        'user_requested': user_books,
+        'all_books': all_books_serialized,
+        'user_books': user_books_serialized,
         'subjects': subjects,
     }
     return render(request, 'request.html', context)
@@ -50,46 +57,66 @@ def show_book(request):
 def requesting(request):
     if request.method == 'POST':
         title = request.POST.get('title')
+        # print("AHHHHHH",title)
+        author = request.POST.get('author')
+        year = request.POST.get('year')
+        language = request.POST.get('language')
+        # print(request.POST)
+        subject = request.POST.getlist('subject')
+        user = Member.objects.get(account=request.user)
+        if title != None or author != None or year != None or language != None or subject != None:
+            # print('a')
+            existing_book = BookRequest.objects.filter(title=title, author=author, year=year, language=language, subjects__name__in=subject).exists()
+            if existing_book:
+                # print('b')
+                messages.info(request, 'This book has already been requested.')
+            else:
+                # print('c')
+                book = BookRequest(member=user,title=title, author=author, year=year, language=language)
+                book.save()
+                print(subject)
+                for genre in subject:
+                    print(Subject.objects.get(name=genre))
+                    book.subjects.add(Subject.objects.get(name=genre))
+                    print(book.subjects)
+    else:
+        messages.info(request, 'Please fill in all the fields.')
+    return HttpResponse(b'CREATED', status=201)
+
+@csrf_exempt
+def edit_book(request):
+    if request.method == 'POST':
+        id = request.POST.get("id")
+        print("this",id)
+        title = request.POST.get('title')
         author = request.POST.get('author')
         year = request.POST.get('year')
         language = request.POST.get('language')
         subjects = request.POST.get('subjects')
-        books = BookRequest.objects.all()
-        if title != '' and author != '' and year != '' and language != '' and subjects != '':
-            existing_book = BookRequest.objects.filter(title=title, author=author, year=year, language=language, subjects=subjects)
-            if existing_book:
-                messages.info(request, 'This book has already been requested.')
-            else:
-                book = BookRequest(title=title, author=author, year=year, language=language, subjects=subjects)
-                book.save()
-        else:
-            messages.info(request, 'Please fill in all the fields.')
-    return HttpResponseRedirect('book_request:show_request')
-
-def edit_book(request,id):
-    if request.method == 'POST':
         book = BookRequest.objects.get(pk=id)
-        book.title = request.POST.get('title')
-        book.author = request.POST.get('author')
-        book.year = request.POST.get('year')
-        book.language = request.POST.get('language')
-        book.subjects = request.POST.get('subjects')
+        book.title = title
+        book.author = author
+        book.year = year
+        book.language = language
+        book.subjects.set(subjects)
         book.save()
-    return HttpResponseRedirect('book_request:show_request')
+    return HttpResponse(b'CREATED', status=201)
 
-def delete_book(request,id):
+@csrf_exempt
+def delete_book(request):
     if request.method == 'POST':
+        id = request.POST.get('id')
         book = BookRequest.objects.get(pk=id)
         book.delete()
-    return HttpResponseRedirect('book_request:show_request')
+    return HttpResponse(b'CREATED', status=201)
 
 def get_request_json_user(request):
-    data = serializers.serialize('json', BookRequest.objects.filter(member=request.user))
-    return HttpResponse(data, content_type='application/json')
+    res = BookRequestSerializer(BookRequest.objects.filter(member=Member.objects.get(account=request.user)), many=True).data
+    return HttpResponse(json.dumps(res, indent=4), content_type='application/json')
 
 def get_requests_json(request):
-    data = serializers.serialize('json', BookRequest.objects.all())
-    return HttpResponse(data, content_type='application/json')
+    res = BookRequestSerializer(BookRequest.objects.all(), many=True).data
+    return HttpResponse(json.dumps(res, indent=4), content_type='application/json')
 
 def get_subjects_json(request):
     data = serializers.serialize('json', Subject.objects.all())

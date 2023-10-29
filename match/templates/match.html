@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div id="success-alert" class="hidden fixed top-0 z-50 bg-[#973B53] w-full text-center py-4 lg:px-4">
+        <div class="p-2 bg-[#C44B6A] items-center text-white leading-none flex lg:inline-flex" role="alert">
+            <span class="flex bg-white uppercase text-neutral-700 italic px-2 py-1 text-xl2 mr-3">MATCHED</span>
+            <span class="font-sans mr-2 text-left flex-auto text-white italic text-2xl" id="success-message"></span>
+        </div>
+    </div>
+
+    <div class="h-screen bg-white pt-12">
+
+        <!-- Card start -->
+        <div class="flex items-center justify-center h-screen">
+            <div class="max-w-sm bg-white rounded-lg overflow-hidden shadow-lg">
+            <!--  <div class="max-w-sm mr-auto mt-20 ml-20 bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">-->
+                <div class="border-b px-6 pb-4">
+                    <div class="text-left my-4">
+                        <p class="font-bold text-4xl">MATCH.</p>
+
+                        <div class="py-2">
+                            <h3 id="rekomen-user" class="text-xl bold text-gray-900 mt-9 mb-3"></h3>
+                        </div>
+
+                        <div class="py-2">
+                            <h3 id="full-name" class="text-xl text-[#C44B6A] mt-9 mb-3"></h3>
+                        </div>
+
+                        <div class="py-2">
+                            <h6 id="bio-user" class="text-xl10 italic text-sm text-gray-600 mb-3"></h6>
+                        </div>
+
+                        <div class="py-2">
+                            <h6 id="interest" class="text-xl3 text-gray-800 mb-3"></h6>
+                        </div>
+
+                        <div class="flex flex-row">
+                            <button id="match-button" type="button" class="flex items-center justify-center text-white bg-neutral-950 hover:bg-neutral-700 focus:ring-4 rounded-lg text-xs px-2 py-1 text-center inline-flex items-center ml-1 h-[38px] w-[140px]">
+                                <svg class="w-8 h-8 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
+                                    <path d="M8.766.566A2 2 0 0 0 6.586 1L1 6.586a2 2 0 0 0 0 2.828L6.586 15A2 2 0 0 0 10 13.586V2.414A2 2 0 0 0 8.766.566Z"/>
+                                </svg>
+                                <div class="text-xl12">
+                                    Swipe Left
+                                </div>
+                            </button>
+                            <button id="see-profile" type="button" class="flex items-center justify-center text-white bg-neutral-950 hover:bg-neutral-700 focus:ring-4 rounded-lg text-xs px-2 py-1 text-center inline-flex items-center ml-1 h-[38px] w-[157px]"> 
+                                <div class="text-xl10">
+                                    See Profile
+                                </div>
+                            </button>
+                        
+                            <form id="random-user-form" method="post" action="">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" id="random-match-id"></input> 
+                                <button id="accept_button" type="submit" class="flex items-center justify-center text-white bg-[#C44B6A] hover:bg-rose-500 focus:ring-4 rounded-lg text-xs px-2 py-1 text-center inline-flex items-center ml-1 h-[38px] w-[140px]">
+                                    <svg class="w-5 h-5 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
+                                        <path d="M17.947 2.053a5.209 5.209 0 0 0-3.793-1.53A6.414 6.414 0 0 0 10 2.311 6.482 6.482 0 0 0 5.824.5a5.2 5.2 0 0 0-3.8 1.521c-1.915 1.916-2.315 5.392.625 8.333l7 7a.5.5 0 0 0 .708 0l7-7a6.6 6.6 0 0 0 2.123-4.508 5.179 5.179 0 0 0-1.533-3.793Z"/>
+                                    </svg>
+                                    <div class="text-xl12">
+                                        Swipe Right
+                                    </div>
+                                </button>
+                            </form> 
+                    </div>
+                </div>
+            </div>      
+        </div>  
+	</div>
+    <script>
+        let randomUserForm = document.getElementById("random-user-form") 
+        let randomMatchIdInput = document.getElementById("random-match-id")
+        let matchButton = document.getElementById("match-button")
+        let rekomenUser = document.getElementById("rekomen-user")
+        let profileButton = document.getElementById("see-profile")
+        let interestMember = document.getElementById("interest")
+        let bioUser = document.getElementById("bio-user")
+        let userFullName = document.getElementById("full-name")  
+
+        async function fetchMatch() {
+            return fetch("{% url 'match:get_match' %}") 
+            .then((res) => res.json())
+        }
+
+        async function getMatch() { 
+            const data = await fetchMatch() 
+            console.log(data)
+            randomMatchIdInput.value = data.matching_id;
+            document.getElementById("rekomen-user").innerHTML = data.name; 
+            document.getElementById("interest").innerHTML = "Interest: " + data.interest_subject; 
+            document.getElementById("bio-user").innerHTML = data.bio;
+            document.getElementById("see-profile").addEventListener("click", () => {
+                const url =  "user/" + data.id 
+                location.href=url
+            })
+            document.getElementById("full-name").innerHTML = data.first_name + " " + data.last_name; 
+            
+        }
+        window.onload = getMatch()
+
+        document.getElementById("match-button").addEventListener("click", getMatch)
+
+        function showSuccessAlert(message) {
+            const successAlert = document.getElementById("success-alert");
+            const successMessage = document.getElementById("success-message");
+            
+            // Mengatur pesan sukses
+            successMessage.textContent = message;
+
+            // Menghapus kelas "hidden" dan menambahkan kelas "block" agar elemen muncul
+            successAlert.classList.remove("hidden");
+            successAlert.classList.add("block");
+
+            // Atur timer untuk menghilangkan pesan alert setelah beberapa detik
+            setTimeout(() => {
+                successAlert.classList.remove("block");
+                successAlert.classList.add("hidden");
+                getMatch();
+            }, 1000); // Hapus pesan alert setelah 2 detik 
+        }
+
+
+        randomUserForm.addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const matchId = document.getElementById("random-match-id").value;
+            const acceptUrl =`{% url 'match:accept' 0 %}`.replace('0', matchId);
+
+            try {
+                const response = await fetch(acceptUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then((response) => {
+                    console.log("matching sukses");
+                    showSuccessAlert("Explore Your Favorite Books Together!");
+                    
+                })
+                .catch((err) => console.log("Udah fetch tapi error"));
+            } catch (error) {
+                console.error('An error occurred while accepting recommendation:', error);
+            }
+        });
+
+    </script>
+
+{% endblock content %}

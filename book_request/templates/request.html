@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="h-20">
+
+</div>
+<p hidden id="nama-User">{{user}}</p>
 <div id="add-request">
     
 <!-- Code block starts -->
 <dh-component>
             
-    <div class="py-12 bg-gray-700 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0" id="modal">
+    <div class="py-12 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0 backdrop-blur-md" id="modal" aria-hidden="true" hidden>
         <div role="alert" class="container mx-auto w-11/12 md:w-2/3 max-w-lg">
             <div class="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
                 <div class="w-full flex justify-start text-gray-600 mb-3">
@@ -17,26 +21,31 @@
                     </svg>
                     <h1 class="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">Request a Book</h1>
                 </div>
-                <form method="post" action="{%url 'book_request:requesting'%}">
+
+                <form method="post" id="request-form" class="space-y-4">
                     {% csrf_token %}
-                    <label for="Rname" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Title</label>
-                    <input id="Rname" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Title" />
-                    <label for="Rauthor" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Author</label>
-                    <input id="Rauthor" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Author" />
-                    <label for="Ryear" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Year</label>
-                    <input id="Ryear" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Year" />
-                    <label for="Rlanguage" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Language</label>
-                    <input id="Rlanguage" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Language" />
-                    <label for="subject" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Subjects</label>
+                    <label for="title" class="block text-sm font-bold text-gray-700">Title</label>
+                    <input name="title" type="text" id="title" class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 text-sm" placeholder="Title" required></input>
+                    <label for="author" class="block text-sm font-bold text-gray-700">Author</label>
+                    <input name="author" type="text" id="author" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Author" required></input>
+                    <label for="year" class="block text-sm font-bold text-gray-700">Year</label>
+                    <input name="year" type="number" id="year" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Year" required></input>
+                    <label for="language" class="block text-sm font-bold text-gray-700">Language</label>
+                    <input name="language" type="text" id="language" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Language" required></input>
+                    <label for="subjects" class="block text-sm font-bold text-gray-700">Subjects</label>
                     <br>
+                    <input id="showGenre" for="subjects" class="block text-sm font-bold text-gray-700" disabled></input>
                     <select id="subject" name="subject" class="block w-full mt-1 form-multiselect" multiple="true">
-                        <option value="" disabled selected>Select an option</option>
+                        <option value="" disabled>Select an option</option>
                         {% for genre in subjects %}
-                            <option value="{{ genre }}">{{ genre }}</option>
+                            <option value="{{ genre }}" required>{{ genre }}</option>
                         {% endfor %}
                     </select>
+                    <button id="addGenre" type="button">Add Genre</button>
+                    <br>
+
                     <div class="flex items-center justify-start w-full">
-                        <button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm" type="submit">Submit</button>
+                        <button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#AA3855] transition duration-150 ease-in-out hover:bg-[#AA3855] bg-[#C44B6A] rounded text-white px-8 py-2 text-sm" onclick="request()">Submit</button>
                         <button class="focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm" onclick="modalHandler()">Cancel</button>
                     </div>
                 </form>
@@ -50,14 +59,14 @@
             </div>
         </div>
     </div>
-    <div class="w-full flex justify-center py-12" id="button">
+    <!-- <div class="w-full flex justify-center py-12" id="button">
         <button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 mx-auto transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm" onclick="modalHandler(true)">
             <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
                 <line x1="25" y1="10" x2="25" y2="40" stroke="white" stroke-width="3"/>
                 <line x1="10" y1="25" x2="40" y2="25" stroke="white" stroke-width="3"/>
             </svg>            
         </button>
-    </div>
+    </div> -->
     <script>
         let modal = document.getElementById("modal");
         function modalHandler(val) {
@@ -99,107 +108,244 @@
         select.addEventListener('mousemove', function(e){
             e.preventDefault();
         });
-        
+        const selected = document.getElementById('subject');
+        const button = document.getElementById('addGenre')
+        button.addEventListener('click', () => {
+        const selectedOptions = [];
+
+        for (const option of selected.options) {
+            if (option.selected) {
+            selectedOptions.push(option.value);
+            }
+        }
+        let showGenre = document.getElementById('showGenre')
+        showGenre.value = selectedOptions.join(', ')
+        })        
     </script>
     
 </dh-component>
 </div>
-<h1>My Requests: </h1>
-{% if user_books %}
-<table>
-    <div id="header">
-        <tr>
-            <th>Title</th>
-            <th>Author</th>
-                    <th>Year</th>
-                    <th>Language</th>
-                    <th>Subjects</th>
-                    <th>Date Requested</th>
-                </tr>
-            </div>
-            <div id="user_request">
-                {% for book in user_books %}
-                {% endfor %}
-            </div>
-        </table>
-    {% else %}
-        <p>No book requests at this time.</p>
-    {% endif %}
-    <h1>All Requests: </h1>
-    {% if all_books %}
-        <table>
-            <div id="header">
-                <tr>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Year</th>
-                    <th>Language</th>
-                    <th>Subjects</th>
-                    <th>Date Requested</th>
-                </tr>
-            </div>
-            <div id="all_requests">
-                {% for book in all_books %}
-                {% endfor %}
-            </div>
-        </table>
-    {% else %}
-        <p>No book requests at this time.</p>
-    {% endif %}
-    <script>
-        async function getUserRequest() {
-            return fetch("{% url 'book_request:get_request_json_user' %}").then((res) => res.json());
-        }
-        async function getRequests() {
-            return fetch("{% url 'book_request:get_requests_json' %}").then((res) => res.json());
-        }
-        async function getSubjects() {
-            return fetch("{% url 'book_request:get_subjects_json' %}").then((res) => res.json());
-        }
-        async function refreshUserRequest() {
+<div class="container flex justify-between items-center mb-4 pl-10 pr-20 mx-auto flex-row pt-24">
+    <h1 class="text-6xl font-bold w-10">Requests.</h1>
+    
+    <button class="bg-[#C44B6A] hover:bg-[#AA3855] text-white font-bold py-2 px-4 rounded-xl" onclick="modalHandler(true)">
+        Add New Request
+    </button>
+</div>
+<hr class="border border-[2px] border-black mt-12 mb-8 mx-32">
+<div class="container flex inline-flex justify-around mb-4 pl-10  mx-auto flex-row">
+    <button class="text-3xl focus:text-[#C44B6A] font-bold" id="my_request">My Requests </button>
+    <button class="text-3xl focus:text-[#C44B6A] font-bold" id="all_request">All Requests </button>
+    
+</div>
+<label for="sortby">Sort by:</label>
+<select id="sortby" name="sortby" onchange="sortBooks()">
+    <option value="title">Title</option>
+    <option value="author">Author</option>
+    <option value="year">Year</option>
+    <option value="language">Language</option>
+    <option value="subjects">Subjects</option>
+    <option value="date_requested">Date Requested</option>
+</select>
+<br>
+<button id="sortorder" name="sortorder" onclick="orderSort()" >^</button>
+<div>
+<div id="user_request">
+</div>
+</div>
+<p id="no-request-user"></p>
+<div>
+    <div id="all_requests">
+    </div>
+<p id="no-request-all"></p>
+<script>
+    async function getUserRequest() {
+        return fetch("{% url 'book_request:get_request_json_user' %}").then((res) => res.json());
+    }
+    async function getRequests() {
+        return fetch("{% url 'book_request:get_requests_json' %}").then((res) => res.json());
+    }
+    async function getSubjects() {
+        return fetch("{% url 'book_request:get_subjects_json' %}").then((res) => res.json());
+    }
+    async function request() {
+        fetch("{% url 'book_request:requesting' %}", {
+            method: "POST",
+            body: new FormData(document.getElementById('request-form'))
+            
+        })
+        .then(refreshUserRequest).then(refreshAllRequests).then(console.log("Request added"))
+            .catch((error) => console.error("Error adding product: ", error));
+
+        document.getElementById("request-form").reset();
+        return false;
+    }
+    async function refreshUserRequest() {
+        const products = await getUserRequest();
+        let htmlString = "";
+        if (products.length == 0) {
+            htmlString = "<p>You haven't requested anything.</p>";
+            document.getElementById("no-request-user").innerHTML = htmlString;
             document.getElementById("user_request").innerHTML = "";
-            const products = await getUserRequest();
-            let htmlString = "";
+        }
+        else {
+            const urlParams = new URLSearchParams(window.location.search);
+            let sortBy = urlParams.get("sortby");
+            let sortOrder = urlParams.get("sortorder");
+            if (sortBy == null) {
+                sortBy = "title";
+            }
+            if (sortOrder == null) {
+                sortOrder = "asc";
+            }
+            products.sort((a, b) => {
+                if (a[sortBy] < b[sortBy]) {
+                    return sortOrder == "asc" ? -1 : 1;
+                }
+                if (a[sortBy] > b[sortBy]) {
+                    return sortOrder == "asc" ? 1 : -1;
+                }
+                return 0;
+            });
             products.forEach((item) => {
+                let subjects = "";
+                    for (let i = 0; i < item.subjects.length; i++) {
+                        subjects += item.subjects[i].charAt(0).toUpperCase() + item.subjects[i].slice(1);
+                        subjects += i == item.subjects.length - 1 ? "" : ", ";
+                    }
                 htmlString += `
-                    <tr>
-                        <td>${item.field.title}</td>
-                        <td>${item.field.author}</td>
-                        <td>${item.field.year}</td>
-                        <td>${item.field.language}</td>
-                        <td>${item.field.subjects}</td>
-                        <td>${item.field.date_requested}</td>
-                    </tr>
+                <div class="box-border h-96 w-72  border-4 mx-auto border-black items-center flex flex-col gap-2 justify-between p-2 overflow-auto">
+                        <div>
+                            <h2 class=" text-lg font-bold">${item.title}</h2>
+                            <p class="font-poppins text-sm">Written by: ${item.author}</p>
+                            <p class="font-poppins text-sm">Year: ${item.year}</p>
+                            <p class="font-poppins text-sm">Genre : ${subjects}</p>
+                            <p class="font-poppins text-sm">${item.date_requested}</p>
+                            <td><button onclick=editBook(${item.id})>Edit</button></td>
+                            <td><button onclick=deleteBook(${item.id})>Cancel</button></td>
+                        </div>
                 `;
 
             })
             document.getElementById("user_request").innerHTML = htmlString;
         }
-        async function refreshAllRequests() {
-            document.getElementById("all_requests").innerHTML = "";
-            const products = await getRequests();
-            let htmlString = "";
+    }
+    async function refreshAllRequests() {
+        urlParams = new URLSearchParams(window.location.search)
+        document.getElementById("sortorder").innerHTML = urlParams.get("sortorder") == "asc" ? "^" : "v";
+        const sortby = urlParams.get("sortby");
+        if (sortby) {
+            document.getElementById("sortby").value = sortby;
+        }
+        // document.getElementById("sortby").setAttribute(name=document.getElementById("sortby").getAttribute(name),urlParams.get("sortby"))
+        let namaUser = document.getElementById("nama-User").innerHTML;
+        const products = await getRequests();
+        let htmlString = "";
+        if (products.length == 0) {
+            // document.getElementById("header-all").innerHTML = "";
+            htmlString = "<p>No book requests at this time.</p>";
+            document.getElementById("no-request-all").innerHTML = htmlString;
+            document.getElementById("all_requests").innerHTML ="";
+        }
+        else{
+            products.sort((a, b) => {
+                if (a[sortBy] < b[sortBy]) {
+                    return sortOrder == "asc" ? -1 : 1;
+                }
+                if (a[sortBy] > b[sortBy]) {
+                    return sortOrder == "asc" ? 1 : -1;
+                }
+                return 0;
+            });
             products.forEach((item) => {
-                htmlString += `
-                    <tr>
-                        <td>${item.title}</td>
-                        <td>${item.author}</td>
-                        <td>${item.year}</td>
-                        <td>${item.language}</td>
-                        <td>${item.subjects}</td>
-                        <td>${item.date_requested}</td>
-                    </tr>
+                let subjects = "";
+                for (let i = 0; i < item.subjects.length; i++) {
+                    subjects += item.subjects[i].charAt(0).toUpperCase() + item.subjects[i].slice(1);
+                    subjects += i == item.subjects.length - 1 ? "" : ", ";
+                }
+                if (item.member == namaUser) {
+                    htmlString += `
+                    <div class="box-border h-96 w-72  border-4 mx-auto border-black items-center flex flex-col gap-2 justify-between p-2 overflow-auto">
+                        <div>
+                            <h2 class=" text-lg font-bold">${item.title}</h2>
+                            <p class="font-poppins text-sm">Written by: ${item.author}</p>
+                            <p class="font-poppins text-sm">Year: ${item.year}</p>
+                            <p class="font-poppins text-sm">Genre : ${subjects}</p>
+                            <p class="font-poppins text-sm">${item.date_requested}</p>
+                            <button onclick=editBook(${item.id})>Edit</button>
+                            <button onclick=deleteBook(${item.id})>Cancel</button>
+                        </div>
                 `;
+                }
+                else{
+                    htmlString += `
+                    <div class="box-border h-96 w-72  border-4 mx-auto border-black items-center flex flex-col gap-2 justify-between p-2 overflow-auto">
+                        <div>
+                            <h2 class=" text-lg font-bold">${item.title}</h2>
+                            <p class="font-poppins text-sm">Written by: ${item.author}</p>
+                            <p class="font-poppins text-sm">Year: ${item.year}</p>
+                            <p class="font-poppins text-sm">Genre : ${subjects}</p>
+                            <p class="font-poppins text-sm">${item.date_requested}</p>
+                        </div>
+                    `;
+                }
 
             })
             document.getElementById("all_requests").innerHTML = htmlString;
+        }
 
+    }
+    function editBook(id) {
+        const formData = new FormData()
+        formData.append("id", id)
+        fetch("{% url 'book_request:edit_book' %}",{
+            method: "POST",
+            body: formData
+        }).then(refreshUserRequest).then(refreshAllRequests)
+
+        return false
+    }
+    function deleteBook(id) {
+        const formData = new FormData()
+        formData.append("id", id)
+        fetch("{% url 'book_request:delete_book' %}",{
+            method: "POST",
+            body: formData
+        }).then(refreshUserRequest).then(refreshAllRequests)
+
+        return false
+    }
+    function sortBooks(){
+        sortBy = document.getElementById("sortby").value
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("sortby", sortBy);
+        window.location.search = urlParams.toString();
+    }
+    function orderSort(){
+        const urlParams = new URLSearchParams(window.location.search);
+        let sortOrder = urlParams.get("sortorder");
+        document.getElementById("sortorder").innerHTML = sortOrder;
+        if (sortOrder == "asc") {
+            sortOrder = "desc";
+        } else if(sortOrder == "desc"){
+            sortOrder = "asc";
         }
-        window.onload = function() {
-            refreshUserRequest();
-            refreshAllRequests();
-        }
-    </script>
+        urlParams.set("sortorder", sortOrder);
+        document.getElementById("sortorder").innerHTML = sortOrder == "asc" ? "^" : "v";
+        window.location.search = urlParams.toString();
+    }
+    document.getElementById('my_request').addEventListener('click', () => {
+        refreshUserRequest()
+        document.getElementById('all_requests').innerHTML = ""
+    })
+    document.getElementById('all_request').addEventListener('click', () => {
+        refreshAllRequests()
+        document.getElementById('user_request').innerHTML = ""
+    })
+    window.onload = function () {
+        refreshUserRequest()
+    }
+</script>
 
 {% endblock %}
 
