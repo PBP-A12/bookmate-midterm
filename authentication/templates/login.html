@@ -1,40 +1,41 @@
 {% extends 'base-belum-login.html' %}
 
 {% block content %}
-   
-<form class="flex flex-col justify-around gap-5" method="POST">
-    {% csrf_token %}
-    <div>
-        <input 
-            class="w-full block py-1.5 px-3 text-gray-900 rounded-xl border-0 ring-2 ring-inset ring-gray-800 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" 
-            type="text" name="username" 
-            placeholder="username"
-        >
-    </div>
-
-    <div>
-        <input 
-        class="w-full block py-1.5 px-3 text-gray-900 rounded-xl border-0 ring-2 ring-inset ring-gray-800 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" 
-            type="password" name="password" 
-            placeholder="password"
-        >
-    </div>
+<div class="flex flex-col items-center justify-center h-full">
+    <form class="flex flex-col justify-around gap-5 w-96" method="POST">
+        {% csrf_token %}
+        <div class="input-username">
+            <input 
+                class="w-full block py-1.5 px-3 text-gray-900 rounded-xl border-0 ring-2 ring-inset ring-gray-800 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" 
+                type="text" name="username" 
+                placeholder="username"
+            >
+        </div>
     
-    {% if messages %}
-        {% for message in messages %}
-            <div class="text-gray-600 text-xs">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
-
-    <button 
-        class="rounded-xl bg-gray-900 hover:bg-black hover:text-gray-100 pointer-events-auto text-white h-10" 
-        type="submit" 
-    > 
-    Login
-    </button>
-    <p>don't have an account? <a class="text-[#C44B6A] font-semibold" href="{% url 'authentication:register' %}">Sign Up</a></p>
-</form>
+        <div class="input-password">
+            <input 
+            class="w-full block py-1.5 px-3 text-gray-900 rounded-xl border-0 ring-2 ring-inset ring-gray-800 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" 
+                type="password" name="password" 
+                placeholder="password"
+            >
+        </div>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="text-gray-600 text-xs">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    
+        <button 
+        class="rounded-xl bg-black py-2 px-4 rounded-lg transition transform ease-in-out duration-400 hover:scale-[1.05] pointer-events-auto text-white h-10" 
+            type="submit" 
+        > 
+        Login
+        </button>
+        <p>don't have an account? <a class="text-[#C44B6A] font-semibold" href="{% url 'authentication:register' %}">Sign Up</a></p>
+    </form>
+</div>
        
 {% endblock content %}

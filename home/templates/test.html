@@ -1,5 +1,4 @@
 {% extends 'base-belum-login.html' %}
-
 {% block content %}
 <div class="flex flex-col gap-3">
     <h1 class="text-[#C44B6A] font-bold text-4xl">
@@ -12,10 +11,10 @@
     </p>
     <div>
         <a href="{% url 'authentication:register' %}" ">
-            <button class="py-2 px-4 rounded-lg transition transform ease-in-out duration-400 hover:scale-[1.05] bg-[#C44B6A] text-white">Register</button>
+            <button class="rounded-md px-3 py-1 border bg-[#C44B6A] text-white">Register</button>
         </a>
         <a href="{% url 'authentication:login' %}" ">
-            <button class="py-2 px-4 rounded-lg transition transform ease-in-out duration-400 hover:scale-[1.05] bg-white text-black">Log In</button>
+            <button class="rounded-md px-3 py-1 border bg-white text-black">Log In</button>
         </a>
     </div>
 </div>
