@@ -32,7 +32,7 @@
                 </a>
                 {% load static %}
                 <img src="{% static 'arrow.svg' %}" alt="">
-                <a href="{% url 'authentication:register' %}" ">
+                <a href="{% url 'match:show_match' %}" ">
                     <button class="w-40 rounded-2xl px-3 py-1 border-2 border-[#C44B6A] text-[#C44B6A] transition transform ease-in-out duration-400 hover:scale-[1.05]">Match!</button>
                 </a>
                 {% elif home == 2 %} 
@@ -41,11 +41,11 @@
                 </a>
                 {% load static %}
                 <img src="{% static 'arrow.svg' %}" alt="">
-                <a href="{% url 'authentication:register' %}" ">
+                <a href="{% url 'match:show_match' %}" ">
                     <button class="w-40 rounded-2xl px-3 py-1 border-2 border-[#C44B6A] text-[#C44B6A] transition transform ease-in-out duration-400 hover:scale-[1.05]">Match!</button>
                 </a>
                 {% elif home == 3 %}
-                <a href="{% url 'authentication:register' %}" ">
+                <a href="{% url  'match:show_match' %}" ">
                     <button class="w-40 rounded-2xl px-3 py-1 border-2 border-[#C44B6A] text-[#C44B6A] transition transform ease-in-out duration-400 hover:scale-[1.05]">Match Sekarang!</button>
                 </a>
                 {% endif %}
