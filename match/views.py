@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.core import serializers
 from book_request.serializers import BookRequestSerializer
 from match.models import Matching
+from user.models import Profile
 from book_request.models import BookRequest
 from django.contrib.auth.decorators import login_required
 from authentication.models import Member
@@ -37,7 +38,7 @@ def get_match(request):
     if (other_member is None) : 
         return HttpResponseNotFound("No Member", status = 404)
   
-    # other_profile = Profile.objects.get(member = other_member)
+    other_profile = Profile.objects.get(member = other_member)
     new_match = Matching.objects.filter(user = this_member, matched_member = other_member, accepted = False)
     if (new_match) :
         new_match = new_match.first() 
@@ -59,7 +60,7 @@ def get_match(request):
         "id" : other_member.account.pk, 
         "matching_id" : new_match.pk,
         "interest_subject" : interest, # match_interest(this_member, other_member)
-        "bio" :  "apa aja dulu" #other_profile.bio,
+        "bio" :  other_profile.bio,
         # "profile_user" : "user/%other_member.account"
     }
     #print(result.interesting_subject)
@@ -116,6 +117,8 @@ def match_interest(this_member, other_member):
 
 
 
+from user.views import user
 
-        
-    
+@login_required
+def redirect(request, id) : 
+    return user(request, id)

@@ -90,7 +90,8 @@
             document.getElementById("interest").innerHTML = "Interest: " + data.interest_subject; 
             document.getElementById("bio-user").innerHTML = data.bio;
             document.getElementById("see-profile").addEventListener("click", () => {
-                // location.href="url 'user:user' data.id %}"
+                const url =  "user/" + data.id 
+                location.href=url
             })
             document.getElementById("full-name").innerHTML = data.first_name + " " + data.last_name; 
             
