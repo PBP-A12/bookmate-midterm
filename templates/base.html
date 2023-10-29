@@ -1,17 +1,66 @@
+{% load static tailwind_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <title>BookMate</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+
+
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
         {% block meta %}
         {% endblock meta %}
+
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
 
-    <body class="bg-gray-50 font-serif leading-normal tracking-normal">
+    <body style="font-family: 'Poppins', sans-serif;">
+        {% if user.is_authenticated %}
+        <nav class="fixed top-0 flex flex-row justify-between items-center w-[100%] px-12 transition ease-in-out duration-150 bg-white">
+            <a href="/" class="flex items-center">
+                <img src="{% static 'svg/bookmate.svg' %}" class="h-[128px] cursor-pointer" ></img>
+            </a>
+
+            <div class="flex flex-row gap-x-12 text-xl">
+                <a href="/" class="flex items-center transition ease-in-out duration-200 hover:text-[#C44B6A]">
+                    Match
+                </a>
+                
+                <a href="/review" class="flex items-center transition ease-in-out duration-200 hover:text-[#C44B6A]">
+                    Book Review
+                </a>
+
+                <a href="/" class="flex items-center transition ease-in-out duration-200 hover:text-[#C44B6A]">
+                    Book Request
+                </a>
+                
+                <a href="/user/id/{{user.pk}}" class="flex items-center transition ease-in-out duration-200 hover:text-[#C44B6A]">
+                    Profile
+                </a>
+
+                <a class="bg-black text-white py-2 px-4 rounded-lg transition transform ease-in-out duration-400 hover:scale-[1.05]" href="{% url 'authentication:logout' %}">
+                    Log Out
+                </a>
+            </div>
+        </nav>
+        {% endif %}
+
         {% block content %}
         {% endblock content %}
 	</body>
+
+    <script>
+        window.addEventListener("scroll", function () {
+        if (window.pageYOffset >= 30) {
+            document.querySelector('nav').style.boxShadow = "0px 1px 1px rgba(3, 7, 18, 0.02), 0px 5px 4px rgba(3, 7, 18, 0.03), 0px 12px 9px rgba(3, 7, 18, 0.05)";
+        } else {
+            document.querySelector('nav').style.boxShadow = "none";
+        }
+        });
+    </script>
 </html>

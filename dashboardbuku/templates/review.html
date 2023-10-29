@@ -2,7 +2,7 @@
 
 
 {% block content %}
-<div class="container grid grid-cols-2 gap-5 h-auto">
+<div class="container grid grid-cols-2 gap-5 h-auto pt-36">
     <div class="flex-1 border-4 border-black">
         <h1 class="text-center text-6xl">{{book.title}}</h1>
         <p class="text-center text-4xl">{{book.author}}, {{book.year}}</p>
@@ -22,7 +22,7 @@
                                 <textarea id="review-area" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Review"></textarea>
                             </form>
                             <div class="flex items-center justify-start w-full">
-                                <button id="button-submit" class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm" onclick="addReview()">Submit</button>
+                                <button id="button-submit" class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm" onclick="addReview(); modalHandler()">Submit</button>
                                 <button class="focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm" onclick="modalHandler()">Cancel</button>
                             </div>
                             <button class="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onclick="modalHandler()" aria-label="close modal" role="button">
@@ -71,7 +71,7 @@
     </div>
     <div class="flex-1">
         <div id="tempat-review" class="">
-            <p class="text-2xl font-bold font-sans">{{member}} berkata:</p>
+            <p class="text-2xl font-bold font-poppins">{{member}} berkata:</p>
             <p>${element.fields.review}</p>
         </div>
     </div>
@@ -88,10 +88,9 @@
         document.getElementById("tempat-review").innerHTML=""
         const review1 = await getReviews()
         let htmlString = ""
-        console.log("ini review 1", review1)
         review1.forEach(element => {
             htmlString += 
-            `<p class="text-2xl">${element.reviewer__account__username} berkata: ${element.review}</p>`
+            `<p class="text-2xl text-stone-600">${element.reviewer__account__username} berkata: ${element.review}</p>`
 
         }); 
         document.getElementById("tempat-review").innerHTML = htmlString
@@ -112,7 +111,6 @@
         return false
     }
     
-    document.getElementById("button-submit").onclick = addReview
     refreshReviews()
 
 
