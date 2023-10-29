@@ -18,7 +18,13 @@ def which_home(request):
 
 # Create your views here.
 def show_main(request): 
-    if (request.user.is_authenticated): 
+    if (request.user.is_authenticated):
+        if (Member.objects.filter(account=request.user).count() == 0):
+            # this user ga punya member object hiks 
+            # bikin member baru 
+            member = Member(account=request.user)
+            member.save()
+            
         context = {
             'home': which_home(request),
         }
