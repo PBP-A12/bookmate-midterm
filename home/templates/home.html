@@ -68,9 +68,9 @@
             </div> -->
     </section>
     <section class="h-screen flex flex-col content-center items-center justify-center w-full ">
-        <h1 class="text-3xl">Top Books: </h1>
+        <h1 class="text-3xl">Recommended Books</h1>
         <br>
-        <div id="random-book" class="h-96 w-96 border-4 border-black rounded-md p-3 flex flex-col gap-3 transition transform ease-in-out duration-400 hover:scale-[1.05]">
+        <div id="random-book" class="h-96 w-96 border-4 border-black rounded-md p-3 flex flex-col items-center justify-center text-center gap-3 transition transform ease-in-out duration-400 hover:scale-[1.05] hover:cursor-pointer">
     </section>
 </div>
 
@@ -104,9 +104,8 @@
     // }); 
 
     async function getRandomBook() {
-        let url = "{% url 'books:get_random_book' %}";
-        console.log(url);
-        return fetch("{% url 'books:get_random_book' %}")
+        let url = "{% url 'home:get_any_recommended_book' %}";
+        return fetch(url)
         .then((res) => res.json())
     }
 
@@ -117,8 +116,9 @@
         console.log(book)
         if (book) {
             const randomBookElement = document.getElementById('random-book');
-            data = `<p class="text-2xl">${book.title} by ${book.author}</p>`
-            data += `<div class='flex flex-col flex-warp gap-2 grow text-sm'>`
+            data = `<p class="text-2xl">${book.title}</p>`
+            data += `<p class="text-md">by ${book.author}</p>`
+            data += `<div class='flex flex-col items-center flex-warp gap-2 text-sm'>`
             for (let i = 0; i < book.subjects.length; i++) {
                 data += `<div class="border-2 border-black grow-0 h-min rounded-lg px-1.5 w-fit">${book.subjects[i]}</div>`
             }
@@ -128,6 +128,10 @@
     }
 
     // Call the function initially
+    document.getElementById('random-book').addEventListener('click', (e) => {    
+        window.location.href = "{% url 'dashboardbuku:show_book' %}";
+    }); 
+
     refreshRandomBook();
 
     // Call the function every x seconds (e.g., every 5 seconds)

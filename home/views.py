@@ -3,11 +3,10 @@ from django.contrib.auth.decorators import login_required
 from books.models import Book
 from dashboardbuku.models import Review
 from authentication.models import Member
-import json 
 from django.http import HttpResponse
+from books.views import get_random_book
 
 def which_home(request): 
-
     # kalau profil belum lengkap, 1 
     # kalau belum ada review, 2 
     member = Member.objects.get(account=request.user)
@@ -25,3 +24,8 @@ def show_main(request):
         }
         return render(request, 'home.html', context=context) 
     return render(request, 'landing.html')
+
+@login_required
+def get_any_recommended_book(request): 
+    # anggap aja rekomendasi hehe
+    return get_random_book(request)
