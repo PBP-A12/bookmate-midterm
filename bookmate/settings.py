@@ -21,12 +21,7 @@ env = environ.Env()
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)wbqtc6mf))(@j^4(!=(ju4-eqa_cd3%z@r(zbdthp_y18q&t-'
 
-# Automatically determine environment by detecting if DATABASE_URL variable.
-# DATABASE_URL is provided by Heroku if a database add-on is added (e.g. Heroku Postgres).
-PRODUCTION = env.bool('PRODUCTION', False)
 SECRET_KEY = 'django-insecure-)wbqtc6mf))(@j^4(!=(ju4-eqa_cd3%z@r(zbdthp_y18q&t-'
 
 # Automatically determine environment by detecting if DATABASE_URL variable.
