@@ -4,7 +4,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpResponseNotFound, JsonResponse
 from django.urls import reverse
 from django.core import serializers
+from book_request.serializers import BookRequestSerializer
 from match.models import Matching
+from book_request.models import BookRequest
 from django.contrib.auth.decorators import login_required
 from authentication.models import Member
 from django.db.models import Max
@@ -43,12 +45,19 @@ def get_match(request):
         new_match = Matching(user = this_member, matched_member = other_member)
     new_match.save()
     
+    interest = "-"
+    if (BookRequest.objects.filter(member = other_member).exists() and BookRequest.objects != None):
+        user_book = BookRequest.objects.filter(member = other_member).first()
+        user_books_serialized  = json.dumps(BookRequestSerializer(user_book, many=True).data)
+        user_books_deserialized = json.load(user_books_serialized)
+        for books in user_books_deserialized:
+            print(books('subjects'))
     result = {
         "name" : other_member.account.username, 
         "id" : other_member.pk, 
         "matching_id" : new_match.pk,
-        "interest_subject" : "babaidsf", #match_interest(this_member, other_member)
-        "bio" : "fdjfbsdgfjbrsdjgkvsdj"
+        "interest_subject" : interest, # match_interest(this_member, other_member)
+        "bio" : "If you look that good in clothes, you must even look better without thm."
     }
     #print(result.interesting_subject)
     return HttpResponse(json.dumps(result), content_type="application/json")    # pass
@@ -100,15 +109,15 @@ def get_receiver_matches(sender_user):
 def recommended_member(request, match_id):
     recommendation = Matching.objects.get(pk=match_id)
     if request.user == recommendation.user.account:
-        data = recommendation.matched_member.account.pk
         result = {
             "id": recommendation.matched_member.account.pk,
         }
         return HttpResponse(json.dumps(result), content_type="application/json")
     
 def match_interest(this_member, other_member):
-    set1 = set(other_member.interest_subjects.all())
-    set2 = set(this_member.interest_subjects.all())
+    BookRequest.objects.filter(member = other_member).first()
+    set1 = set(this_member.interest_subjects.all())
+    set2 = set(other_member.interest_subjects.all())
     intersection_result = set1.intersection(set2)
     if not intersection_result:
         interest_subject = random.choice(list(set2))
