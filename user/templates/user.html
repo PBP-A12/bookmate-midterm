@@ -3,13 +3,13 @@
 
 {% block content %}
 <body>
-    <div id="edit_modals" class="fixed w-[100%] h-[100%] flex items-top justify-center z-10" style="visibility: hidden;">
-        <div id="edit" class="fade w-[480px] h-fit p-[32px] rounded-lg bg-[#FFFAF0]">
+    <div id="edit_modals" class="fixed w-[100%] h-[100%] flex items-top justify-center z-10 drop-shadow-md" style="visibility: hidden;">
+        <div id="edit" class="fade w-[480px] h-fit p-[32px] rounded-lg bg-[#FFFFFF]">
             <div class="flex flex-col gap-[32px]">
                 <div class="flex flex-row justify-between items-center">
                     <p class="text-[32px] font-bold"> Edit Profile </p>
                     <div class="flex flex-row justify-end w-[100%]">
-                        <button class="cursor-pointer w-[50px] rounded-md bg-[#FFB619] text-[#FFFAF0] font-bold p-[10px] hover:scale-[103%] transition duration-300 " onclick="hide_edit_profile()">X</button>
+                        <button class="cursor-pointer w-[50px] rounded-md bg-[#C44B6A] text-[#FFFAF0] font-bold p-[10px] hover:scale-[103%] transition duration-300 " onclick="hide_edit_profile()">X</button>
                     </div>
                 </div>
 
@@ -17,7 +17,7 @@
                 <form id="formEdit" onsubmit="return false;" class="flex flex-col gap-[32px]">
                     {% csrf_token %}
                     <div class="border-[1px] focus-within:border-[#64B357] rounded-md">
-                        <input type="text" id="age" name="age" placeholder="Age" value = "" class="rounded-md w-[100%] h-[52px] border-none focus:ring-0"> 
+                        <input type="number" id="age" name="age" placeholder="Age" value = "" class="rounded-md w-[100%] h-[52px] border-none focus:ring-0"> 
                     </div>
 
                     <div class="border-[1px] focus-within:border-[#64B357] rounded-md">
@@ -28,7 +28,7 @@
 
                 <div>
                     <form>
-                        <button onclick="edit_profile()" class="w-[100%] cursor-pointer rounded-md bg-[#64B357] text-[#FFFAF0] font-bold p-[10px] hover:scale-[103%] transition duration-300">Done</button>
+                        <button onclick="edit_profile()" class="w-[100%] cursor-pointer rounded-md bg-[#C44B6A] text-[#FFFAF0] font-bold p-[10px] hover:scale-[103%] transition duration-300">Done</button>
                     </form>
                 </div>
             </div>
@@ -110,7 +110,7 @@
         let matchesHTML = ``
         reviews.forEach((review) => {
             matchesHTML += `
-            <div class="box-border h-96 w-72  border-4 mx-auto border-black items-center flex flex-col gap-2 justify-between p-2 overflow-auto">
+            <div class="box-border min-h-50 w-72  border-4 mx-auto border-black items-center flex flex-col gap-2 justify-between p-2 overflow-auto">
                 <div>
                     <h2 class=" text-lg font-bold">${review.book.fields.title}</h2>
                     <p class="font-poppins text-sm">Written by: ${review.book.fields.author}</p>
