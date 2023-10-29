@@ -4,5 +4,7 @@ from .views import *
 app_name = 'user'
 
 urlpatterns = [
-    path('id/<int:id>', user, name='user'),
+    path('<int:id>', user, name='user'),
+    path('get_matched/<int:id>', get_matched, name='user'),
+    path('get_reviews/<int:id>', get_reviews, name='user'),
 ]
