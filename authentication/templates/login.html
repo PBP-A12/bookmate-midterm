@@ -1,45 +1,40 @@
-{% extends 'base.html' %}
+{% extends 'base-belum-login.html' %}
 
 {% block content %}
+   
+<form class="flex flex-col justify-around gap-5" method="POST">
+    {% csrf_token %}
+    <div>
+        <input 
+            class="w-full block py-1.5 px-3 text-gray-900 rounded-xl border-0 ring-2 ring-inset ring-gray-800 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" 
+            type="text" name="username" 
+            placeholder="username"
+        >
+    </div>
 
-<div class="container mx-auto">
-    <section class="flex flex-col items-center justify-center h-screen">
-        <h1 class="text-3xl">Login</h1>
-        <br>
-        
-        <form class="flex flex-col justify-around gap-5" method="POST">
-            {% csrf_token %}
-            <div>
-                <label>Username: </label>
-                <input 
-                    class="w-full block py-1.5 text-gray-900 rounded-md border-0 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" 
-                    type="text" name="username" placeholder="myname"
-                >
+    <div>
+        <input 
+        class="w-full block py-1.5 px-3 text-gray-900 rounded-xl border-0 ring-2 ring-inset ring-gray-800 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" 
+            type="password" name="password" 
+            placeholder="password"
+        >
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="text-gray-600 text-xs">
+                {{ message }}
             </div>
+        {% endfor %}
+    {% endif %}
 
-            <div>
-                <label>Password: </label>
-                <input 
-                    class="w-full block py-1.5 text-gray-900 rounded-md border-0 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" 
-                    type="password" name="password" placeholder="mypassword"
-                >
-            </div>
-            
-            <button 
-                class="bg-blue-500 hover:bg-blue-700 hover:cursor-pointer text-white h-10 rounded-md" 
-                type="submit" 
-            > 
-            Login
-            </button>
-        </form>
+    <button 
+        class="rounded-xl bg-gray-900 hover:bg-black hover:text-gray-100 pointer-events-auto text-white h-10" 
+        type="submit" 
+    > 
+    Login
+    </button>
+    <p>don't have an account? <a class="text-[#C44B6A] font-semibold" href="{% url 'authentication:register' %}">Sign Up</a></p>
+</form>
        
-        {% if messages %}
-            {% for message in messages %}
-                <div class="text-sm">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-    </section>
-</div>
 {% endblock content %}

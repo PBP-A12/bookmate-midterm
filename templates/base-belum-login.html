@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>BookMate</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+        {% block meta %}
+        {% endblock meta %}
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <!-- harusnya mirip sama base tapi nambah -->
+    <body class="leading-normal tracking-normal font-sans">
+        <div class="h-screen flex justify-between py-16 px-14 min-w-screen">
+            <!-- bagi jadi 2 kolom, kanan gambar, kiri tulisan-->
+            
+                <div class="w-full flex flex-col">
+                    {% load static %}
+                    <div>
+                        <a href="{% url 'home:show_main' %}">
+                            <img src="{% static 'logo.svg' %}" class="h-min" alt="BookMate">
+                        </a>
+                    </div>
+                    <div class="px-5 grow flex flex-col items-center justify-center">
+                        {% block content %}
+                        {% endblock content %}
+                    </div>                        
+                </div>
+                
+                <div class="min-w-fit object-cobtain hidden lg:block">
+                    {% load static %}
+                    <img class="h-full align-center" src="{% static 'main-bg.png' %}" alt="">
+                </div>    
+                
+            </div>
+	</body>
+</html>
