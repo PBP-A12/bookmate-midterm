@@ -1,71 +1,76 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div id="success-alert" class="hidden fixed top-0 z-50 bg-indigo-900 w-full text-center py-4 lg:px-4">
-        <div class="p-2 bg-indigo-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
-            <span class="flex rounded-full bg-indigo-500 uppercase px-2 py-1 text-xs font-bold mr-3">MATCH❤️</span>
-            <span class="font-semibold mr-2 text-left flex-auto" id="success-message"></span>
+
+    <div id="success-alert" class="hidden fixed top-0 z-50 bg-[#973B53] w-full text-center py-4 lg:px-4">
+        <div class="p-2 bg-[#C44B6A] items-center text-white leading-none flex lg:inline-flex" role="alert">
+            <span class="flex bg-white uppercase text-neutral-700 px-2 py-1 text-xl2 mr-3">MATE←→</span>
+            <span class="font-sans mr-2 text-left flex-auto text-white text-2xl" id="success-message"></span>
         </div>
     </div>
 
-    <nav class="bg-white border-gray-200 dark:bg-gray-900 relative z-40">
-        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">BookMate</span>
-        <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-            
-            <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                <li>
-                    <a href="{% url 'home:show_main' %}" class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" aria-current="page">Home</a>
-                </li>
-                <li>
-                    <a href="{% url 'home:show_main' %}" class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" aria-current="page">{{ user_login.username }}</a>
-                </li>
-                
-            </ul>
-        </div>
-    </nav>
-  
-    <div class="h-screen dark:bg-gray-700 bg-gray-200 pt-12">
+    <div class="h-screen bg-white pt-12">
 
         <!-- Card start -->
-            <div class="max-w-sm mx-auto bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
-                <div class="border-b px-4 pb-6">
-                    <div class="text-center my-4">
-                        <img class="h-32 w-32 rounded-full border-4 border-white dark:border-gray-800 mx-auto my-4"
-                            src="https://i.imgur.com/gpRh2di.png" alt="">
+        <div class="flex items-center justify-center h-screen">
+            <div class="max-w-sm bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+            <!--  <div class="max-w-sm mr-auto mt-20 ml-20 bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">-->
+                <div class="border-b px-6 pb-4">
+                    <div class="text-left my-4">
+                        <p class="font-bold text-4xl">MATCH.</p>
+
                         <div class="py-2">
-                            <h3 id="tempat-user" class="font-bold text-2xl text-gray-800 dark:text-white mb-1"></h3>
-                            <div class="inline-flex text-gray-700 dark:text-gray-300 items-center">
-                                <svg class="h-5 w-5 text-gray-400 dark:text-gray-600 mr-1" fill="currentColor"
-                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                                    <path class=""
-                                        d="M5.64 16.36a9 9 0 1 1 12.72 0l-5.65 5.66a1 1 0 0 1-1.42 0l-5.65-5.66zm11.31-1.41a7 7 0 1 0-9.9 0L12 19.9l4.95-4.95zM12 14a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
-                                </svg>
-                                New York, NY
-                            </div>
+                            <h3 id="rekomen-user" class="text-2xl text-gray-800 dark:text-white mb-1"></h3>
                         </div>
-                        <form id="random-user-form" method="post" action="">
-                            {% csrf_token %}
-                            <input type="hidden" name="id" id="random-match-id"></input> 
-                            <button id="accept_button" type="submit" class="bg-green-500 hover:bg-blue-700 text-gray-900 font-bold py-2 px-4 rounded">
-                                Accept  
+
+                        <div class="py-2">
+                            <h5 id="bio-user" class="text-2xl text-gray-800 dark:text-white mb-1"></h5>
+                        </div>
+
+                        <div class="py-2">
+                            <h6 id="interest" class="text-xl3 text-gray-800 dark:text-white mb-1"></h6>
+                        </div>
+
+                        <div class="flex flex-row">
+                            <button id="match-button" type="button" class="flex items-center justify-center text-white bg-neutral-950 hover:bg-neutral-700 focus:ring-4 rounded-lg text-xs px-2 py-1 text-center inline-flex items-center ml-1 h-[38px] w-[140px]">
+                                <svg class="w-8 h-8 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
+                                    <path d="M8.766.566A2 2 0 0 0 6.586 1L1 6.586a2 2 0 0 0 0 2.828L6.586 15A2 2 0 0 0 10 13.586V2.414A2 2 0 0 0 8.766.566Z"/>
+                                </svg>
+                                <div class="text-xl12">
+                                    Swipe Left
+                                </div>
                             </button>
-                        </form>    
-                        <button id="match-button" type="" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"> 
-                            Swipe (Skip)  
-                        </button>
+                            <button id="see-profile" type="button" class="flex items-center justify-center text-white bg-neutral-950 hover:bg-neutral-700 focus:ring-4 rounded-lg text-xs px-2 py-1 text-center inline-flex items-center ml-1 h-[38px] w-[157px]"> 
+                                <div class="text-xl10">
+                                    See Profile
+                                </div>
+                            </button>
+                        
+                            <form id="random-user-form" method="post" action="">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" id="random-match-id"></input> 
+                                <button id="accept_button" type="submit" class="flex items-center justify-center text-white bg-[#C44B6A] hover:bg-rose-500 focus:ring-4 rounded-lg text-xs px-2 py-1 text-center inline-flex items-center ml-1 h-[38px] w-[140px]">
+                                    <svg class="w-5 h-5 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
+                                        <path d="M17.947 2.053a5.209 5.209 0 0 0-3.793-1.53A6.414 6.414 0 0 0 10 2.311 6.482 6.482 0 0 0 5.824.5a5.2 5.2 0 0 0-3.8 1.521c-1.915 1.916-2.315 5.392.625 8.333l7 7a.5.5 0 0 0 .708 0l7-7a6.6 6.6 0 0 0 2.123-4.508 5.179 5.179 0 0 0-1.533-3.793Z"/>
+                                    </svg>
+                                    <div class="text-xl12">
+                                        Swipe Right
+                                    </div>
+                                </button>
+                            </form> 
                     </div>
                 </div>
-            </div>
-                
-            <h1 class="text-3xl font-bold mb-4">It's a Match 📚🫶</h1>
-        </section>  
+            </div>      
+        </div>  
 	</div>
     <script>
         let randomUserForm = document.getElementById("random-user-form") 
         let randomMatchIdInput = document.getElementById("random-match-id")
         let matchButton = document.getElementById("match-button")
-        let tempatUser = document.getElementById("tempat-user")
+        let rekomenUser = document.getElementById("rekomen-user")
+        let profileButton = document.getElementById("see-profile")
+        let interestMember = document.getElementById("interest")
+        let bioUser = document.getElementById("bio-user")
 
         async function fetchMatch() {
             return fetch("{% url 'match:get_match' %}") 
@@ -74,12 +79,33 @@
         async function getMatch() { 
             const data = await fetchMatch() 
             console.log(data)
-            console.log("msk sini")
             randomMatchIdInput.value = data.matching_id;
-            document.getElementById("tempat-user").innerHTML = data.name; 
+            document.getElementById("rekomen-user").innerHTML = data.name; 
+            document.getElementById("interest").innerHTML = "Interest: " + data.interest_subject; 
+            document.getElementById("bio-user").innerHTML = data.bio;
         }
         window.onload = getMatch()
+
         document.getElementById("match-button").addEventListener("click", getMatch)
+
+        async function seeRecommendedProfile() {
+            const matchId = document.getElementById("random-match-id").value;
+            const recommendedMemberURL = "{% url 'match:recommended_member' match_id=0 %}";
+            const modifiedURL = recommendedMemberURL.replace("0", matchId);
+            console.log(modifiedURL)
+            const recommendedMember = await fetch(modifiedURL);
+            console.log(recommendedMember.id)
+
+            if (recommendedMember.ok) {
+                console.log("berhasil bestie")
+                const recommendedMemberId = recommendedMember.id; 
+                
+               
+            } else {
+                console.error("Gagal mengambil data dari recommendedMember");
+            }
+        } 
+        document.getElementById("see-profile").addEventListener("click", seeRecommendedProfile)
 
         function showSuccessAlert(message) {
             const successAlert = document.getElementById("success-alert");
@@ -96,14 +122,14 @@
             setTimeout(() => {
                 successAlert.classList.remove("block");
                 successAlert.classList.add("hidden");
-            }, 3000); // Hapus pesan alert setelah 4 detik (sesuaikan sesuai kebutuhan)
+            }, 1000); // Hapus pesan alert setelah 2 detik 
         }
+
 
         randomUserForm.addEventListener("submit", async function(e) {
             e.preventDefault();
-            const data = document.getElementById("random-match-id").value;
-            const id = data;
-            const acceptUrl =`{% url 'match:accept' 0 %}`.replace('0', id);
+            const matchId = document.getElementById("random-match-id").value;
+            const acceptUrl =`{% url 'match:accept' 0 %}`.replace('0', matchId);
 
             try {
                 const response = await fetch(acceptUrl, {
@@ -114,7 +140,7 @@
                 })
                 .then((response) => {
                     console.log("matching sukses");
-                    showSuccessAlert("Explore Favorite Books Together!");
+                    showSuccessAlert("Explore Your Favorite Books Together!");
                     getMatch();
                 })
                 .catch((err) => console.log("Udah fetch tapi error"));
