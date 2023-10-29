@@ -20,11 +20,11 @@
                         <p class="font-bold text-4xl">MATCH.</p>
 
                         <div class="py-2">
-                            <h3 id="rekomen-user" class="text-xl bold text-[#C44B6A] mt-9 mb-3"></h3>
+                            <h3 id="rekomen-user" class="text-xl bold text-gray-900 mt-9 mb-3"></h3>
                         </div>
 
                         <div class="py-2">
-                            <h3 id="full-name" class="text-xl bold text-[#C44B6A] mt-9 mb-3"></h3>
+                            <h3 id="full-name" class="text-xl text-[#C44B6A] mt-9 mb-3"></h3>
                         </div>
 
                         <div class="py-2">
@@ -98,22 +98,6 @@
         window.onload = getMatch()
 
         document.getElementById("match-button").addEventListener("click", getMatch)
-
-        async function seeRecommendedProfile() {
-
-
-
-
-            if (recommendedMember.ok) {
-                console.log("berhasil bestie")
-                
-               
-            } else {
-                console.error("Gagal mengambil data dari recommendedMember");
-            }
-        } 
-
-        document.getElementById("see-profile").addEventListener("click", seeRecommendedProfile)
 
         function showSuccessAlert(message) {
             const successAlert = document.getElementById("success-alert");

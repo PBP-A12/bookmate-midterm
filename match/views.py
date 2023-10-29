@@ -81,7 +81,6 @@ def accept_recommendation(request, id):
             print("ini nge send ke")
             print(recommendation.user.match_sent.all())
         return HttpResponseRedirect(reverse('match:show_match'))
-    
 
 def delete_no_match():
     notMatch_to_delete = Matching.objects.filter(accepted=False)
@@ -103,17 +102,6 @@ def get_receiver_matches(sender_user):
         if Matching.objects.filter(user=sender_user, matched_member=received_user, accepted=True).exists():
             receiver_matches.append(received_user)
     return receiver_matches
-
-@login_required
-@csrf_exempt
-def recommended_member(request, match_id):
-    recommendation = Matching.objects.get(pk=match_id)
-    # other_profile = Profile.objects.get(member = other_member)
-    if request.user == recommendation.user.account:
-        result = {
-            "id": recommendation.matched_member.account.pk,
-        }
-        return HttpResponse(json.dumps(result), content_type="application/json")
     
 def match_interest(this_member, other_member):
     BookRequest.objects.filter(member = other_member).first()
