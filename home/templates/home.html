@@ -4,6 +4,7 @@
 
 <div class="container mx-auto">
     <section class="flex flex-col my-14 h-screen ">
+        <div class="text-center text-xl">Halo <span class="text-[#C44B6A] font-semibold">{{user.username}}</span>! </div>
         <div class="flex flex-col items-center content-center gap-6 h-5/6 ">
             {% load static %}
             <img src="{% static 'main-match-bg.png' %}" alt="">
@@ -52,6 +53,10 @@
                 {% endif %}
             </div>
         </div>
+        
+        <!-- <div id="random-book" class="border-2 p-3">
+
+        </div>
 
         <div class="text-center">
             <h1 class="text-4xl">Hi {{ user.username }}!</h1>
@@ -63,7 +68,7 @@
         <br> 
         <input class="w-1/2 p-3 rounded-xl" id="book-search" type="text" placeholder="search your book here..">
         <div id="book-search-result" class="grid grid-cols-4 gap-4 pt-3">
-        </div>
+        </div> -->
     </section>
 </div>
 
@@ -96,6 +101,36 @@
         refreshBooks(searchString); 
     }); 
 
+    async function getRandomBook() {
+        let url = "{% url 'books:get_random_book' %}";
+        console.log(url);
+        return fetch("{% url 'books:get_random_book' %}")
+        .then((res) => res.json())
+    }
+
+    
+    async function refreshRandomBook() {
+    // Replace this URL with your own API endpoint for fetching random books
+        const book = await getRandomBook();
+        console.log(book)
+        if (book) {
+            const randomBookElement = document.getElementById('random-book');
+            
+            data = `<p class="text-2xl">${book.title} by ${book.author}</p>`
+            for (let i = 0; i < book.subjects.length; i++) {
+                data += `<div>${book.subjects[i]}</div>`
+            }
+
+            randomBookElement.innerHTML = data; 
+        }
+    }
+
+    // Call the function initially
+    refreshRandomBook();
+
+    // Call the function every x seconds (e.g., every 5 seconds)
+    const intervalSeconds = 7; // Change this value to set the interval in seconds
+    setInterval(refreshRandomBook, intervalSeconds * 1000);
 </script>
 
 {% endblock content %}
