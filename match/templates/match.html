@@ -4,7 +4,7 @@
 
     <div id="success-alert" class="hidden fixed top-0 z-50 bg-[#973B53] w-full text-center py-4 lg:px-4">
         <div class="p-2 bg-[#C44B6A] items-center text-white leading-none flex lg:inline-flex" role="alert">
-            <span class="flex bg-white uppercase text-neutral-700 italic px-2 py-1 text-xl2 mr-3">MATE←→</span>
+            <span class="flex bg-white uppercase text-neutral-700 italic px-2 py-1 text-xl2 mr-3">MATCHED</span>
             <span class="font-sans mr-2 text-left flex-auto text-white italic text-2xl" id="success-message"></span>
         </div>
     </div>
@@ -13,7 +13,7 @@
 
         <!-- Card start -->
         <div class="flex items-center justify-center h-screen">
-            <div class="max-w-sm bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+            <div class="max-w-sm bg-white rounded-lg overflow-hidden shadow-lg">
             <!--  <div class="max-w-sm mr-auto mt-20 ml-20 bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">-->
                 <div class="border-b px-6 pb-4">
                     <div class="text-left my-4">
@@ -21,6 +21,10 @@
 
                         <div class="py-2">
                             <h3 id="rekomen-user" class="text-2xl text-[#C44B6A] dark:text-white mb-1"></h3>
+                        </div>
+
+                        <div class="py-2">
+                            <h6 id="user-firstlast-name" class="text-xl3 text-gray-800 dark:text-white mb-1"></h6>
                         </div>
 
                         <div class="py-2">
@@ -71,6 +75,7 @@
         let profileButton = document.getElementById("see-profile")
         let interestMember = document.getElementById("interest")
         let bioUser = document.getElementById("bio-user")
+        let userFirstLastName = document.getElementById("user-firstlast-name")  
 
         async function fetchMatch() {
             return fetch("{% url 'match:get_match' %}") 
@@ -83,6 +88,8 @@
             document.getElementById("rekomen-user").innerHTML = data.name; 
             document.getElementById("interest").innerHTML = "Interest: " + data.interest_subject; 
             document.getElementById("bio-user").innerHTML = data.bio;
+            document.getElementById("user-name").innerHTML = data.bio;
+            document.getElementById("user-firstlast-name").innerHTML = data.bio;
         }
         window.onload = getMatch()
 
