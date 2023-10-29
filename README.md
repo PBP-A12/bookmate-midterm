@@ -37,6 +37,7 @@ https://drive.google.com/file/d/17jiAwHx_68zUrolbTl75IoLRFK_JLYrx/view
 ##  Role Pengguna Aplikasi
 - ### Role admin
     Role ini diakses melalui Django Admin Interface. Admin dapat melihat dan mengatur seluruh database seperti list user, list buku, dan lain-lain. 
+    - 
 - ### Role guest user
     Role ini tidak dapat mengakses fitur apapun, akan diberikan arahan untuk login. 
 - ### Role logged in user

@@ -19,7 +19,6 @@ def register(request):
             member = Member(account=account)
             member.save()
 
-
             messages.success(request, 'Your account has been successfully created!')
             return redirect('authentication:login')
         
