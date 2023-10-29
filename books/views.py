@@ -24,3 +24,9 @@ def get_books_by_title(request, title):
     queryset = Book.objects.filter(title__iregex=rquery); 
     res = BookSerializer(queryset, many=True)
     return HttpResponse(json.dumps(res.data, indent=4), content_type='application/json')
+
+def get_random_book(request): 
+    book = Book.objects.all().order_by('?').first()
+    res = BookSerializer(book)
+    return HttpResponse(json.dumps(res.data, indent=4), content_type='application/json')
+    return HttpResponse({}, content_type='application/json')

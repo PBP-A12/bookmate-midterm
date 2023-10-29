@@ -1,0 +1,23 @@
+{% extends 'base-belum-login.html' %}
+
+{% block content %}
+<div class="flex flex-col gap-3">
+    <h1 class="text-[#C44B6A] font-bold text-4xl">
+        Temukan Cinta 
+        <br>
+        di Halaman Buku Anda!
+    </h1>
+    <p><span class="text-[#C44B6A] font-bold">BookMate:</span> Aplikasi Dating berdasarkan Preferensi Buku Anda. 
+        Matching Seperti Belum Pernah Terjadi Sebelumnya!
+    </p>
+    <div>
+        <a href="{% url 'authentication:register' %}" ">
+            <button class="py-2 px-4 rounded-lg transition transform ease-in-out duration-400 hover:scale-[1.05] bg-[#C44B6A] text-white">Register</button>
+        </a>
+        <a href="{% url 'authentication:login' %}" ">
+            <button class="py-2 px-4 rounded-lg transition transform ease-in-out duration-400 hover:scale-[1.05] bg-white text-black">Log In</button>
+        </a>
+    </div>
+</div>
+{% endblock content %}
+
