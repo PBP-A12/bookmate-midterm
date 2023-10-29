@@ -47,12 +47,6 @@ def get_match(request):
     new_match.save()
     
     interest = "-"
-    if (BookRequest.objects.filter(member = other_member).exists() and BookRequest.objects != None):
-        user_book = BookRequest.objects.filter(member = other_member).first()
-        user_books_serialized  = json.dumps(BookRequestSerializer(user_book, many=True).data)
-        user_books_deserialized = json.load(user_books_serialized)
-        for books in user_books_deserialized:
-            interest = books('subjects')
     result = {
         "name" : other_member.account.username, 
         "first_name": other_member.account.first_name,
