@@ -36,8 +36,6 @@
                     <button class="w-40 rounded-2xl px-3 py-1 border-2 border-[#C44B6A] text-[#C44B6A] transition transform ease-in-out duration-400 hover:scale-[1.05]">Match!</button>
                 </a>
                 {% elif home == 2 %} 
-                {% load static %}
-                <img src="{% static 'arrow.svg' %}" alt="">
                 <a href="{% url 'dashboardbuku:show_book' %}" ">
                     <button class="w-40 rounded-2xl px-3 py-1 border-2 border-black text-black transition transform ease-in-out duration-400 hover:scale-[1.05]">Review Buku</button>
                 </a>
@@ -72,7 +70,7 @@
     <section class="h-screen flex flex-col content-center items-center justify-center w-full ">
         <h1 class="text-3xl">Top Books: </h1>
         <br>
-        <div id="random-book" class="h-96 w-96 border-4 border-[#C44B6A] rounded-md p-3 flex flex-col gap-3 transition transform ease-in-out duration-400 hover:scale-[1.05]">
+        <div id="random-book" class="h-96 w-96 border-4 border-black rounded-md p-3 flex flex-col gap-3 transition transform ease-in-out duration-400 hover:scale-[1.05]">
     </section>
 </div>
 
