@@ -1,11 +1,13 @@
 import json
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.urls import reverse
 from authentication.models import Member
 from books.models import Book
 from dashboardbuku.models import Review
+from user.forms import ProfileForm
 from user.models import Profile
 from django.core import serializers
 # from book_request.models import BookRequest
@@ -16,7 +18,10 @@ def user(request, id):
     member = Member.objects.get(account=id)
     user = User.objects.get(pk=id)
 
-    profile = Profile.objects.get(member=member)
+    profile = Profile.objects.filter(member = member)
+
+    # if (not profile):
+    #     Profile(member=member, age=0, bio='').save()
     
     context = {
         "id" : id,
@@ -63,3 +68,14 @@ def get_reviews(request, id):
         i["book"] = serialized_user[0]
     
     return JsonResponse(serialized_matches, safe=False)
+
+def edit_profile(request, id):
+    member = Member.objects.get(account=id)
+    profile = Profile.objects.get(member = member)
+
+    form = ProfileForm(request.POST or None, instance=profile)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+
+    return HttpResponseRedirect(reverse('user:user', args=[id]))
