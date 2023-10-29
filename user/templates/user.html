@@ -3,7 +3,37 @@
 
 {% block content %}
 <body>
-    <!-- <div id="edit_modals" class="absolute w-[100%] h-[100%] flex items-center justify-center"></div> -->
+    <div id="edit_modals" class="fixed w-[100%] h-[100%] flex items-top justify-center z-10" style="visibility: hidden;">
+        <div id="edit" class="fade w-[480px] h-fit p-[32px] rounded-lg bg-[#FFFAF0]">
+            <div class="flex flex-col gap-[32px]">
+                <div class="flex flex-row justify-between items-center">
+                    <p class="text-[32px] font-bold"> Edit Profile </p>
+                    <div class="flex flex-row justify-end w-[100%]">
+                        <button class="cursor-pointer w-[50px] rounded-md bg-[#FFB619] text-[#FFFAF0] font-bold p-[10px] hover:scale-[103%] transition duration-300 " onclick="hide_edit_profile()">X</button>
+                    </div>
+                </div>
+
+                
+                <form id="formEdit" onsubmit="return false;" class="flex flex-col gap-[32px]">
+                    {% csrf_token %}
+                    <div class="border-[1px] focus-within:border-[#64B357] rounded-md">
+                        <input type="text" id="age" name="age" placeholder="Age" value = "" class="rounded-md w-[100%] h-[52px] border-none focus:ring-0"> 
+                    </div>
+
+                    <div class="border-[1px] focus-within:border-[#64B357] rounded-md">
+                        <input type="text" id="bio" name="bio" placeholder="bio" value = "" class="rounded-md w-[100%] h-[52px] border-none focus:ring-0"> 
+                    </div>
+
+                </form>
+
+                <div>
+                    <form>
+                        <button onclick="edit_profile()" class="w-[100%] cursor-pointer rounded-md bg-[#64B357] text-[#FFFAF0] font-bold p-[10px] hover:scale-[103%] transition duration-300">Done</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="container mx-auto mt-48">
         <div class="flex flex-row items-center gap-8 ml-[10%]">
@@ -11,22 +41,14 @@
             <div>
                 <div class="flex flex-row gap-8">
                     <p class="text-4xl font-bold">{{userProfile.username}}, {{profile.age}}</p>
-                    <button class="bg-black text-white py-2 px-4 rounded-lg transition transform ease-in-out duration-400 hover:scale-[1.05]" onclick="edit_profile()">Edit Profile</button>
+
+                    {% if user.id == id%}
+                    <button class="bg-black text-white py-2 px-4 rounded-lg transition transform ease-in-out duration-400 hover:scale-[1.05]" onclick="show_edit_profile()">Edit Profile</button>
+                    {% endif %}
                 </div>
                 <br>
                 <p class="text-2xl font-medium">{{userProfile.first_name}} {{userProfile.last_name}}</p>
                 <p class="text-2xl font-reguler">{{profile.bio}}</p>
-                <br>
-                <ul>
-                    {% for subject in subjects %}
-                    <li >
-                        <h5> {{subject}} </h5>
-                    </li>
-                    {% endfor %}
-                </ul>
-
-                <p></p>
-                <p></p>
             </div>
         </div>
 
@@ -103,8 +125,19 @@
         detailDiv.innerHTML = matchesHTML
     }
 
-    // async function edit_profile(){
-    //     document.getElementById('edit_modals').innerHTML = `<div class="bg-black text-white">TEASDASDASDASD</div>`
-    // }
+    async function show_edit_profile(){
+        document.getElementById('edit_modals').style.visibility = 'visible';
+    }
+
+    async function hide_edit_profile(){
+        document.getElementById('edit_modals').style.visibility = 'hidden';
+    }
+
+    async function edit_profile() {
+        const response = await fetch(`edit_profile/${id}`, {
+            method: "POST",
+            body: new FormData(document.querySelector('#formEdit'))
+        })
+    }
 </script>
 {% endblock content %}
