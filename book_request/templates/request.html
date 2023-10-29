@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<p hidden id="nama-User">{{user}}</p>
 <div id="add-request">
     
 <!-- Code block starts -->
@@ -20,25 +21,29 @@
                 <form method="post" id="request-form">
                     {% csrf_token %}
                     <label for="title" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Title</label>
-                    <input name="title" type="text" id="title" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Title"></input>
+                    <input name="title" type="text" id="title" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Title" required></input>
                     <label for="author" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Author</label>
-                    <input name="author" type="text" id="author" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Author"></input>
+                    <input name="author" type="text" id="author" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Author" required></input>
                     <label for="year" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Year</label>
-                    <input name="year" type="number" id="year" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Year"></input>
+                    <input name="year" type="number" id="year" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Year" required></input>
                     <label for="language" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Language</label>
-                    <input name="language" type="text" id="language" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Language"></input>
-                    <label for="subject" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Subjects</label>
+                    <input name="language" type="text" id="language" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Language" required></input>
+                    <label for="subjects" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Subjects</label>
                     <br>
+                    <input id="showGenre" for="subjects" class="text-gray-800 text-sm font-bold leading-tight tracking-normal" disabled></input>
                     <select id="subject" name="subject" class="block w-full mt-1 form-multiselect" multiple="true">
-                        <option value="" disabled selected>Select an option</option>
+                        <option value="" disabled>Select an option</option>
                         {% for genre in subjects %}
-                            <option value="{{ genre }}">{{ genre }}</option>
+                            <option value="{{ genre }}" required>{{ genre }}</option>
                         {% endfor %}
                     </select>
+                    <button id="addGenre" type="button">Add Genre</button>
+                    <br>
+
                     <div class="flex items-center justify-start w-full">
-                        <button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm" type="buttpn" onclick="request()">Submit</button>
+                        <button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm" onclick="request()">Submit</button>
+                        <button class="focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm" onclick="modalHandler()">Cancel</button>
                     </div>
-                    <button class="focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm" onclick="modalHandler()">Cancel</button>
                 </form>
                 <button class="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onclick="modalHandler()" aria-label="close modal" role="button">
                     <svg  xmlns="http://www.w3.org/2000/svg"  class="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -99,158 +104,262 @@
         select.addEventListener('mousemove', function(e){
             e.preventDefault();
         });
-        function request() {
-            fetch("{% url 'book_request:requesting' %}", {
-                method: "POST",
-                body: new FormData(document.getElementById('request-form'))
-            })
-                .then(refreshProducts)
-                .catch((error) => console.error("Error adding product: ", error));
-    
-            document.getElementById("request-form").reset();
-            return false;
+        const selected = document.getElementById('subject');
+        const button = document.getElementById('addGenre')
+        button.addEventListener('click', () => {
+            console.log("aaaaaaaaaaaaaaa")
+        const selectedOptions = [];
+
+        for (const option of selected.options) {
+            if (option.selected) {
+            selectedOptions.push(option.value);
+            }
         }
-        
+        let showGenre = document.getElementById('showGenre')
+        showGenre.value = selectedOptions.join(', ')
+        console.log(selectedOptions)
+        })        
     </script>
     
 </dh-component>
 </div>
+<label for="sortby">Sort by:</label>
+<select id="sortby" name="sortby" onchange="sortBooks()">
+    <option value="title">Title</option>
+    <option value="author">Author</option>
+    <option value="year">Year</option>
+    <option value="language">Language</option>
+    <option value="subjects">Subjects</option>
+    <option value="date_requested">Date Requested</option>
+</select>
+<label for="sortorder">Sort order:</label>
+<button id="sortorder" name="sortorder" onclick="orderSort()"></button>
 <h1>My Requests: </h1>
-{% if user_books %}
 <table>
-    <div id="header">
+<thead id="header-user">
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Year</th>
+        <th>Language</th>
+        <th>Subjects</th>
+        <th>Date Requested</th>
+    </tr>
+</thead>
+<tbody id="user_request">
+    <tr>
+        {% for book in all_books %}
+        {% endfor %}
+    </tr>
+</tbody>
+</table>
+<p id="no-request-user"></p>
+<h1>All Requests: </h1>
+<table>
+    <thead id="header-all">
         <tr>
             <th>Title</th>
             <th>Author</th>
-                    <th>Year</th>
-                    <th>Language</th>
-                    <th>Subjects</th>
-                    <th>Date Requested</th>
-                </tr>
-            </div>
-            <div id="user_request">
-                {% for book in user_books %}
-                {% endfor %}
-            </div>
-        </table>
-    {% else %}
-        <p>No book requests at this time.</p>
-    {% endif %}
-    <h1>All Requests: </h1>
-    {% if all_books %}
-        <table>
-            <thead id="header">
-                <tr>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Year</th>
-                    <th>Language</th>
-                    <th>Subjects</th>
-                    <th>Date Requested</th>
-                </tr>
-            </thead>
-            <tbody id="all_requests">
-                <tr>
-                    {% for book in all_books %}
-                    {% endfor %}
-                </tr>
-            </tbody>
-        </table>
-    {% else %}
-        <p>No book requests at this time.</p>
-    {% endif %}
-    <script>
-        async function getUserRequest() {
-            return fetch("{% url 'book_request:get_request_json_user' %}").then((res) => res.json());
-        }
-        async function getRequests() {
-            return fetch("{% url 'book_request:get_requests_json' %}").then((res) => res.json());
-        }
-        async function getSubjects() {
-            return fetch("{% url 'book_request:get_subjects_json' %}").then((res) => res.json());
-        }
-        async function refreshUserRequest() {
+            <th>Year</th>
+            <th>Language</th>
+            <th>Subjects</th>
+            <th onclick="sortHeader('date_requested')">Date Requested</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="all_requests">
+        <tr>
+            {% for book in all_books %}
+            {% endfor %}
+        </tr>
+    </tbody>
+</table>
+<p id="no-request-all"></p>
+<script>
+    async function getUserRequest() {
+        return fetch("{% url 'book_request:get_request_json_user' %}").then((res) => res.json());
+    }
+    async function getRequests() {
+        return fetch("{% url 'book_request:get_requests_json' %}").then((res) => res.json());
+    }
+    async function getSubjects() {
+        return fetch("{% url 'book_request:get_subjects_json' %}").then((res) => res.json());
+    }
+    async function request() {
+        fetch("{% url 'book_request:requesting' %}", {
+            method: "POST",
+            body: new FormData(document.getElementById('request-form'))
+            
+        })
+        .then(refreshUserRequest).then(refreshAllRequests).then(console.log("Request added"))
+            .catch((error) => console.error("Error adding product: ", error));
+
+        document.getElementById("request-form").reset();
+        return false;
+    }
+    async function refreshUserRequest() {
+        const products = await getUserRequest();
+        let htmlString = "";
+        if (products.length == 0) {
+            // document.getElementById("header-user").innerHTML = "";
+            htmlString = "<p>You haven't requested anything.</p>";
+            document.getElementById("no-request-user").innerHTML = htmlString;
             document.getElementById("user_request").innerHTML = "";
-            const products = await getUserRequest();
-            let htmlString = "";
+        }
+        else {
+            const urlParams = new URLSearchParams(window.location.search);
+            let sortBy = urlParams.get("sortby");
+            let sortOrder = urlParams.get("sortorder");
+            if (sortBy == null) {
+                sortBy = "title";
+            }
+            if (sortOrder == null) {
+                sortOrder = "asc";
+            }
+            products.sort((a, b) => {
+                if (a[sortBy] < b[sortBy]) {
+                    return sortOrder == "asc" ? -1 : 1;
+                }
+                if (a[sortBy] > b[sortBy]) {
+                    return sortOrder == "asc" ? 1 : -1;
+                }
+                return 0;
+            });
             products.forEach((item) => {
+                let subjects = "";
+                    for (let i = 0; i < item.subjects.length; i++) {
+                        subjects += item.subjects[i].charAt(0).toUpperCase() + item.subjects[i].slice(1);
+                        subjects += i == item.subjects.length - 1 ? "" : ", ";
+                    }
                 htmlString += `
                     <tr>
-                        <td>${item.fields.title}</td>
-                        <td>${item.fields.author}</td>
-                        <td>${item.fields.year}</td>
-                        <td>${item.fields.language}</td>
-                        <td>${item.fields.subjects}</td>
-                        <td>${item.fields.date_requested}</td>
-                        <td><button onclick=deleteBook(${item.pk})>Cancel</button></td>
+                        <td>${item.title}</td>
+                        <td>${item.author}</td>
+                        <td>${item.year}</td>
+                        <td>${item.language}</td>
+                        <td>${subjects}</td>
+                        <td>${item.date_requested}</td>
+                        <td><button onclick=editBook(${item.id})>Edit</button></td>
+                        <td><button onclick=deleteBook(${item.id})>Cancel</button></td>
                     </tr>
                 `;
 
             })
             document.getElementById("user_request").innerHTML = htmlString;
         }
-        async function refreshAllRequests() {
-            document.getElementById("all_requests").innerHTML = "";
-            const products = await getRequests();
-            let htmlString = "";
+    }
+    async function refreshAllRequests() {
+        urlParams = new URLSearchParams(window.location.search)
+        document.getElementById("sortorder").innerHTML = urlParams.get("sortorder") == "asc" ? "Ascending" : "Descending";
+        const sortby = urlParams.get("sortby");
+        if (sortby) {
+            document.getElementById("sortby").value = sortby;
+        }
+        // document.getElementById("sortby").setAttribute(name=document.getElementById("sortby").getAttribute(name),urlParams.get("sortby"))
+        let namaUser = document.getElementById("nama-User").innerHTML;
+        const products = await getRequests();
+        console.log(products)
+        let htmlString = "";
+        if (products.length == 0) {
+            // document.getElementById("header-all").innerHTML = "";
+            htmlString = "<p>No book requests at this time.</p>";
+            document.getElementById("no-request-all").innerHTML = htmlString;
+            document.getElementById("all_requests").innerHTML ="";
+        }
+        else{
+            products.sort((a, b) => {
+                if (a[sortBy] < b[sortBy]) {
+                    return sortOrder == "asc" ? -1 : 1;
+                }
+                if (a[sortBy] > b[sortBy]) {
+                    return sortOrder == "asc" ? 1 : -1;
+                }
+                return 0;
+            });
             products.forEach((item) => {
-                if (item.fields.member == "{{ user.username }}") {
+                console.log(item.member)
+                let subjects = "";
+                for (let i = 0; i < item.subjects.length; i++) {
+                    subjects += item.subjects[i].charAt(0).toUpperCase() + item.subjects[i].slice(1);
+                    subjects += i == item.subjects.length - 1 ? "" : ", ";
+                }
+                if (item.member == namaUser) {
+                    console.log(item)
                     htmlString += `
                     <tr>
-                        <td>${item.fields.title}</td>
-                        <td>${item.fields.author}</td>
-                        <td>${item.fields.year}</td>
-                        <td>${item.fields.language}</td>
-                        <td>${item.fields.subjects}</td>
-                        <td>${item.fields.date_requested}</td>
-                        <td><button onclick=editBook(${item.pk})>Cancel</button></td>
-                        <td><button onclick=deleteBook(${item.pk})>Cancel</button></td>
+                        <td>${item.title}</td>
+                        <td>${item.author}</td>
+                        <td>${item.year}</td>
+                        <td>${item.language}</td>
+                        <td>${subjects}</td>
+                        <td>${item.date_requested}</td>
+                        <td><button onclick=editBook(${item.id})>Edit</button></td>
+                        <td><button onclick=deleteBook(${item.id})>Cancel</button></td>
                     </tr>
                 `;
                 }
                 else{
                     htmlString += `
                         <tr>
-                            <td>${item.fields.title}</td>
-                            <td>${item.fields.author}</td>
-                            <td>${item.fields.year}</td>
-                            <td>${item.fields.language}</td>
-                            <td>${item.fields.subjects}</td>
-                            <td>${item.fields.date_requested}</td>
+                            <td>${item.title}</td>
+                            <td>${item.author}</td>
+                            <td>${item.year}</td>
+                            <td>${item.language}</td>
+                            <td>${subjects}</td>
+                            <td>${item.date_requested}</td>
                         </tr>
                     `;
                 }
 
             })
             document.getElementById("all_requests").innerHTML = htmlString;
-
-        }
-        function editBook(id) {
-            const formData = new FormData()
-            formData.append("id", id)
-            fetch("{% url 'book_request:edit_book' %}",{
-                method: "POST",
-                body: formData
-            }).then(refreshProducts)
-
-            return false
-        }
-        function deleteBook(id) {
-            const formData = new FormData()
-            formData.append("id", id)
-            fetch("{% url 'book_request:delete_book' %}",{
-                method: "POST",
-                body: formData
-            }).then(refreshProducts)
-
-            return false
         }
 
-        window.onload = function() {
-            refreshUserRequest();
-            refreshAllRequests();
+    }
+    function editBook(id) {
+        const formData = new FormData()
+        formData.append("id", id)
+        fetch("{% url 'book_request:edit_book' %}",{
+            method: "POST",
+            body: formData
+        }).then(refreshUserRequest).then(refreshAllRequests)
+
+        return false
+    }
+    function deleteBook(id) {
+        const formData = new FormData()
+        formData.append("id", id)
+        fetch("{% url 'book_request:delete_book' %}",{
+            method: "POST",
+            body: formData
+        }).then(refreshUserRequest).then(refreshAllRequests)
+
+        return false
+    }
+    function sortBooks(){
+        sortBy = document.getElementById("sortby").value
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("sortby", sortBy);
+        window.location.search = urlParams.toString();
+    }
+    function orderSort(){
+        const urlParams = new URLSearchParams(window.location.search);
+        let sortOrder = urlParams.get("sortorder");
+        document.getElementById("sortorder").innerHTML = sortOrder;
+        if (sortOrder == "asc") {
+            sortOrder = "desc";
+        } else if(sortOrder == "desc"){
+            sortOrder = "asc";
         }
-    </script>
+        urlParams.set("sortorder", sortOrder);
+        document.getElementById("sortorder").innerHTML = sortOrder == "asc" ? "Ascending" : "Descending";
+        window.location.search = urlParams.toString();
+    }
+    window.onload = function() {
+        refreshUserRequest();
+        refreshAllRequests();
+    }
+</script>
 
 {% endblock %}
 

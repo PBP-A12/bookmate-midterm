@@ -13,4 +13,4 @@ class Member(models.Model) :
     subjects = models.ManyToManyField(Subject, related_name="members")
 
     def __str__(self): 
-        return self.user.username 
+        return self.account.username 
