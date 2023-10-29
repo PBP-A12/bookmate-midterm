@@ -24,7 +24,6 @@ def show_book(request):
 def get_review_json(request, id):
     buku = Book.objects.get(pk = id)
     review_book = Review.objects.filter(book=buku).values("pk" ,"reviewer__account__username", "book", "review")
-    print("ini review_book: ", review_book)
     return HttpResponse(json.dumps(list(review_book)), content_type='application/json')
 
 @csrf_exempt
@@ -48,7 +47,6 @@ def add_review_ajax(request, id):
     form = ReviewForm(request.POST or None, instance=book_review)
     book_review = BookSerializer(book_review)
     book_review = book_review.data
-    print("ini book review : ", book_review)
     user = request.user
     member = Member.objects.get(account = user)
 
