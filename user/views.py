@@ -20,8 +20,10 @@ def user(request, id):
 
     profile = Profile.objects.filter(member = member)
 
-    # if (not profile):
-    #     Profile(member=member, age=0, bio='').save()
+    if (not profile):
+        profile = Profile(member=member, age=0, bio='').save()
+    else:
+        profile = profile.first()
     
     context = {
         "id" : id,
