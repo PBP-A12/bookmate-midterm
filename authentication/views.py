@@ -23,7 +23,6 @@ def register(request):
             return redirect('authentication:login')
         
         else:
-            print(form.fields)
             context = {'form': form}
             return render(request, 'register.html', context)
         
@@ -40,7 +39,6 @@ def login_user(request):
             response = HttpResponseRedirect(reverse("home:show_main")) 
             return response
         else:
-            print("incorrect")
             messages.info(request, 'Sorry, incorrect username or password. Please try again.')
     context = {}
     return render(request, 'login.html', context)
