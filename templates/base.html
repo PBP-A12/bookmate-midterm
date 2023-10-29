@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -19,7 +20,7 @@
 
     <body style="font-family: 'Poppins', sans-serif;">
         {% if user.is_authenticated %}
-        <nav class="fixed top-0 flex flex-row justify-between items-center w-[100%] px-12 transition ease-in-out duration-150">
+        <nav class="fixed top-0 flex flex-row justify-between items-center w-[100%] px-12 transition ease-in-out duration-150 bg-white">
             <a href="/" class="flex items-center">
                 <img src="{% static 'svg/bookmate.svg' %}" class="h-[128px] cursor-pointer" ></img>
             </a>
@@ -33,7 +34,7 @@
                     Book Review
                 </a>
 
-                <a href="/" class="flex items-center transition ease-in-out duration-200 hover:text-[#C44B6A]">
+                <a href="" class="flex items-center transition ease-in-out duration-200 hover:text-[#C44B6A]">
                     Book Request
                 </a>
                 

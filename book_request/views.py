@@ -22,9 +22,7 @@ def show_book(request):
     sort_by = request.GET.get('sortby')
     subjects = Subject.objects.all()
     subjects = subjects.values_list('name', flat=True)
-    print(request.user)
     order = request.GET.get('sortorder', 'asc') # default to ascending order if not specified
-    print(sort_by,order)
     if sort_by:
         if order == 'asc':
             all_books = BookRequest.objects.all().order_by(sort_by)
@@ -35,11 +33,11 @@ def show_book(request):
     else:
         all_books = BookRequest.objects.all()
         user_books = BookRequest.objects.filter(member=member)
-    # print(all_books.values_list('subjects', flat=True))
     all_books_serialized  = json.dumps(BookRequestSerializer(all_books, many=True).data) 
     user_books_serialized  = json.dumps(BookRequestSerializer(user_books, many=True).data)
-    # print("ini serialized", all_books_serialized)
-    # print("ini ngga", all_books)
+    user_book_deserialized = json.loads(user_books_serialized)
+    for book in user_book_deserialized:
+        print(book['subjects'])
     context = {
         'user': request.user,
         'title': '',
@@ -58,21 +56,21 @@ def show_book(request):
 def requesting(request):
     if request.method == 'POST':
         title = request.POST.get('title')
-        print("AHHHHHH",title)
+        # print("AHHHHHH",title)
         author = request.POST.get('author')
         year = request.POST.get('year')
         language = request.POST.get('language')
-        print(request.POST)
+        # print(request.POST)
         subject = request.POST.getlist('subject')
         user = Member.objects.get(account=request.user)
         if title != None or author != None or year != None or language != None or subject != None:
-            print('a')
+            # print('a')
             existing_book = BookRequest.objects.filter(title=title, author=author, year=year, language=language, subjects__name__in=subject).exists()
             if existing_book:
-                print('b')
+                # print('b')
                 messages.info(request, 'This book has already been requested.')
             else:
-                print('c')
+                # print('c')
                 book = BookRequest(member=user,title=title, author=author, year=year, language=language, date_requested=datetime.datetime.now())
                 book.save()
                 print(subject)
@@ -112,13 +110,10 @@ def delete_book(request):
     return HttpResponse(b'CREATED', status=201)
 
 def get_request_json_user(request):
-    # data = serializers.serialize('json', BookRequest.objects.filter(member=Member.objects.get(account=request.user)))
     res = BookRequestSerializer(BookRequest.objects.filter(member=Member.objects.get(account=request.user)), many=True).data
     return HttpResponse(json.dumps(res, indent=4), content_type='application/json')
-    # return HttpResponse(data, content_type='application/json')
 
 def get_requests_json(request):
-    # data = serializers.serialize('json', BookRequest.objects.all())
     res = BookRequestSerializer(BookRequest.objects.all(), many=True).data
     return HttpResponse(json.dumps(res, indent=4), content_type='application/json')
 
