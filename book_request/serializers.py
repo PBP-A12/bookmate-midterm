@@ -4,7 +4,6 @@ from .models import BookRequest
 class BookRequestSerializer(serializers.ModelSerializer):
     subjects = serializers.SerializerMethodField()
     member = serializers.SerializerMethodField()
-    date_requested = serializers.DateTimeField(format="%Y-%m-%d")
 
     class Meta:
         model = BookRequest

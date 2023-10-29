@@ -11,5 +11,5 @@ class BookRequest(models.Model):
     year = models.IntegerField()
     language = models.CharField(max_length=2)
     subjects = models.ManyToManyField(Subject)
-    date_requested = models.DateField(default=datetime.date.today)
+    date_requested = models.DateField(auto_now=True)
 
