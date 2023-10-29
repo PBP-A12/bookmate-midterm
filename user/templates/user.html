@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mx-auto">
+        <section class="flex flex-col items-center justify-center h-screen">
+            <h1 class="text-9xl text-[#ffd700]">Welcome to your profile  {{user.username}}</h1>
+            <h1 class="text-9xl text-[#ffd700]">{{user.first_name}} {{user.last_name}}</h1>
+            {% for subject in subjects %}
+                <p> {{subject}}</p>
+            {% endfor %}
+
+            {% for review in reviews %}
+                <p> {{review.review}}</p>
+            {% endfor %}
+
+            {% for request in requests %}
+                <p> {{request.title}}</p>
+            {% endfor %}
+            <br>
+            <div class="text-center">
+                <p class="text-2xl">What's up?</p>
+                <div>
+                    <a class="underline hover:text-blue-600" href="{% url 'authentication:logout' %}">Log Out</a>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock content %}
