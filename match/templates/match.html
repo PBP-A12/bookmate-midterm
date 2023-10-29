@@ -20,19 +20,19 @@
                         <p class="font-bold text-4xl">MATCH.</p>
 
                         <div class="py-2">
-                            <h3 id="rekomen-user" class="text-2xl text-[#C44B6A] dark:text-white mb-1"></h3>
+                            <h3 id="rekomen-user" class="text-xl bold text-[#C44B6A] mt-9 mb-3"></h3>
                         </div>
 
                         <div class="py-2">
-                            <h6 id="user-firstlast-name" class="text-xl3 text-gray-800 dark:text-white mb-1"></h6>
+                            <h3 id="full-name" class="text-xl bold text-[#C44B6A] mt-9 mb-3"></h3>
                         </div>
 
                         <div class="py-2">
-                            <h6 id="bio-user" class="text-xl10 italic text-sm text-gray-600 dark:text-white mb-1"></h6>
+                            <h6 id="bio-user" class="text-xl10 italic text-sm text-gray-600 mb-3"></h6>
                         </div>
 
                         <div class="py-2">
-                            <h6 id="interest" class="text-xl3 text-gray-800 dark:text-white mb-1"></h6>
+                            <h6 id="interest" class="text-xl3 text-gray-800 mb-3"></h6>
                         </div>
 
                         <div class="flex flex-row">
@@ -75,12 +75,13 @@
         let profileButton = document.getElementById("see-profile")
         let interestMember = document.getElementById("interest")
         let bioUser = document.getElementById("bio-user")
-        let userFirstLastName = document.getElementById("user-firstlast-name")  
+        let userFullName = document.getElementById("full-name")  
 
         async function fetchMatch() {
             return fetch("{% url 'match:get_match' %}") 
             .then((res) => res.json())
         }
+
         async function getMatch() { 
             const data = await fetchMatch() 
             console.log(data)
@@ -88,24 +89,23 @@
             document.getElementById("rekomen-user").innerHTML = data.name; 
             document.getElementById("interest").innerHTML = "Interest: " + data.interest_subject; 
             document.getElementById("bio-user").innerHTML = data.bio;
-            document.getElementById("user-name").innerHTML = data.bio;
-            document.getElementById("user-firstlast-name").innerHTML = data.bio;
+            document.getElementById("see-profile").addEventListener("click", () => {
+                // location.href="url 'user:user' data.id %}"
+            })
+            document.getElementById("full-name").innerHTML = data.first_name + " " + data.last_name; 
+            
         }
         window.onload = getMatch()
 
         document.getElementById("match-button").addEventListener("click", getMatch)
 
         async function seeRecommendedProfile() {
-            const matchId = document.getElementById("random-match-id").value;
-            const recommendedMemberURL = "{% url 'match:recommended_member' match_id=0 %}";
-            const modifiedURL = recommendedMemberURL.replace("0", matchId);
-            console.log(modifiedURL)
-            const recommendedMember = await fetch(modifiedURL);
-            console.log(recommendedMember.id)
+
+
+
 
             if (recommendedMember.ok) {
                 console.log("berhasil bestie")
-                const recommendedMemberId = recommendedMember.id; 
                 
                
             } else {
