@@ -4,7 +4,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpResponseNotFound, JsonResponse
 from django.urls import reverse
 from django.core import serializers
+from book_request.serializers import BookRequestSerializer
 from match.models import Matching
+from user.models import Profile
+from book_request.models import BookRequest
 from django.contrib.auth.decorators import login_required
 from authentication.models import Member
 from django.db.models import Max
@@ -26,16 +29,16 @@ def show_match(request):
 def get_match(request):
     this_member = Member.objects.get(account = request.user)
     other_member = None 
-
     for user_i in Member.objects.order_by("?") : 
         is_matched = Matching.objects.filter(user = this_member, matched_member = user_i, accepted = True).exists()
-        if (user_i != this_member and not is_matched) :
+        if (user_i != this_member and not is_matched and not user_i.account.is_superuser) :
             other_member = user_i 
             break 
     
     if (other_member is None) : 
         return HttpResponseNotFound("No Member", status = 404)
   
+    other_profile = Profile.objects.get(member = other_member)
     new_match = Matching.objects.filter(user = this_member, matched_member = other_member, accepted = False)
     if (new_match) :
         new_match = new_match.first() 
@@ -43,12 +46,16 @@ def get_match(request):
         new_match = Matching(user = this_member, matched_member = other_member)
     new_match.save()
     
+    interest = "-"
     result = {
         "name" : other_member.account.username, 
-        "id" : other_member.pk, 
+        "first_name": other_member.account.first_name,
+        "last_name": other_member.account.last_name,
+        "id" : other_member.account.pk, 
         "matching_id" : new_match.pk,
-        "interest_subject" : "babaidsf", #match_interest(this_member, other_member)
-        "bio" : "fdjfbsdgfjbrsdjgkvsdj"
+        "interest_subject" : interest, # match_interest(this_member, other_member)
+        "bio" :  other_profile.bio,
+        # "profile_user" : "user/%other_member.account"
     }
     #print(result.interesting_subject)
     return HttpResponse(json.dumps(result), content_type="application/json")    # pass
@@ -69,10 +76,6 @@ def accept_recommendation(request, id):
             print("ini nge send ke")
             print(recommendation.user.match_sent.all())
         return HttpResponseRedirect(reverse('match:show_match'))
-    
-#def cekMatching(thisUser, otherUser):
-#   for user_i in Member.objects.order_by("?") : 
-#      is_matched = Matching.objects.filter(user = , matched_member = user_i, accepted = True).exists()
 
 def delete_no_match():
     notMatch_to_delete = Matching.objects.filter(accepted=False)
@@ -94,21 +97,11 @@ def get_receiver_matches(sender_user):
         if Matching.objects.filter(user=sender_user, matched_member=received_user, accepted=True).exists():
             receiver_matches.append(received_user)
     return receiver_matches
-
-@login_required
-@csrf_exempt
-def recommended_member(request, match_id):
-    recommendation = Matching.objects.get(pk=match_id)
-    if request.user == recommendation.user.account:
-        data = recommendation.matched_member.account.pk
-        result = {
-            "id": recommendation.matched_member.account.pk,
-        }
-        return HttpResponse(json.dumps(result), content_type="application/json")
     
 def match_interest(this_member, other_member):
-    set1 = set(other_member.interest_subjects.all())
-    set2 = set(this_member.interest_subjects.all())
+    BookRequest.objects.filter(member = other_member).first()
+    set1 = set(this_member.interest_subjects.all())
+    set2 = set(other_member.interest_subjects.all())
     intersection_result = set1.intersection(set2)
     if not intersection_result:
         interest_subject = random.choice(list(set2))
@@ -118,6 +111,8 @@ def match_interest(this_member, other_member):
 
 
 
+from user.views import user
 
-        
-    
+@login_required
+def redirect(request, id) : 
+    return user(request, id)

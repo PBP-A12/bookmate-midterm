@@ -4,8 +4,8 @@
 
     <div id="success-alert" class="hidden fixed top-0 z-50 bg-[#973B53] w-full text-center py-4 lg:px-4">
         <div class="p-2 bg-[#C44B6A] items-center text-white leading-none flex lg:inline-flex" role="alert">
-            <span class="flex bg-white uppercase text-neutral-700 px-2 py-1 text-xl2 mr-3">MATE←→</span>
-            <span class="font-sans mr-2 text-left flex-auto text-white text-2xl" id="success-message"></span>
+            <span class="flex bg-white uppercase text-neutral-700 italic px-2 py-1 text-xl2 mr-3">MATCHED</span>
+            <span class="font-sans mr-2 text-left flex-auto text-white italic text-2xl" id="success-message"></span>
         </div>
     </div>
 
@@ -13,22 +13,26 @@
 
         <!-- Card start -->
         <div class="flex items-center justify-center h-screen">
-            <div class="max-w-sm bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+            <div class="max-w-sm bg-white rounded-lg overflow-hidden shadow-lg">
             <!--  <div class="max-w-sm mr-auto mt-20 ml-20 bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">-->
                 <div class="border-b px-6 pb-4">
                     <div class="text-left my-4">
                         <p class="font-bold text-4xl">MATCH.</p>
 
                         <div class="py-2">
-                            <h3 id="rekomen-user" class="text-2xl text-gray-800 dark:text-white mb-1"></h3>
+                            <h3 id="rekomen-user" class="text-xl bold text-gray-900 mt-9 mb-3"></h3>
                         </div>
 
                         <div class="py-2">
-                            <h5 id="bio-user" class="text-2xl text-gray-800 dark:text-white mb-1"></h5>
+                            <h3 id="full-name" class="text-xl text-[#C44B6A] mt-9 mb-3"></h3>
                         </div>
 
                         <div class="py-2">
-                            <h6 id="interest" class="text-xl3 text-gray-800 dark:text-white mb-1"></h6>
+                            <h6 id="bio-user" class="text-xl10 italic text-sm text-gray-600 mb-3"></h6>
+                        </div>
+
+                        <div class="py-2">
+                            <h6 id="interest" class="text-xl3 text-gray-800 mb-3"></h6>
                         </div>
 
                         <div class="flex flex-row">
@@ -71,11 +75,13 @@
         let profileButton = document.getElementById("see-profile")
         let interestMember = document.getElementById("interest")
         let bioUser = document.getElementById("bio-user")
+        let userFullName = document.getElementById("full-name")  
 
         async function fetchMatch() {
             return fetch("{% url 'match:get_match' %}") 
             .then((res) => res.json())
         }
+
         async function getMatch() { 
             const data = await fetchMatch() 
             console.log(data)
@@ -83,29 +89,16 @@
             document.getElementById("rekomen-user").innerHTML = data.name; 
             document.getElementById("interest").innerHTML = "Interest: " + data.interest_subject; 
             document.getElementById("bio-user").innerHTML = data.bio;
+            document.getElementById("see-profile").addEventListener("click", () => {
+                const url =  "user/" + data.id 
+                location.href=url
+            })
+            document.getElementById("full-name").innerHTML = data.first_name + " " + data.last_name; 
+            
         }
         window.onload = getMatch()
 
         document.getElementById("match-button").addEventListener("click", getMatch)
-
-        async function seeRecommendedProfile() {
-            const matchId = document.getElementById("random-match-id").value;
-            const recommendedMemberURL = "{% url 'match:recommended_member' match_id=0 %}";
-            const modifiedURL = recommendedMemberURL.replace("0", matchId);
-            console.log(modifiedURL)
-            const recommendedMember = await fetch(modifiedURL);
-            console.log(recommendedMember.id)
-
-            if (recommendedMember.ok) {
-                console.log("berhasil bestie")
-                const recommendedMemberId = recommendedMember.id; 
-                
-               
-            } else {
-                console.error("Gagal mengambil data dari recommendedMember");
-            }
-        } 
-        document.getElementById("see-profile").addEventListener("click", seeRecommendedProfile)
 
         function showSuccessAlert(message) {
             const successAlert = document.getElementById("success-alert");
@@ -122,6 +115,7 @@
             setTimeout(() => {
                 successAlert.classList.remove("block");
                 successAlert.classList.add("hidden");
+                getMatch();
             }, 1000); // Hapus pesan alert setelah 2 detik 
         }
 
@@ -141,7 +135,7 @@
                 .then((response) => {
                     console.log("matching sukses");
                     showSuccessAlert("Explore Your Favorite Books Together!");
-                    getMatch();
+                    
                 })
                 .catch((err) => console.log("Udah fetch tapi error"));
             } catch (error) {
