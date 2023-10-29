@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.core import serializers
+
 from .models import Member
 
 # Create your views here.
@@ -35,6 +37,8 @@ def login_user(request):
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
+            # serialized_obj = serializers.serialize('json', [ user ])
+            # print(serialized_obj)
             login(request, user)
             response = HttpResponseRedirect(reverse("home:show_main")) 
             return response

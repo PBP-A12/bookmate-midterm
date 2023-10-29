@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static tailwind_tags %}
+
+{% block content %}
+<body>
+    <!-- <div id="edit_modals" class="absolute w-[100%] h-[100%] flex items-center justify-center"></div> -->
+
+    <div class="container mx-auto mt-48">
+        <div class="flex flex-row items-center gap-8 ml-[10%]">
+            <img src="{% static 'svg/profile_picture.svg' %}" class="h-[248px]" ></img>
+            <div>
+                <div class="flex flex-row gap-8">
+                    <p class="text-4xl font-bold">{{userProfile.username}}, {{profile.age}}</p>
+                    <button class="bg-black text-white py-2 px-4 rounded-lg transition transform ease-in-out duration-400 hover:scale-[1.05]" onclick="edit_profile()">Edit Profile</button>
+                </div>
+                <br>
+                <p class="text-2xl font-medium">{{userProfile.first_name}} {{userProfile.last_name}}</p>
+                <p class="text-2xl font-reguler">{{profile.bio}}</p>
+                <br>
+                <ul>
+                    {% for subject in subjects %}
+                    <li >
+                        <h5> {{subject}} </h5>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                <p></p>
+                <p></p>
+            </div>
+        </div>
+
+        <hr class="border border-[2px] border-black mt-12 mb-8 mx-32">
+        
+        <div class="flex flex-row gap-32 justify-center my-8">
+            <div class="flex flex-row gap-3 cursor-pointer items-center " onclick="show_matched()">
+                <img src="{% static 'svg/matched_icon.svg' %}" class="h-6" ></img>
+                <span class="text-2xl font-bold" >Matched</span>
+            </div>
+            <div class="flex flex-row gap-3 cursor-pointer items-center" onclick="show_reviews()">
+                <img src="{% static 'svg/reviews_icon.svg' %}" class="h-6" ></img>
+                <span class="text-2xl font-bold" >Reviews</span>
+            </div>
+        </div>
+        
+        <div id="details">
+        </div>
+    </div>
+</body>
+<script>
+    var id = JSON.parse("{{ id|escapejs }}");
+
+    show_matched();
+
+    async function show_matched(){
+        const detailDiv = document.getElementById("details");
+
+        const matches = await fetch(`get_matched/${id}`).then((res) => res.json());
+
+        let matchesHTML = ``
+        matches.forEach((match) => {
+
+            matchesHTML += `
+            <div class="flex flex-row justify-between items-center mx-72 my-5">
+                <div class="flex flex-row items-center gap-5">
+                    <img src="{% static 'svg/profile_picture.svg' %}" class="h-[64px]" ></img>
+                    <div>
+                        <p class="text-2xl font-bold">${match.user.fields.username}, ${match.profile.fields.age}</p>
+                        <p class="text-xl font-medium">${match.user.fields.first_name + ' ' + match.user.fields.last_name}</p>
+                    </div>
+                </div>
+                <a href="/user/${match.fields.account}">
+                    <button class="bg-black text-white py-2 px-4 h-fit rounded-lg transition transform ease-in-out duration-400 hover:scale-[1.05]">See Profile</button>
+                </a> 
+            </div>`
+
+        })
+        detailDiv.className = "flex flex-col"
+        detailDiv.innerHTML = matchesHTML
+    }
+
+    async function show_reviews(){
+        const detailDiv = document.getElementById("details");
+
+        const reviews = await fetch(`get_reviews/${id}`).then((res) => res.json());
+
+        console.log(reviews)
+        let matchesHTML = ``
+        reviews.forEach((review) => {
+            matchesHTML += `
+            <div class="box-border h-96 w-72  border-4 mx-auto border-black items-center flex flex-col gap-2 justify-between p-2 overflow-auto">
+                <div>
+                    <h2 class=" text-lg font-bold">${review.book.fields.title}</h2>
+                    <p class="font-poppins text-sm">Written by: ${review.book.fields.author}</p>
+                    <p class="font-poppins text-sm">Year: ${review.book.fields.year}</p>
+                    <p class="font-poppins text-sm">Review : </p>
+                    
+                    <p class="font-poppins text-sm">${review.fields.review}</p>
+                </div>
+            </div>`
+        })
+        detailDiv.className = "flex flex-row justify-center"
+        detailDiv.innerHTML = matchesHTML
+    }
+
+    // async function edit_profile(){
+    //     document.getElementById('edit_modals').innerHTML = `<div class="bg-black text-white">TEASDASDASDASD</div>`
+    // }
+</script>
+{% endblock content %}
