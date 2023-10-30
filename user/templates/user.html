@@ -37,7 +37,8 @@
 
     <div class="container mx-auto mt-48">
         <div class="flex flex-row items-center gap-8 ml-[10%]">
-            <img src="{% static 'svg/profile_picture.svg' %}" class="h-[248px]" ></img>
+            {% load static %}
+            <img src="{% static 'profile_picture.svg' %}" class="h-[248px]" ></img>
             <div>
                 <div class="flex flex-row gap-8">
                     <p class="text-4xl font-bold">{{userProfile.username}}, {{profile.age}}</p>
@@ -56,11 +57,13 @@
         
         <div class="flex flex-row gap-32 justify-center my-8">
             <div class="flex flex-row gap-3 cursor-pointer items-center " onclick="show_matched()">
-                <img src="{% static 'svg/matched_icon.svg' %}" class="h-6" ></img>
+                {% load static %}
+                <img src="{% static 'matched_icon.svg' %}" class="h-6" ></img>
                 <span class="text-2xl font-bold" >Matched</span>
             </div>
             <div class="flex flex-row gap-3 cursor-pointer items-center" onclick="show_reviews()">
-                <img src="{% static 'svg/reviews_icon.svg' %}" class="h-6" ></img>
+                {% load static %}
+                <img src="{% static 'reviews_icon.svg' %}" class="h-6" ></img>
                 <span class="text-2xl font-bold" >Reviews</span>
             </div>
         </div>
@@ -85,7 +88,8 @@
             matchesHTML += `
             <div class="flex flex-row justify-between items-center mx-72 my-5">
                 <div class="flex flex-row items-center gap-5">
-                    <img src="{% static 'svg/profile_picture.svg' %}" class="h-[64px]" ></img>
+                    {% load static %}
+                    <img src="{% static 'profile_picture.svg' %}" class="h-[64px]" ></img>
                     <div>
                         <p class="text-2xl font-bold">${match.user.fields.username}, ${match.profile.fields.age}</p>
                         <p class="text-xl font-medium">${match.user.fields.first_name + ' ' + match.user.fields.last_name}</p>
