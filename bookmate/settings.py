@@ -33,6 +33,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+CSRF_TRUSTED_ORIGINS = ['https://bookmate-a12-tk.pbp.cs.ui.ac.id']
 
 # Application definition
 
