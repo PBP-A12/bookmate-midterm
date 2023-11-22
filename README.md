@@ -126,4 +126,4 @@ Untuk mengaktifkan *auto-reload* file HTML setelah server dijalankan, ikuti lang
     ```
     python manage.py tailwind build
     ```
-Sekarang tidak perlu lagi *reload* halaman setiap kali ada perubahan pada file HTML. 😇
+Sekarang tidak perlu lagi *reload* halaman setiap kali ada perubahan pada file HTML. 😇z
