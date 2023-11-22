@@ -12,6 +12,7 @@
 
 
 # Nama Aplikasi: BookMate
+tautan aplikasi: https://bookmate-a12-tk.pbp.cs.ui.ac.id/
 
 ## Cerita dan Manfaat Aplikasi
  BookMate adalah platform yang menghubungkan pecinta buku. Tujuannya adalah memfasilitasi koneksi dan pengalaman berbagi antar pembaca dengan minat buku yang serupa. Di era digital ini, banyak orang merasa kesulitan menemukan teman dengan minat buku yang serupa. Oleh karena itu, BookMate menciptakan wadah yang memudahkan pecinta buku untuk terhubung, berinteraksi, dan memperdalam minat mereka dalam dunia literasi.
@@ -20,7 +21,7 @@
 ### 1. Authentication (Ester)
 Modul ini berisi pengaturan autentikasi pengguna, baik sign up maupun sign in. Ketika pengguna sign up, pengguna perlu memasukkan data-data pribadi seperti username dan password. Selain itu, pengguna diminta memilih interest mereka (genre buku). Setelah terautentikasi, pengguna akan diarahkan ke homepage.   
 ### 2. Homepage (Ester)
-Modul ini berisi halaman utama ketika user mengunjungi website BookMate. Bagi pengguna yang belum login, halaman utamanya berupa landing page yang akan mengarahkan user tersebut untuk login. Sementara itu, bagi user yang sudah login, halaman utama akan berisi list rekomendasi buku (berdasarkan interest) serta search bar untuk mencari buku. User tersebut bisa memilih salah satu buku untuk pergi ke dashboard buku tersebut. Selain list rekomendasi buku, akan ada list pengguna yang sudah di-match dengan pengguna sekarang. 
+Modul ini berisi halaman utama ketika user membuka website BookMate. Bagi pengguna yang belum login, halaman utamanya berupa landing page yang akan mengarahkan user tersebut untuk login. Sementara itu, bagi user yang sudah login, halaman utama akan berisi list rekomendasi buku (berdasarkan interest) serta search bar untuk mencari buku. User tersebut bisa memilih salah satu buku untuk pergi ke dashboard buku tersebut. Selain list rekomendasi buku, akan ada list pengguna yang sudah di-match dengan pengguna sekarang. 
 ### 3. Dashboard Profile (Azmy)
 Modul ini akan menampilkan profil, baik dirinya sendiri maupun profil pengguna lain. Profil berisi data-data pribadi yang tidak bersifat rahasia, interest, dan buku yang sudah pernah diulas. Pengguna bisa mengedit profilnya sendiri. Pengguna juga bisa melihat profil pengguna lain dalam aplikasi, supaya membantu pengguna untuk berinteraksi dan menjelajahi minat bersama. 
 ### 4. Matching (Vinka)
