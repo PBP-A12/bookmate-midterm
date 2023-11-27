@@ -5,13 +5,6 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import UserCreationForm
 
-<<<<<<< Updated upstream
-from django.http import HttpResponseRedirect
-
-from django.shortcuts import render, redirect
-
-from django.urls import reverse
-=======
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -21,7 +14,6 @@ from .models import Member
 from user.models import Profile
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
->>>>>>> Stashed changes
 
 # Create your views here.
 def register(request): 
@@ -122,6 +114,7 @@ def register_flutter(request):
             }, status=400)
         
         # Create the new user
+        print(Member.objects.all())
         member = Member.objects.create(username=username, password=password1)
         member.save()
         profile = Profile.objects.create(member=member, age=0, bio="")
