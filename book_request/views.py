@@ -35,9 +35,9 @@ def show_book(request):
         user_books = BookRequest.objects.filter(member=member)
     all_books_serialized  = json.dumps(BookRequestSerializer(all_books, many=True).data) 
     user_books_serialized  = json.dumps(BookRequestSerializer(user_books, many=True).data)
-    user_book_deserialized = json.loads(user_books_serialized)
-    for book in user_book_deserialized:
-        print(book['subjects'])
+    # user_book_deserialized = json.loads(user_books_serialized)
+    # for book in user_book_deserialized:
+    #     print(book['subjects'])
     context = {
         'user': request.user,
         'title': '',
@@ -111,6 +111,7 @@ def delete_book(request):
 
 def get_request_json_user(request):
     res = BookRequestSerializer(BookRequest.objects.filter(member=Member.objects.get(account=request.user)), many=True).data
+    
     return HttpResponse(json.dumps(res, indent=4), content_type='application/json')
 
 def get_requests_json(request):
