@@ -123,20 +123,24 @@ def register_flutter(request):
             }, status=400)
         
         # Check if the username is already taken
-        if Member.objects.filter(username=username).exists():
+        if User.objects.filter(username=username).exists():
             return JsonResponse({
                 "status": False,
                 "message": "Username already exists."
             }, status=400)
         
         # Create the new user
-        member = Member.objects.create(username=username, password=password1)
+        user = User(username=username)
+        user.set_password(password1)
+        user.save()
+        member = Member(account=user)
         member.save()
-        profile = Profile.objects.create(member=member, age=0, bio="")
+        member.account.password = password1
+        profile = Profile(member=member, age=0, bio="")
         profile.save()
         
         return JsonResponse({
-            "username": member.username,
+            "username": member.account.username,
             "status": 'success',
             "message": "User created successfully!"
         }, status=200)
