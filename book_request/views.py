@@ -110,29 +110,24 @@ def delete_book(request):
     return HttpResponse(b'CREATED', status=201)
 
 def get_request_json_user(request):
-<<<<<<< Updated upstream
     res = BookRequestSerializer(BookRequest.objects.filter(member=Member.objects.get(account=request.user)), many=True).data
-    
-=======
-    res = BookRequestSerializer(BookRequest.objects.filter(member=Member.objects.get(account=request.user)).order_by(request.GET.get('sortby')), many=True).data
->>>>>>> Stashed changes
     return HttpResponse(json.dumps(res, indent=4), content_type='application/json')
 
 def get_requests_json(request):
-    res = BookRequestSerializer(BookRequest.objects.all().order_by(request.GET.get('sortby')), many=True).data
+    res = BookRequestSerializer(BookRequest.objects.all(), many=True).data
     return HttpResponse(json.dumps(res, indent=4), content_type='application/json')
 
 def get_subjects_json(request):
     data = serializers.serialize('json', Subject.objects.all())
     return HttpResponse(data, content_type='application/json')
 
-# def get_requests_json_user_sort(request):
-#     res = BookRequestSerializer(BookRequest.objects.filter(member=Member.objects.get(account=request.user)).order_by(request.GET.get('sortby')), many=True).data
-#     return HttpResponse(json.dumps(res, indent=4), content_type='application/json')
+def get_requests_json_user_sort(request):
+    res = BookRequestSerializer(BookRequest.objects.filter(member=Member.objects.get(account=request.user)).order_by(request.GET.get('sortby')), many=True).data
+    return HttpResponse(json.dumps(res, indent=4), content_type='application/json')
 
-# def get_requests_json_sort(request):
-#     res = BookRequestSerializer(BookRequest.objects.all().order_by(request.GET.get('sortby')), many=True).data
-#     return HttpResponse(json.dumps(res, indent=4), content_type='application/json')
+def get_requests_json_sort(request):
+    res = BookRequestSerializer(BookRequest.objects.all().order_by(request.GET.get('sortby')), many=True).data
+    return HttpResponse(json.dumps(res, indent=4), content_type='application/json')
 
 @csrf_exempt
 def edit_request(request):

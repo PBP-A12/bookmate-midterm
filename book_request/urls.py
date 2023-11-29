@@ -11,8 +11,8 @@ urlpatterns = [
     path('edit-book/', edit_book, name='edit_book'),
     path('delete-book/', delete_book, name='delete_book'),
     path('get-subjects-json/', get_subjects_json, name='get_subjects_json'),
-    path('get-request_json/', get_requests_json, name='get_request_json'),
-    path('get-request_json_user/', get_request_json_user, name='get_request_json_user'),
+    path('get-request-json/', get_requests_json_sort, name='get_request_json_mobile'),
+    path('get-request-json-user/', get_requests_json_user_sort, name='get_request_json_user_mobile'),
     path('edit-request/', edit_request, name='edit_request'),
     path('delete-request/', delete_request, name='delete_request'),
 
