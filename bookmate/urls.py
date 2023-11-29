@@ -21,7 +21,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/books/', include('books.urls')), 
     path('auth/', include('authentication.urls')),
+    path('user/', include('user.urls')),
     path('', include('home.urls')),
+    path('match/', include('match.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
+    path("review/", include('dashboardbuku.urls')), 
     path('request/', include('book_request.urls')),
 ]

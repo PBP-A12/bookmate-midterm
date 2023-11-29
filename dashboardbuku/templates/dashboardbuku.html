@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="container mx-auto mt-10">
+    <div class="container flex mx-auto flex-row items-center pt-24">
+        <h1 class="font-poppins font-bold text-7xl">BOOKS.</h1>
+        <form class="w-full" id="search-bar">   
+            <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    </svg>
+                </div>
+                <input type="search" id="default-search" class=" w-2/3 h-4 p-4 pt-5 pl-10 text-sm text-white border border-red-500 rounded-lg bg-red-500 focus:ring-blue-500 focus:border-blue-500 dark:bg-red-500 dark:border-gray-600 dark:placeholder-white dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search your book" required>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="tesjudul2" class="container py-10 px-10 mx-0 min-w-full columns-5" >
+    {% for book in books %}
+    <div class="box-border h-96 w-72  border-4 mx-auto border-black items-center flex flex-col gap-2 justify-between p-2 overflow-auto">
+        <div>
+            <h2 class=" text-lg font-bold">{{book.title}}</h2>
+            <p class="font-poppins text-sm">Written by: {{book.author}}</p>
+            <p class="font-poppins text-sm">Year: {{book.year}}</p>
+            <p class="font-poppins text-sm">Genre : </p>
+            {% for subject in book.subjects %}
+            <p class="font-poppins text-sm">{{subject}}</p>
+            {% endfor %}
+        </div>
+        <a href="{% url 'dashboardbuku:add_review_ajax' book.id %}"><button class="text-center bg-red-500 hover:bg-red-800 text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow ">Review</button></a>
+    </div> 
+    <br>
+    {% endfor %}
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#default-search').on('input', function(){
+            var query = $(this).val();
+            if(query){
+                $.ajax({
+                    url : '/review/search/',
+                    data : {'q' : query},
+                    dataType : 'json',
+                    success: function(data){
+                        var results = $('#tesjudul2');
+                        results.empty();
+                        if (data.length > 0){
+                            data.forEach(function(item){
+                                results.append('<div class="container border-4 mx-auto"> <h2 class="text-center text-2xl">' + item.title + '</h2> <p class="text-center">Written by: ' + item.author + '</p> <p class="text-center">Year: ' + item.year + '</p> <p class="text-center">Genre: ' + item.subjects + '</p> </div>')
+                            })
+                        }
+                        else{
+                            results.text('no result found')
+                        }
+                    }
+                })
+            }
+            else{
+            }
+        });
+    })
+</script>
+{% endblock content %}

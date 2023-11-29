@@ -33,6 +33,7 @@ def show_book(request):
     else:
         all_books = BookRequest.objects.all()
         user_books = BookRequest.objects.filter(member=member)
+    print(BookRequestSerializer(all_books, many=True))
     all_books_serialized  = json.dumps(BookRequestSerializer(all_books, many=True).data) 
     user_books_serialized  = json.dumps(BookRequestSerializer(user_books, many=True).data)
     # user_book_deserialized = json.loads(user_books_serialized)
@@ -71,7 +72,7 @@ def requesting(request):
                 messages.info(request, 'This book has already been requested.')
             else:
                 # print('c')
-                book = BookRequest(member=user,title=title, author=author, year=year, language=language, date_requested=datetime.datetime.now())
+                book = BookRequest(member=user,title=title, author=author, year=year, language=language)
                 book.save()
                 print(subject)
                 for genre in subject:
