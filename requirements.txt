@@ -7,3 +7,4 @@ urllib3
 django-environ
 django-rest-framework
 django-tailwind[reload]
+corsheaders
