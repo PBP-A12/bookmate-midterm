@@ -1,4 +1,5 @@
 import json
+import json
 from django.contrib import messages 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import login as auth_login
@@ -111,7 +112,6 @@ def logout_flutter(request):
 def register_flutter(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        print(data)
         username = data['username']
         password1 = data['password1']
         password2 = data['password2']
@@ -124,21 +124,24 @@ def register_flutter(request):
             }, status=400)
         
         # Check if the username is already taken
-        if Member.objects.filter(account=username).exists():
+        if User.objects.filter(username=username).exists():
             return JsonResponse({
                 "status": False,
                 "message": "Username already exists."
             }, status=400)
         
         # Create the new user
-        print(username)
-        member = Member.objects.create(account=data['username'], password=password1)
+        user = User(username=username)
+        user.set_password(password1)
+        user.save()
+        member = Member(account=user)
         member.save()
-        profile = Profile.objects.create(member=member, age=0, bio="")
+        member.account.password = password1
+        profile = Profile(member=member, age=0, bio="")
         profile.save()
         
         return JsonResponse({
-            "username": member.username,
+            "username": member.account.username,
             "status": 'success',
             "message": "User created successfully!"
         }, status=200)
