@@ -33,7 +33,7 @@ def show_book(request):
     else:
         all_books = BookRequest.objects.all()
         user_books = BookRequest.objects.filter(member=member)
-    print(BookRequestSerializer(all_books, many=True))
+    # print(BookRequestSerializer(all_books, many=True))
     all_books_serialized  = json.dumps(BookRequestSerializer(all_books, many=True).data) 
     user_books_serialized  = json.dumps(BookRequestSerializer(user_books, many=True).data)
     # user_book_deserialized = json.loads(user_books_serialized)
@@ -132,13 +132,17 @@ def get_requests_json_sort(request):
 
 @csrf_exempt
 def requesting_flutter(request):
+    print(request.method)
     if request.method == 'POST':
         data = json.loads(request.body)
         title = data['title']
+
         author = data['author']
         year = data['year']
         language = data['language']
-        subject = data['subject']
+        subject = data['subjects']
+        subject = subject[1:-1]
+        subject = subject.split(', ')
         user = Member.objects.get(account=request.user)
         if title != None or author != None or year != None or language != None or subject != None:
             existing_book = BookRequest.objects.filter(title=title, author=author, year=year, language=language, subjects__name__in=subject).exists()
