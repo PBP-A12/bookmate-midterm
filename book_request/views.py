@@ -131,6 +131,42 @@ def get_requests_json_sort(request):
     return HttpResponse(json.dumps(res, indent=4), content_type='application/json')
 
 @csrf_exempt
+def requesting_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        title = data['title']
+        author = data['author']
+        year = data['year']
+        language = data['language']
+        subject = data['subject']
+        user = Member.objects.get(account=request.user)
+        if title != None or author != None or year != None or language != None or subject != None:
+            existing_book = BookRequest.objects.filter(title=title, author=author, year=year, language=language, subjects__name__in=subject).exists()
+            if existing_book:
+                return JsonResponse({
+                    "status": 'failed',
+                    "message": "This book has already been requested."
+                }, status=400)
+            else:
+                book = BookRequest(member=user,title=title, author=author, year=year, language=language)
+                book.save()
+                for genre in subject:
+                    book.subjects.add(Subject.objects.get(name=genre))
+                return JsonResponse({
+                    "status": 'success',
+                    "message": "Request created successfully!"
+                }, status=200)
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": "Invalid request method."
+        }, status=400)
+    return JsonResponse({
+        "status": False,
+        "message": "Invalid request method."
+    }, status=400)
+
+@csrf_exempt
 def edit_request(request):
     if request.method == 'POST':
         data = json.loads(request.body)
