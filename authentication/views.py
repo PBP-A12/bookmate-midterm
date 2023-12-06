@@ -63,7 +63,6 @@ def logout_user(request):
     logout(request)
     return redirect('home:show_main')
 
-
 @csrf_exempt
 def login_flutter(request):
     username = request.POST['username']
@@ -126,7 +125,7 @@ def register_flutter(request):
         # Check if the username is already taken
         if User.objects.filter(username=username).exists():
             return JsonResponse({
-                "status": False,
+                "status": 'username_exists',
                 "message": "Username already exists."
             }, status=400)
         

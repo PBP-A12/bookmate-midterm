@@ -136,13 +136,19 @@ def requesting_flutter(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         title = data['title']
-
+        title = title[0]
         author = data['author']
+        author = author[0]
         year = data['year']
+        year = year[0]
         language = data['language']
+        language = language[0]
         subject = data['subjects']
-        subject = subject[1:-1]
-        subject = subject.split(', ')
+        print(title, author, year, language, subject)
+        # subject = subject[1:-1]
+        # print(subject)
+        # subject = subject.split(', ')
+        # print(subject)
         user = Member.objects.get(account=request.user)
         if title != None or author != None or year != None or language != None or subject != None:
             existing_book = BookRequest.objects.filter(title=title, author=author, year=year, language=language, subjects__name__in=subject).exists()
@@ -154,6 +160,7 @@ def requesting_flutter(request):
             else:
                 book = BookRequest(member=user,title=title, author=author, year=year, language=language)
                 book.save()
+                print(subject)
                 for genre in subject:
                     book.subjects.add(Subject.objects.get(name=genre))
                 return JsonResponse({
