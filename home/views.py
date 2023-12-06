@@ -10,6 +10,8 @@ def which_home(request):
     # kalau profil belum lengkap, 1 
     # kalau belum ada review, 2 
     member = Member.objects.get(account=request.user)
+    if (member.profile.age == 0 or member.profile.bio == ""): 
+        return 1
     have_reviewed = Review.objects.filter(reviewer=member).count() > 0
     if (not have_reviewed): 
         return 2
