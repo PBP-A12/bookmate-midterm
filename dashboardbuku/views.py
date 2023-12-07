@@ -26,6 +26,12 @@ def get_review_json(request, id):
     review_book = Review.objects.filter(book=buku).values("pk" ,"reviewer__account__username", "book", "review")
     return HttpResponse(json.dumps(list(review_book)), content_type='application/json')
 
+# def get_all_review_(request):
+#     buku = Book.objects.all()
+#     review_book = Review.objects.filter(book=buku).values("pk" ,"reviewer__account__username", "book", "review")
+#     return HttpResponse(json.dumps(list(review_book)), content_type='application/json')
+
+
 @csrf_exempt
 def add_review_ajax2(request, id):
     if request.method == 'POST':

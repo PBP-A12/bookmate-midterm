@@ -1,5 +1,5 @@
 from django.urls import include, path
-from book_request.views import show_book, get_request_json_user, requesting, get_requests_json, edit_book, delete_book, get_subjects_json
+from book_request.views import *
 app_name = 'book_request'
 
 urlpatterns = [
@@ -11,4 +11,10 @@ urlpatterns = [
     path('edit-book/', edit_book, name='edit_book'),
     path('delete-book/', delete_book, name='delete_book'),
     path('get-subjects-json/', get_subjects_json, name='get_subjects_json'),
+    path('get-all-request-json/', get_requests_json_sort, name='get_request_json_mobile'),
+    path('get-request-json-user/', get_requests_json_user_sort, name='get_request_json_user_mobile'),
+    path('requesting-flutter/', requesting_flutter, name='requesting_flutter'),
+    path('edit-request/', edit_request, name='edit_request'),
+    path('delete-request/', delete_request, name='delete_request'),
+
 ]
