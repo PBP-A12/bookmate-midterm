@@ -138,6 +138,7 @@
     <button class="text-3xl focus:text-[#C44B6A] font-bold" id="all_request">All Requests </button>
     
 </div>
+<button id="sortorder" name="sortorder" onclick="orderSort()" class="bg-[#C44B6A] hover:bg-[#AA3855] text-white font-bold py-2 px-4 rounded"></button>  
 <label for="sortby">Sort by:</label>
 <select id="sortby" name="sortby" onchange="sortBooks()">
     <option value="title">Title</option>
@@ -148,15 +149,14 @@
     <option value="date_requested">Date Requested</option>
 </select>
 <br>
-<button id="sortorder" name="sortorder" onclick="orderSort()" >^</button>
 <div>
-<div id="user_request">
-</div>
-</div>
-<p id="no-request-user"></p>
-<div>
-    <div id="all_requests">
+    <div id="requests" class="container flex justify-center items-center mb-4 pl-10 pr-20 mx-auto flex-row pt-24 ">
     </div>
+    <p id="no-request-user" class="container flex justify-center items-center mb-4 pl-10 pr-20 mx-auto flex-row pt-24"></p>
+</div>
+<div>
+<!-- <div id="all_requests" class="container flex justify-between items-center mb-4 pl-10 pr-20 mx-auto flex-row pt-24">
+</div> -->
 <p id="no-request-all"></p>
 <script>
     async function getUserRequest() {
@@ -174,9 +174,14 @@
             body: new FormData(document.getElementById('request-form'))
             
         })
-        .then(refreshUserRequest).then(refreshAllRequests).then(console.log("Request added"))
+        .then(refreshUserRequest).then(console.log("Request added"))
             .catch((error) => console.error("Error adding product: ", error));
-
+        if (document.getElementById("request-form").checkValidity() == false) {
+            return false;
+        }
+        else {
+            modalHandler(false);
+        }
         document.getElementById("request-form").reset();
         return false;
     }
@@ -186,17 +191,20 @@
         if (products.length == 0) {
             htmlString = "<p>You haven't requested anything.</p>";
             document.getElementById("no-request-user").innerHTML = htmlString;
-            document.getElementById("user_request").innerHTML = "";
+            document.getElementById("requests").innerHTML = "";
         }
         else {
             const urlParams = new URLSearchParams(window.location.search);
             let sortBy = urlParams.get("sortby");
             let sortOrder = urlParams.get("sortorder");
-            if (sortBy == null) {
-                sortBy = "title";
-            }
             if (sortOrder == null) {
                 sortOrder = "asc";
+                document.getElementById("sortorder").innerHTML = "⬆";
+            }
+            if (sortOrder == "asc") {
+                document.getElementById("sortorder").innerHTML = "⬆";
+            } else if (sortOrder == "desc") {
+                document.getElementById("sortorder").innerHTML = "⬇";
             }
             products.sort((a, b) => {
                 if (a[sortBy] < b[sortBy]) {
@@ -215,39 +223,57 @@
                     }
                 htmlString += `
                 <div class="box-border h-96 w-72  border-4 mx-auto border-black items-center flex flex-col gap-2 justify-between p-2 overflow-auto">
-                        <div>
+                        
                             <h2 class=" text-lg font-bold">${item.title}</h2>
                             <p class="font-poppins text-sm">Written by: ${item.author}</p>
                             <p class="font-poppins text-sm">Year: ${item.year}</p>
+                            <p class="font-poppins text-sm">Language: ${item.language}</p>
                             <p class="font-poppins text-sm">Genre : ${subjects}</p>
-                            <p class="font-poppins text-sm">${item.date_requested}</p>
+                            <p class="font-poppins text-sm">Request Date: ${item.date_requested}</p>
                             <td><button onclick=editBook(${item.id})>Edit</button></td>
                             <td><button onclick=deleteBook(${item.id})>Cancel</button></td>
                         </div>
+                    
                 `;
 
             })
-            document.getElementById("user_request").innerHTML = htmlString;
+            document.getElementById("requests").innerHTML = htmlString;
         }
     }
     async function refreshAllRequests() {
-        urlParams = new URLSearchParams(window.location.search)
-        document.getElementById("sortorder").innerHTML = urlParams.get("sortorder") == "asc" ? "^" : "v";
-        const sortby = urlParams.get("sortby");
-        if (sortby) {
-            document.getElementById("sortby").value = sortby;
-        }
+        
+        // document.getElementById("sortorder").innerHTML = urlParams.get("sortorder") == "asc" ? "⬆" : "⬇";
+        // const sortby = urlParams.get("sortby");
+        // console.log(sortby);
+        // if (sortby) {
+        //     document.getElementById("sortby").value = sortby;
+        // }
         // document.getElementById("sortby").setAttribute(name=document.getElementById("sortby").getAttribute(name),urlParams.get("sortby"))
+        
         let namaUser = document.getElementById("nama-User").innerHTML;
         const products = await getRequests();
+        console.log(products);
         let htmlString = "";
+        document.getElementById("no-request-user").innerHTML = "";
         if (products.length == 0) {
-            // document.getElementById("header-all").innerHTML = "";
             htmlString = "<p>No book requests at this time.</p>";
             document.getElementById("no-request-all").innerHTML = htmlString;
-            document.getElementById("all_requests").innerHTML ="";
+            document.getElementById("requests").innerHTML ="";
         }
         else{
+            urlParams = new URLSearchParams(window.location.search)
+            if (urlParams.get("sortorder") == null) {
+                urlParams.set("sortorder", "asc");
+                document.getElementById("sortorder").innerHTML = "⬆";
+            } else if (urlParams.get("sortorder") == "asc") {
+                urlParams.set("sortorder", "desc");
+                document.getElementById("sortorder").innerHTML = "⬇";
+            } else if (urlParams.get("sortorder") == "desc") {
+                urlParams.set("sortorder", "asc");
+                document.getElementById("sortorder").innerHTML = "⬆";
+            }
+            let sortBy = urlParams.get("sortby");
+            let sortOrder = urlParams.get("sortorder");            
             products.sort((a, b) => {
                 if (a[sortBy] < b[sortBy]) {
                     return sortOrder == "asc" ? -1 : 1;
@@ -266,12 +292,12 @@
                 if (item.member == namaUser) {
                     htmlString += `
                     <div class="box-border h-96 w-72  border-4 mx-auto border-black items-center flex flex-col gap-2 justify-between p-2 overflow-auto">
-                        <div>
                             <h2 class=" text-lg font-bold">${item.title}</h2>
                             <p class="font-poppins text-sm">Written by: ${item.author}</p>
                             <p class="font-poppins text-sm">Year: ${item.year}</p>
+                            <p class="font-poppins text-sm">Language: ${item.language}</p>
                             <p class="font-poppins text-sm">Genre : ${subjects}</p>
-                            <p class="font-poppins text-sm">${item.date_requested}</p>
+                            <p class="font-poppins text-sm">Request Date: ${item.date_requested}</p>
                             <button onclick=editBook(${item.id})>Edit</button>
                             <button onclick=deleteBook(${item.id})>Cancel</button>
                         </div>
@@ -280,18 +306,19 @@
                 else{
                     htmlString += `
                     <div class="box-border h-96 w-72  border-4 mx-auto border-black items-center flex flex-col gap-2 justify-between p-2 overflow-auto">
-                        <div>
+                        
                             <h2 class=" text-lg font-bold">${item.title}</h2>
                             <p class="font-poppins text-sm">Written by: ${item.author}</p>
                             <p class="font-poppins text-sm">Year: ${item.year}</p>
+                            <p class="font-poppins text-sm">Language: ${item.language}</p>
                             <p class="font-poppins text-sm">Genre : ${subjects}</p>
-                            <p class="font-poppins text-sm">${item.date_requested}</p>
+                            <p class="font-poppins text-sm">Request Date: ${item.date_requested}</p>
                         </div>
                     `;
                 }
 
             })
-            document.getElementById("all_requests").innerHTML = htmlString;
+            document.getElementById("requests").innerHTML = htmlString;
         }
 
     }
@@ -324,23 +351,28 @@
     function orderSort(){
         const urlParams = new URLSearchParams(window.location.search);
         let sortOrder = urlParams.get("sortorder");
-        document.getElementById("sortorder").innerHTML = sortOrder;
+        if (sortOrder == null) {
+            sortOrder = "asc";
+            document.getElementById("sortorder").innerHTML = sortOrder;
+        } 
         if (sortOrder == "asc") {
             sortOrder = "desc";
+            document.getElementById("sortorder").innerHTML = "⬇";
         } else if(sortOrder == "desc"){
             sortOrder = "asc";
+            document.getElementById("sortorder").innerHTML = "⬆";
         }
         urlParams.set("sortorder", sortOrder);
-        document.getElementById("sortorder").innerHTML = sortOrder == "asc" ? "^" : "v";
+        // document.getElementById("sortorder").innerHTML = sortOrder == "asc" ? "⬆" : "⬇";
         window.location.search = urlParams.toString();
     }
     document.getElementById('my_request').addEventListener('click', () => {
         refreshUserRequest()
-        document.getElementById('all_requests').innerHTML = ""
+        document.getElementById('requests').innerHTML = ""
     })
     document.getElementById('all_request').addEventListener('click', () => {
         refreshAllRequests()
-        document.getElementById('user_request').innerHTML = ""
+        document.getElementById('requests').innerHTML = ""
     })
     window.onload = function () {
         refreshUserRequest()
