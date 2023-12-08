@@ -22,7 +22,7 @@
             
             <div class="flex gap-2">
                 {% if home == 1 %}
-                <a href="{% url 'authentication:register' %}" ">
+                <a href="{% url 'user:user' user.pk %}">
                     <button class="w-40 rounded-2xl px-3 py-1 border-2 border-black text-black transition transform ease-in-out duration-400 hover:scale-[1.05]">Lengkapi Profile</button>
                 </a>
                 {% load static %}
