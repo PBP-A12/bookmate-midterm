@@ -1,10 +1,14 @@
 import json
+import json
 from django.contrib import messages 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import UserCreationForm
 
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -111,6 +115,7 @@ def logout_flutter(request):
 def register_flutter(request):
     if request.method == 'POST':
         data = json.loads(request.body)
+        print(data)
         username = data['username']
         password1 = data['password1']
         password2 = data['password2']
@@ -123,24 +128,21 @@ def register_flutter(request):
             }, status=400)
         
         # Check if the username is already taken
-        if User.objects.filter(username=username).exists():
+        if Member.objects.filter(account=username).exists():
             return JsonResponse({
                 "status": False,
                 "message": "Username already exists."
             }, status=400)
         
         # Create the new user
-        user = User(username=username)
-        user.set_password(password1)
-        user.save()
-        member = Member(account=user)
+        print(username)
+        member = Member.objects.create(account=data['username'], password=password1)
         member.save()
-        member.account.password = password1
-        profile = Profile(member=member, age=0, bio="")
+        profile = Profile.objects.create(member=member, age=0, bio="")
         profile.save()
         
         return JsonResponse({
-            "username": member.account.username,
+            "username": member.username,
             "status": 'success',
             "message": "User created successfully!"
         }, status=200)

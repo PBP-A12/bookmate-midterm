@@ -5,6 +5,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpRes
 from django.urls import reverse
 from django.core import serializers
 from book_request.serializers import BookRequestSerializer
+from match.serializers import MatchingSerializer
 from match.models import Matching
 from user.models import Profile
 from book_request.models import BookRequest
@@ -55,9 +56,7 @@ def get_match(request):
         "matching_id" : new_match.pk,
         "interest_subject" : interest, # match_interest(this_member, other_member)
         "bio" :  other_profile.bio,
-        # "profile_user" : "user/%other_member.account"
     }
-    #print(result.interesting_subject)
     return HttpResponse(json.dumps(result), content_type="application/json")    # pass
 
 @csrf_exempt
@@ -69,6 +68,7 @@ def accept_recommendation(request, id):
         recommendation.save()
         if is_receiver(recommendation.user, recommendation.matched_member):
             recommendation.user.match_received.add(recommendation.matched_member)
+            recommendation.matched_member.match_received.add(recommendation.user.match_received)
             print("ini terima dari")
             print(recommendation.user.match_received.all())
         if not is_receiver(recommendation.user, recommendation.matched_member):
@@ -109,6 +109,62 @@ def match_interest(this_member, other_member):
         interest_subject = random.choice(list(intersection_result))
     return interest_subject
 
+
+def get_match_json(request):
+    data = serializers.serialize('json', Matching.objects.all())
+    return HttpResponse(data, content_type='application/json')
+
+
+@login_required
+@csrf_exempt
+def get_match_flutter(request):
+    this_member = Member.objects.get(account = request.user)
+    other_member = None 
+    for user_i in Member.objects.order_by("?") : 
+        is_matched = Matching.objects.filter(user = this_member, matched_member = user_i, accepted = True).exists()
+        if (user_i != this_member and not is_matched and not user_i.account.is_superuser) :
+            other_member = user_i 
+            break 
+    
+    if (other_member is None) : 
+        return JsonResponse({"status": 'failed', "message": "no member!"}, status=400)
+  
+    other_profile = Profile.objects.get(member = other_member)
+    new_match = Matching.objects.filter(user = this_member, matched_member = other_member, accepted = False)
+    if (new_match) :
+        new_match = new_match.first() 
+    else : 
+        new_match = Matching(user = this_member, matched_member = other_member)
+    new_match.save()
+    
+    interest = "-"
+    result = {
+        "name" : other_member.account.username, 
+        "first_name": other_member.account.first_name,
+        "last_name": other_member.account.last_name,
+        "id" : other_member.account.pk, 
+        "matching_id" : new_match.pk,
+        "interest_subject" : interest, # match_interest(this_member, other_member)
+        "bio" :  other_profile.bio,
+    }
+    return HttpResponse(json.dumps(result), content_type="application/json")    # pass
+
+@csrf_exempt
+def accept_recommendation_flutter(request):
+    data = json.loads(request.body)
+    name = data[""]
+    first_name = data[""]
+    recommendation = Matching.objects.get()
+    print(recommendation.matched_member)
+    if request.user == recommendation.user.account:
+        recommendation.accepted = True
+        recommendation.save()
+        if is_receiver(recommendation.user, recommendation.matched_member):
+            recommendation.user.match_received.add(recommendation.matched_member)
+            recommendation.matched_member.match_received.add(recommendation.user.match_received)
+        if not is_receiver(recommendation.user, recommendation.matched_member):
+            recommendation.user.match_sent.add(recommendation.matched_member)
+        return JsonResponse({ "status": 'success', "message": "Request created successfully!"}, status=200)
 
 
 from user.views import user
