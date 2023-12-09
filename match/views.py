@@ -5,6 +5,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpRes
 from django.urls import reverse
 from django.core import serializers
 from book_request.serializers import BookRequestSerializer
+from django.core.serializers import serialize
 from match.models import Matching
 from user.models import Profile
 from book_request.models import BookRequest
@@ -46,7 +47,7 @@ def get_match(request):
         new_match = Matching(user = this_member, matched_member = other_member)
     new_match.save()
     
-    interest = "-"
+    interest = get_interest(other_member)
     result = {
         "name" : other_member.account.username, 
         "first_name": other_member.account.first_name,
@@ -55,9 +56,7 @@ def get_match(request):
         "matching_id" : new_match.pk,
         "interest_subject" : interest, # match_interest(this_member, other_member)
         "bio" :  other_profile.bio,
-        # "profile_user" : "user/%other_member.account"
     }
-    #print(result.interesting_subject)
     return HttpResponse(json.dumps(result), content_type="application/json")    # pass
 
 @csrf_exempt
@@ -108,7 +107,27 @@ def match_interest(this_member, other_member):
     else:
         interest_subject = random.choice(list(intersection_result))
     return interest_subject
+    
 
+def get_interest(other_member):
+    other_interest_book = BookRequest.objects.filter(member=other_member).first()
+
+    if not other_interest_book:
+        return ""
+
+    # Extract names directly from the ManyToManyField
+    interest_names = other_interest_book.subjects.values_list('name', flat=True)
+    
+    # Take only the first 3 subjects
+    interest_names = list(interest_names)[:3]
+
+    # Join the names into a single string separated by commas
+    interest_string = ', '.join(interest_names)
+
+    return interest_string
+
+def get_matching_flutter(request):
+    this_member = Member.objects.get(account = request.user)
 
 
 from user.views import user
