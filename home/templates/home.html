@@ -22,7 +22,7 @@
             
             <div class="flex gap-2">
                 {% if home == 1 %}
-                <a href="{% url 'authentication:register' %}" ">
+                <a href="{% url 'user:user' user.pk %}">
                     <button class="w-40 rounded-2xl px-3 py-1 border-2 border-black text-black transition transform ease-in-out duration-400 hover:scale-[1.05]">Lengkapi Profile</button>
                 </a>
                 {% load static %}
@@ -124,15 +124,19 @@
             }
             data += '</div>'
             randomBookElement.innerHTML = data; 
+            randomBookElement.addEventListener('click', (e) => {    
+                window.location.href = "{% url 'dashboardbuku:add_review_ajax' id=9999999 %}".replace(/9999999/, book.id.toString());
+            });
         }
     }
 
     // Call the function initially
-    document.getElementById('random-book').addEventListener('click', (e) => {    
-        window.location.href = "{% url 'dashboardbuku:show_book' %}";
-    }); 
-
     refreshRandomBook();
+
+    // document.getElementById('random-book').addEventListener('click', (e) => {    
+    //     window.location.href = `{% url 'dashboardbuku:add_review_ajax' 1 %}`;
+    // }); 
+
 
     // Call the function every x seconds (e.g., every 5 seconds)
     const intervalSeconds = 3; // Change this value to set the interval in seconds
