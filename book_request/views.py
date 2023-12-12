@@ -123,13 +123,17 @@ def get_subjects_json(request):
     return HttpResponse(data, content_type='application/json')
 
 def get_requests_json_user_sort(request):
+    sort_by = request.GET.get('sortby')
+    print(BookRequest.objects.filter(member=Member.objects.get(account=request.user)).order_by(request.GET.get('sortby')))
     res = BookRequestSerializer(BookRequest.objects.filter(member=Member.objects.get(account=request.user)).order_by(request.GET.get('sortby')), many=True).data
+    # print(res)
     return HttpResponse(json.dumps(res, indent=4), content_type='application/json')
 
 def get_requests_json_sort(request):
     res = BookRequestSerializer(BookRequest.objects.all().order_by(request.GET.get('sortby')), many=True).data
     return HttpResponse(json.dumps(res, indent=4), content_type='application/json')
 
+@login_required
 @csrf_exempt
 def requesting_flutter(request):
     print(request.method)
@@ -145,10 +149,6 @@ def requesting_flutter(request):
         language = language[0]
         subject = data['subjects']
         print(title, author, year, language, subject)
-        # subject = subject[1:-1]
-        # print(subject)
-        # subject = subject.split(', ')
-        # print(subject)
         user = Member.objects.get(account=request.user)
         if title != None or author != None or year != None or language != None or subject != None:
             existing_book = BookRequest.objects.filter(title=title, author=author, year=year, language=language, subjects__name__in=subject).exists()
@@ -177,17 +177,23 @@ def requesting_flutter(request):
         "message": "Invalid request method."
     }, status=400)
 
+@login_required
 @csrf_exempt
 def edit_request(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         id = data['id']
+        id = id[0]
         title = data['title']
+        title = title[0]
         author = data['author']
+        author = author[0]
         year = data['year']
+        year = year[0]
         language = data['language']
+        language = language[0]
         subjects = data['subjects']
-        book = BookRequest.objects.get(pk=id)
+        book = BookRequest.objects.get(pk=id, member=Member.objects.get(account=request.user), title=title, author=author, year=year, language=language)
         book.title = title
         book.author = author
         book.year = year
@@ -204,6 +210,7 @@ def edit_request(request):
             "message": "Invalid request method."
         }, status=400)
 
+@login_required
 @csrf_exempt
 def delete_request(request):
     if request.method == 'POST':
