@@ -186,6 +186,9 @@ def get_match_flutter(request):
         return HttpResponseNotFound("No Member", status=404)
 
     other_profile = Profile.objects.get(member=other_member)
+    if (other_profile.bio is None):
+        other_profile.bio = ""
+        other_profile.save()
     new_match = Matching.objects.filter(user=this_member, matched_member=other_member, accepted=False)
 
     if new_match:
