@@ -1,4 +1,5 @@
 import json
+import json
 from django.contrib import messages 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import login as auth_login
@@ -62,7 +63,6 @@ def logout_user(request):
     logout(request)
     return redirect('home:show_main')
 
-
 @csrf_exempt
 def login_flutter(request):
     username = request.POST['username']
@@ -125,7 +125,7 @@ def register_flutter(request):
         # Check if the username is already taken
         if User.objects.filter(username=username).exists():
             return JsonResponse({
-                "status": False,
+                "status": 'username_exists',
                 "message": "Username already exists."
             }, status=400)
         
