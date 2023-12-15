@@ -1,10 +1,12 @@
 import logging
+import time
 from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpResponseNotFound, HttpResponseServerError, JsonResponse
 from django.urls import reverse
 from django.core import serializers
+import requests
 from book_request.serializers import BookRequestSerializer
 from django.core.serializers import serialize
 from match.models import Matching
@@ -15,6 +17,9 @@ from authentication.models import Member
 from django.db.models import Max
 import json 
 import random
+
+
+user_avatars = {}
 
 
 @login_required
@@ -116,13 +121,10 @@ def get_interest(other_member):
 
     if not other_interest_book:
         return ""
-
     # Extract names directly from the ManyToManyField
     interest_names = other_interest_book.subjects.values_list('name', flat=True)
-    
     # Take only the first 3 subjects
     interest_names = list(interest_names)[:3]
-
     # Join the names into a single string separated by commas
     interest_string = ', '.join(interest_names)
 
@@ -136,31 +138,37 @@ def get_match_json(request):
     return HttpResponse(data, content_type='application/json')
 
 
-
-
 @csrf_exempt
 def accept_flutter(request):
-    data = json.loads(request.body)
-    name = data['name']
-    interest = data['interest']
-    bio = data['bio']
-    matching_id = data['matching_id']
-    recommendation = Matching.objects.get(pk=matching_id,matched_member=Member.objects(account=name))
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        name = data['name']
 
-    if request.user == recommendation.user.account:
-        recommendation.accepted = True
-        recommendation.save()
+        bio = data['bio']
+        matching_id = data['matching_id']
+        recommendation = Matching.objects.get(pk=matching_id)
+                                            #   matched_member=Member.objects(account=name))
 
-        if is_receiver(recommendation.user, recommendation.matched_member):
-            recommendation.user.match_received.add(recommendation.matched_member)
-            recommendation.matched_member.match_received.add(recommendation.user.match_received)
+        if Member.objects.get(account = request.user) == recommendation.user:
+            recommendation.accepted = True
+            recommendation.save()
 
-        if not is_receiver(recommendation.user, recommendation.matched_member):
-            recommendation.user.match_sent.add(recommendation.matched_member)
+            if is_receiver(recommendation.user, recommendation.matched_member):
+                recommendation.user.match_received.add(recommendation.matched_member)
+                recommendation.matched_member.match_received.add(recommendation.user.match_received)
 
-        return HttpResponse("Recommendation Accepted", status=200)
+            if not is_receiver(recommendation.user, recommendation.matched_member):
+                recommendation.user.match_sent.add(recommendation.matched_member)
+
+            return JsonResponse({
+                "status" : "success",
+                'message': ''
+            }, status=200)
     else:
-        return HttpResponse("Unauthorized", status=401)
+        return JsonResponse({
+            "status": False,
+            "message": ""
+        }, status=401)
 
 # @login_required
 @csrf_exempt   # disini
@@ -186,7 +194,7 @@ def get_match_flutter(request):
         new_match = Matching(user=this_member, matched_member=other_member)
         new_match.save()
 
-    interest = get_interest(other_member)
+    interest = get_interest_flutter(other_member)
     result = {
         "name": other_member.account.username,
         "first_name": other_member.account.first_name,
@@ -195,12 +203,34 @@ def get_match_flutter(request):
         "matching_id": new_match.pk,
         "interest_subject": interest,
         "bio": other_profile.bio,
+        "picture" : get_picture_for_user(other_member.account.username)  ,
     }
-    
     logging.info('get_match endpoint reached successfully')
 
     return JsonResponse(result)
 
+def get_interest_flutter(other_member):
+    other_interest_book = BookRequest.objects.filter(member=other_member).first()
+
+    if not other_interest_book:
+        return []
+    # Extract names directly from the ManyToManyField
+    interest_names = other_interest_book.subjects.values_list('name', flat=True)
+    # Take only the first 3 subjects
+    interest_names = list(interest_names)[:3]
+    # Join the names into a single string separated by commas
+
+    return interest_names
+
+def get_picture_for_user(username):
+    if username not in user_avatars:
+        # Jika avatar belum ada untuk user tertentu, buat dan simpan
+        user_avatars[username] = get_random_image_url(username)
+    return user_avatars[username]
+
+def get_random_image_url(username):
+    unique_identifier = hash(username)  # Gunakan ID pengguna atau sesuatu yang unik sebagai basis
+    return 'https://picsum.photos/200/300?random=' + str(unique_identifier)
 
 
 

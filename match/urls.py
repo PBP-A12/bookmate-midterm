@@ -10,5 +10,5 @@ urlpatterns = [
     path('accept/<int:id>/', accept_recommendation, name='accept'),
     path("user/<int:id>/", redirect, name="redirect"),
     path('get_match_flutter/', get_match_flutter, name='get_match_flutter'),
-    path('accept-flutter/<int:id>/', accept_flutter, name='accept_flutter'),
+    path('accept-flutter/', accept_flutter, name='accept_flutter'),
 ]

@@ -138,7 +138,7 @@ def register_flutter(request):
         print(username)
         member = Member.objects.create(account=data['username'], password=password1)
         member.save()
-        profile = Profile.objects.create(member=member, age=0, bio="")
+        profile = Profile(member=member, age=0, bio="")
         profile.save()
         
         return JsonResponse({
