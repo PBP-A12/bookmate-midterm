@@ -18,22 +18,19 @@
                 <div class="border-b px-6 pb-4">
                     <div class="text-left my-4">
                         <p class="font-bold text-4xl">MATCH.</p>
-
+                
                         <div class="py-2">
                             <h3 id="rekomen-user" class="text-xl bold text-gray-900 mt-9 mb-3"></h3>
                         </div>
-
+                
                         <div class="py-2">
-                            <h3 id="full-name" class="text-xl text-[#C44B6A] mt-9 mb-3"></h3>
+                            <h3 id="bio-user" class="text-xl10 italic text-sm text-gray-600 mb-3"></h3>
                         </div>
-
+                
                         <div class="py-2">
-                            <h6 id="bio-user" class="text-xl10 italic text-sm text-gray-600 mb-3"></h6>
+                            <h6 id="interest" class="text-xl3 bold text-[#C44B6A] mb-3"></h6>
                         </div>
-
-                        <div class="py-2">
-                            <h6 id="interest" class="text-xl3 text-gray-800 mb-3"></h6>
-                        </div>
+                    </div>
 
                         <div class="flex flex-row">
                             <button id="match-button" type="button" class="flex items-center justify-center text-white bg-neutral-950 hover:bg-neutral-700 focus:ring-4 rounded-lg text-xs px-2 py-1 text-center inline-flex items-center ml-1 h-[38px] w-[140px]">
@@ -74,8 +71,7 @@
         let rekomenUser = document.getElementById("rekomen-user")
         let profileButton = document.getElementById("see-profile")
         let interestMember = document.getElementById("interest")
-        let bioUser = document.getElementById("bio-user")
-        let userFullName = document.getElementById("full-name")  
+        let bioUser = document.getElementById("bio-user")  
 
         async function fetchMatch() {
             return fetch("{% url 'match:get_match' %}") 
@@ -87,13 +83,12 @@
             console.log(data)
             randomMatchIdInput.value = data.matching_id;
             document.getElementById("rekomen-user").innerHTML = data.name; 
-            document.getElementById("interest").innerHTML = "Interest: " + data.interest_subject; 
+            document.getElementById("interest").innerHTML = "<span style='font-weight: bold;'>🌙 Interest:</span> " + data.interest_subject;
             document.getElementById("bio-user").innerHTML = data.bio;
             document.getElementById("see-profile").addEventListener("click", () => {
                 const url =  "user/" + data.id 
                 location.href=url
             })
-            document.getElementById("full-name").innerHTML = data.first_name + " " + data.last_name; 
             
         }
         window.onload = getMatch()

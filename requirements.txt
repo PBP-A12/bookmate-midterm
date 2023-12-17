@@ -1,5 +1,5 @@
 django
-gunicorn
+gunicorn==21.2.0
 whitenoise
 psycopg2-binary
 requests

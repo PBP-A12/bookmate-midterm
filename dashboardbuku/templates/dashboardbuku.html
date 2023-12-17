@@ -41,10 +41,13 @@
   </div>
 </div>
 
-<div id="tesjudul2" class="container py-10 px-10 mx-0 min-w-full columns-5">
+<div
+  id="tesjudul2"
+  class="container py-10 px-10 mx-0 min-h-screen min-w-full columns-5 flex flex-wrap gap-4 justify-center"
+>
   {% for book in books %}
   <div
-    class="box-border h-96 w-72 border-4 mx-auto border-black items-center flex flex-col gap-2 justify-between p-2 overflow-auto rounded-2xl"
+    class="box-border h-96 w-72 border-4 border-black items-center flex flex-col gap-2 justify-between p-2 overflow-auto"
   >
     <div>
       <h2 class="text-lg font-bold">{{book.title}}</h2>
@@ -63,7 +66,6 @@
       </button></a
     >
   </div>
-  <br />
   {% endfor %}
 </div>
 
@@ -79,24 +81,36 @@
           dataType: "json",
           success: function (data) {
             var results = $("#tesjudul2");
-            results.empty();
+            results = "";
             if (data.length > 0) {
               data.forEach(function (item) {
-                results.append(
-                  '<div class="container border-4 mx-auto"> <h2 class="text-center text-2xl">' +
-                    item.title +
-                    '</h2> <p class="text-center">Written by: ' +
-                    item.author +
-                    '</p> <p class="text-center">Year: ' +
-                    item.year +
-                    '</p> <p class="text-center">Genre: ' +
-                    item.subjects +
-                    "</p> </div>"
-                );
+                console.log(item);
+                results += `
+                                <div class="box-border h-96 w-72 border-4 border-black items-center flex flex-col gap-2 justify-between p-2 overflow-auto">
+                                    <div>
+                                        <h2 class=" text-lg font-bold"> ${item.title}</h2>
+                                        <p class="font-poppins text-sm">Written by: ${item.author}</p>
+                                        <p class="font-poppins text-sm">Year: ${item.year}</p>
+                                        <p class="font-poppins text-sm">Genre : </p>
+                                `;
+
+                for (subject in item.subjects) {
+                  results += `<p class="font-poppins text-sm">${subject}</p>`;
+                }
+                console.log(results);
+
+                results += `    
+                                    </div>
+                                    
+                                    <a href=""><button class="text-center bg-red-500 hover:bg-red-800 text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow ">Review</button></a>
+                                </div> 
+                                
+                                `;
               });
             } else {
-              results.text("no result found");
+              results = "no result found";
             }
+            $("#tesjudul2").html(results);
           },
         });
       } else {

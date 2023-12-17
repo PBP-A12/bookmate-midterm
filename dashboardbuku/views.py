@@ -87,6 +87,15 @@ def searchBookbyTitle(request):
     } for book in results]
     return JsonResponse(data, safe=False)
 
+def search_flutter(request,judul):
+    queryset = Book.objects.filter(title__icontains=judul)
+    res = BookSerializer(queryset, many=True)
+    return HttpResponse(json.dumps(res.data, indent=4), content_type='application/json')
+
+    # data = Book.objects.filter(title__icontains=judul)
+    # return HttpResponse(serializers.serialize('json',data),content_type="application/json")
+
+
 @csrf_exempt
 def add_review_flutter(request):
     print(request.method)

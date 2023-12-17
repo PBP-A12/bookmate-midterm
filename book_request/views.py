@@ -33,7 +33,7 @@ def show_book(request):
     else:
         all_books = BookRequest.objects.all()
         user_books = BookRequest.objects.filter(member=member)
-    print(BookRequestSerializer(all_books, many=True))
+    # print(BookRequestSerializer(all_books, many=True))
     all_books_serialized  = json.dumps(BookRequestSerializer(all_books, many=True).data) 
     user_books_serialized  = json.dumps(BookRequestSerializer(user_books, many=True).data)
     # user_book_deserialized = json.loads(user_books_serialized)
@@ -53,6 +53,7 @@ def show_book(request):
     }
     return render(request, 'request.html', context)
 
+@login_required
 @csrf_exempt
 def requesting(request):
     if request.method == 'POST':
@@ -61,7 +62,7 @@ def requesting(request):
         author = request.POST.get('author')
         year = request.POST.get('year')
         language = request.POST.get('language')
-        # print(request.POST)
+        print(language)
         subject = request.POST.getlist('subject')
         user = Member.objects.get(account=request.user)
         if title != None or author != None or year != None or language != None or subject != None:
@@ -83,6 +84,7 @@ def requesting(request):
         messages.info(request, 'Please fill in all the fields.')
     return HttpResponse(b'CREATED', status=201)
 
+@login_required
 @csrf_exempt
 def edit_book(request):
     if request.method == 'POST':
@@ -92,6 +94,7 @@ def edit_book(request):
         author = request.POST.get('author')
         year = request.POST.get('year')
         language = request.POST.get('language')
+        print(language)
         subjects = request.POST.get('subjects')
         book = BookRequest.objects.get(pk=id)
         book.title = title
