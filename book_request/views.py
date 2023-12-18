@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-import datetime
 from django.http import HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from .forms import ProductForm
 from django.urls import reverse
@@ -148,7 +147,6 @@ def requesting_flutter(request):
         language = data['language']
         language = language[0]
         subject = data['subjects']
-        print(title, author, year, language, subject)
         user = Member.objects.get(account=request.user)
         if title != None or author != None or year != None or language != None or subject != None:
             existing_book = BookRequest.objects.filter(title=title, author=author, year=year, language=language, subjects__name__in=subject).exists()
