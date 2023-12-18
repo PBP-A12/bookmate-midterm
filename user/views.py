@@ -1,6 +1,6 @@
 import json
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -10,6 +10,7 @@ from dashboardbuku.models import Review
 from user.forms import ProfileForm
 from user.models import Profile
 from django.core import serializers
+from django.views.decorators.csrf import csrf_exempt
 # from book_request.models import BookRequest
 
 
@@ -32,6 +33,29 @@ def user(request, id):
         "subjects" : member.interest_subjects.all(),
     }
     return render(request, 'user.html', context)
+
+def user_flutter(request, id): 
+    member = Member.objects.get(account=id)
+    user = User.objects.get(pk=id)
+
+    profile = Profile.objects.filter(member=member)
+
+    if not profile:
+        # If the profile does not exist, create a new one
+        profile = Profile(member=member, age=0, bio='')
+        profile.save()
+    else:
+        profile = profile.first()
+    
+    # Serialize the user and profile objects
+    serialized_user = serializers.serialize('json', [user])
+    serialized_profile = serializers.serialize('json', [profile])
+
+    
+    return JsonResponse({
+        "user": json.loads(serialized_user),
+        "profile": json.loads(serialized_profile),
+    }, status=200)
 
 def get_matched(request, id):
     member = Member.objects.get(account=id)
@@ -81,3 +105,19 @@ def edit_profile(request, id):
         form.save()
 
     return HttpResponseRedirect(reverse('user:user', args=[id]))
+
+@csrf_exempt
+def edit_profile_flutter(request, id):
+    user_profile = get_object_or_404(Profile, id=id)
+
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+        # Update profile fields with the provided data
+        user_profile.age = int(data.get('age', user_profile.age))
+        user_profile.bio = data.get('bio', user_profile.bio)
+        user_profile.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
