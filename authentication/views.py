@@ -71,7 +71,7 @@ def login_flutter(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
-    print(username, password)
+    # print(username, password)
     if user is not None:
         if user.is_active:
             auth_login(request, user)
@@ -98,7 +98,7 @@ def login_flutter(request):
     
 @csrf_exempt
 def logout_flutter(request):
-    username = request.user.username
+    username = Member.objects.get(account=request.user).account.username
 
     try:
         auth_logout(request)
