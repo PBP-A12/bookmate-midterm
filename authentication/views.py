@@ -1,14 +1,10 @@
 import json
-import json
 from django.contrib import messages 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
-from django.contrib.auth import login as auth_login
-from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import UserCreationForm
 
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -77,6 +73,7 @@ def login_flutter(request):
             auth_login(request, user)
             # Status login sukses.
             return JsonResponse({
+                "id": user.id,
                 "username": user.username,
                 "status": True,
                 "message": "Login sukses!"
