@@ -1,5 +1,4 @@
 from django.db import models
-import datetime
 from authentication.models import Member
 from authentication.models import Subject
 
@@ -11,5 +10,5 @@ class BookRequest(models.Model):
     year = models.IntegerField()
     language = models.CharField(max_length=2)
     subjects = models.ManyToManyField(Subject)
-    date_requested = models.DateField(auto_now=True)
+    date_requested = models.DateField(auto_now_add=True)
 
