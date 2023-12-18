@@ -26,6 +26,12 @@ def get_review_json(request, id):
     review_book = Review.objects.filter(book=buku).values("pk" ,"reviewer__account__username", "book", "review")
     return HttpResponse(json.dumps(list(review_book)), content_type='application/json')
 
+# def get_all_review_(request):
+#     buku = Book.objects.all()
+#     review_book = Review.objects.filter(book=buku).values("pk" ,"reviewer__account__username", "book", "review")
+#     return HttpResponse(json.dumps(list(review_book)), content_type='application/json')
+
+
 @csrf_exempt
 def add_review_ajax2(request, id):
     if request.method == 'POST':
@@ -80,6 +86,34 @@ def searchBookbyTitle(request):
         'year': book.year,
     } for book in results]
     return JsonResponse(data, safe=False)
+
+def search_flutter(request,judul):
+    queryset = Book.objects.filter(title__icontains=judul)
+    res = BookSerializer(queryset, many=True)
+    return HttpResponse(json.dumps(res.data, indent=4), content_type='application/json')
+
+    # data = Book.objects.filter(title__icontains=judul)
+    # return HttpResponse(serializers.serialize('json',data),content_type="application/json")
+
+
+@csrf_exempt
+def add_review_flutter(request):
+    print(request.method)
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+        id = data["id"]
+        new_product = Review.objects.create(
+            reviewer = Member.objects.get(account= request.user), 
+            book = Book.objects.get(pk = id),
+            review = data["review"]
+        )
+
+        new_product.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
 
 
 
