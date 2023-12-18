@@ -86,8 +86,8 @@
             document.getElementById("interest").innerHTML = "<span style='font-weight: bold;'>🌙 Interest:</span> " + data.interest_subject;
             document.getElementById("bio-user").innerHTML = data.bio;
             document.getElementById("see-profile").addEventListener("click", () => {
-                const url =  "user/" + data.id 
-                location.href=url
+                const url =  "/user/" + data.id;
+                location.replace(url);
             })
             
         }

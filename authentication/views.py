@@ -62,22 +62,23 @@ def logout_user(request):
     logout(request)
     return redirect('home:show_main')
 
-
 @csrf_exempt
 def login_flutter(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
+    # print(username, password)
     if user is not None:
         if user.is_active:
             auth_login(request, user)
-            # Status login sukses.
+            # Status login sukses.            
             return JsonResponse({
                 "id": user.id,
                 "username": user.username,
                 "status": True,
-                "message": "Login sukses!"
+                "message": "Login sukses!",
                 # Tambahkan data lainnya jika ingin mengirim data ke Flutter.
+                "id": user.id,
             }, status=200)
         else:
             return JsonResponse({
@@ -93,7 +94,7 @@ def login_flutter(request):
     
 @csrf_exempt
 def logout_flutter(request):
-    username = request.user.username
+    username = Member.objects.get(account=request.user).account.username
 
     try:
         auth_logout(request)
@@ -112,7 +113,6 @@ def logout_flutter(request):
 def register_flutter(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        print(data)
         username = data['username']
         password1 = data['password1']
         password2 = data['password2']
@@ -125,21 +125,24 @@ def register_flutter(request):
             }, status=400)
         
         # Check if the username is already taken
-        if Member.objects.filter(account=username).exists():
+        if User.objects.filter(username=username).exists():
             return JsonResponse({
-                "status": False,
+                "status": 'username_exists',
                 "message": "Username already exists."
             }, status=400)
         
         # Create the new user
-        print(username)
-        member = Member.objects.create(account=data['username'], password=password1)
+        user = User(username=username)
+        user.set_password(password1)
+        user.save()
+        member = Member(account=user)
         member.save()
+        member.account.password = password1
         profile = Profile(member=member, age=0, bio="")
         profile.save()
         
         return JsonResponse({
-            "username": member.username,
+            "username": member.account.username,
             "status": 'success',
             "message": "User created successfully!"
         }, status=200)

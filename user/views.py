@@ -108,7 +108,7 @@ def edit_profile(request, id):
 
 @csrf_exempt
 def edit_profile_flutter(request, id):
-    user_profile = get_object_or_404(Profile, id=id)
+    user_profile = get_object_or_404(Profile, member__account__pk=id)
 
     if request.method == 'POST':
         data = json.loads(request.body)

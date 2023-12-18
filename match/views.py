@@ -170,10 +170,12 @@ def accept_flutter(request):
             "message": ""
         }, status=401)
 
+from django.contrib.auth.models import User
 # @login_required
 @csrf_exempt   # disini
 def get_match_flutter(request):
-    this_member = Member.objects.get(account=request.user)
+    # the user shouldn't be anonymous user 
+    this_member = Member.objects.get(account=request.user.id)
     other_member = None
 
     for user_i in Member.objects.order_by("?"):
@@ -235,6 +237,26 @@ def get_random_image_url(username):
     unique_identifier = hash(username)  # Gunakan ID pengguna atau sesuatu yang unik sebagai basis
     return 'https://picsum.photos/200/300?random=' + str(unique_identifier)
 
+
+def get_interest(other_member):
+    other_interest_book = BookRequest.objects.filter(member=other_member).first()
+
+    if not other_interest_book:
+        return ""
+
+    # Extract names directly from the ManyToManyField
+    interest_names = other_interest_book.subjects.values_list('name', flat=True)
+    
+    # Take only the first 3 subjects
+    interest_names = list(interest_names)[:3]
+
+    # Join the names into a single string separated by commas
+    interest_string = ', '.join(interest_names)
+
+    return interest_string
+
+def get_matching_flutter(request):
+    this_member = Member.objects.get(account = request.user)
 
 
 from user.views import user
