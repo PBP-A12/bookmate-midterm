@@ -1,9 +1,12 @@
+import logging
+import time
 from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpResponseNotFound, JsonResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpResponseNotFound, HttpResponseServerError, JsonResponse
 from django.urls import reverse
 from django.core import serializers
+import requests
 from book_request.serializers import BookRequestSerializer
 from django.core.serializers import serialize
 from match.models import Matching
@@ -14,6 +17,9 @@ from authentication.models import Member
 from django.db.models import Max
 import json 
 import random
+
+
+user_avatars = {}
 
 
 @login_required
@@ -68,6 +74,7 @@ def accept_recommendation(request, id):
         recommendation.save()
         if is_receiver(recommendation.user, recommendation.matched_member):
             recommendation.user.match_received.add(recommendation.matched_member)
+            recommendation.matched_member.match_received.add(recommendation.user.match_received)
             print("ini terima dari")
             print(recommendation.user.match_received.all())
         if not is_receiver(recommendation.user, recommendation.matched_member):
@@ -108,6 +115,128 @@ def match_interest(this_member, other_member):
         interest_subject = random.choice(list(intersection_result))
     return interest_subject
     
+
+def get_interest(other_member):
+    other_interest_book = BookRequest.objects.filter(member=other_member).first()
+
+    if not other_interest_book:
+        return ""
+    # Extract names directly from the ManyToManyField
+    interest_names = other_interest_book.subjects.values_list('name', flat=True)
+    # Take only the first 3 subjects
+    interest_names = list(interest_names)[:3]
+    # Join the names into a single string separated by commas
+    interest_string = ', '.join(interest_names)
+
+    return interest_string
+
+def get_matching_flutter(request):
+    this_member = Member.objects.get(account = request.user)
+
+def get_match_json(request):
+    data = serializers.serialize('json', Matching.objects.all())
+    return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def accept_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        name = data['name']
+
+        bio = data['bio']
+        matching_id = data['matching_id']
+        recommendation = Matching.objects.get(pk=matching_id)
+                                            #   matched_member=Member.objects(account=name))
+
+        if Member.objects.get(account = request.user) == recommendation.user:
+            recommendation.accepted = True
+            recommendation.save()
+
+            if is_receiver(recommendation.user, recommendation.matched_member):
+                recommendation.user.match_received.add(recommendation.matched_member)
+                recommendation.matched_member.match_received.add(recommendation.user.match_received)
+
+            if not is_receiver(recommendation.user, recommendation.matched_member):
+                recommendation.user.match_sent.add(recommendation.matched_member)
+
+            return JsonResponse({
+                "status" : "success",
+                'message': ''
+            }, status=200)
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": ""
+        }, status=401)
+
+from django.contrib.auth.models import User
+# @login_required
+@csrf_exempt   # disini
+def get_match_flutter(request):
+    # the user shouldn't be anonymous user 
+    this_member = Member.objects.get(account=request.user.id)
+    other_member = None
+
+    for user_i in Member.objects.order_by("?"):
+        is_matched = Matching.objects.filter(user=this_member, matched_member=user_i, accepted=True).exists()
+        if (user_i != this_member and not is_matched and not user_i.account.is_superuser):
+            other_member = user_i
+            break
+
+    if other_member is None:
+        return HttpResponseNotFound("No Member", status=404)
+
+    other_profile = Profile.objects.get(member=other_member)
+    if (other_profile.bio is None):
+        other_profile.bio = ""
+        other_profile.save()
+    new_match = Matching.objects.filter(user=this_member, matched_member=other_member, accepted=False)
+
+    if new_match:
+        new_match = new_match.first()
+    else:
+        new_match = Matching(user=this_member, matched_member=other_member)
+        new_match.save()
+
+    interest = get_interest_flutter(other_member)
+    result = {
+        "name": other_member.account.username,
+        "first_name": other_member.account.first_name,
+        "last_name": other_member.account.last_name,
+        "id": other_member.account.pk,
+        "matching_id": new_match.pk,
+        "interest_subject": interest,
+        "bio": other_profile.bio,
+        "picture" : get_picture_for_user(other_member.account.username)  ,
+    }
+    logging.info('get_match endpoint reached successfully')
+
+    return JsonResponse(result)
+
+def get_interest_flutter(other_member):
+    other_interest_book = BookRequest.objects.filter(member=other_member).first()
+
+    if not other_interest_book:
+        return []
+    # Extract names directly from the ManyToManyField
+    interest_names = other_interest_book.subjects.values_list('name', flat=True)
+    # Take only the first 3 subjects
+    interest_names = list(interest_names)[:3]
+    # Join the names into a single string separated by commas
+
+    return interest_names
+
+def get_picture_for_user(username):
+    if username not in user_avatars:
+        # Jika avatar belum ada untuk user tertentu, buat dan simpan
+        user_avatars[username] = get_random_image_url(username)
+    return user_avatars[username]
+
+def get_random_image_url(username):
+    unique_identifier = hash(username)  # Gunakan ID pengguna atau sesuatu yang unik sebagai basis
+    return 'https://picsum.photos/200/300?random=' + str(unique_identifier)
+
 
 def get_interest(other_member):
     other_interest_book = BookRequest.objects.filter(member=other_member).first()

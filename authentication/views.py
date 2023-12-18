@@ -1,10 +1,14 @@
 import json
+import json
 from django.contrib import messages 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import UserCreationForm
 
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -67,15 +71,17 @@ def login_flutter(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
+    print(username, password)
     if user is not None:
         if user.is_active:
             auth_login(request, user)
-            # Status login sukses.
+            # Status login sukses.            
             return JsonResponse({
                 "username": user.username,
                 "status": True,
-                "message": "Login sukses!"
+                "message": "Login sukses!",
                 # Tambahkan data lainnya jika ingin mengirim data ke Flutter.
+                "id": user.id,
             }, status=200)
         else:
             return JsonResponse({
