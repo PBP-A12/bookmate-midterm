@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-import datetime
 from django.http import HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from .forms import ProductForm
 from django.urls import reverse
@@ -126,6 +125,7 @@ def get_subjects_json(request):
     return HttpResponse(data, content_type='application/json')
 
 def get_requests_json_user_sort(request):
+    print(BookRequest.objects.filter(member=Member.objects.get(account=request.user)).values_list("subjects", flat=True))
     res = BookRequestSerializer(BookRequest.objects.filter(member=Member.objects.get(account=request.user)).order_by(request.GET.get('sortby')), many=True).data
     return HttpResponse(json.dumps(res, indent=4), content_type='application/json')
 
@@ -138,10 +138,14 @@ def requesting_flutter(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         title = data['title']
+        title = title[0]
         author = data['author']
+        author = author[0]
         year = data['year']
+        year = year[0]
         language = data['language']
-        subject = data['subject']
+        language = language[0]
+        subject = data['subjects']
         user = Member.objects.get(account=request.user)
         if title != None or author != None or year != None or language != None or subject != None:
             existing_book = BookRequest.objects.filter(title=title, author=author, year=year, language=language, subjects__name__in=subject).exists()
