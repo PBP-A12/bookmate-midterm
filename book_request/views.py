@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
-import datetime
-from django.http import HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from .forms import ProductForm
 from django.urls import reverse
 from book_request.models import BookRequest
@@ -124,3 +123,95 @@ def get_requests_json(request):
 def get_subjects_json(request):
     data = serializers.serialize('json', Subject.objects.all())
     return HttpResponse(data, content_type='application/json')
+
+def get_requests_json_user_sort(request):
+    print(BookRequest.objects.filter(member=Member.objects.get(account=request.user)).values_list("subjects", flat=True))
+    res = BookRequestSerializer(BookRequest.objects.filter(member=Member.objects.get(account=request.user)).order_by(request.GET.get('sortby')), many=True).data
+    return HttpResponse(json.dumps(res, indent=4), content_type='application/json')
+
+def get_requests_json_sort(request):
+    res = BookRequestSerializer(BookRequest.objects.all().order_by(request.GET.get('sortby')), many=True).data
+    return HttpResponse(json.dumps(res, indent=4), content_type='application/json')
+
+@csrf_exempt
+def requesting_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        title = data['title']
+        title = title[0]
+        author = data['author']
+        author = author[0]
+        year = data['year']
+        year = year[0]
+        language = data['language']
+        language = language[0]
+        subject = data['subjects']
+        user = Member.objects.get(account=request.user)
+        if title != None or author != None or year != None or language != None or subject != None:
+            existing_book = BookRequest.objects.filter(title=title, author=author, year=year, language=language, subjects__name__in=subject).exists()
+            if existing_book:
+                return JsonResponse({
+                    "status": 'failed',
+                    "message": "This book has already been requested."
+                }, status=400)
+            else:
+                book = BookRequest(member=user,title=title, author=author, year=year, language=language)
+                book.save()
+                for genre in subject:
+                    book.subjects.add(Subject.objects.get(name=genre))
+                return JsonResponse({
+                    "status": 'success',
+                    "message": "Request created successfully!"
+                }, status=200)
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": "Invalid request method."
+        }, status=400)
+    return JsonResponse({
+        "status": False,
+        "message": "Invalid request method."
+    }, status=400)
+
+@csrf_exempt
+def edit_request(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        id = data['id']
+        title = data['title']
+        author = data['author']
+        year = data['year']
+        language = data['language']
+        subjects = data['subjects']
+        book = BookRequest.objects.get(pk=id)
+        book.title = title
+        book.author = author
+        book.year = year
+        book.language = language
+        book.subjects.set(subjects)
+        book.save()
+        return JsonResponse({
+            "status": 'success',
+            "message": "Request edited successfully!"
+        }, status=200)
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": "Invalid request method."
+        }, status=400)
+
+@csrf_exempt
+def delete_request(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        book = BookRequest.objects.get(pk=id)
+        book.delete()
+        return JsonResponse({
+            "status": 'success',
+            "message": "Request deleted successfully!"
+        }, status=200)
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": "Invalid request method."
+        }, status=400)
