@@ -177,19 +177,28 @@ def requesting_flutter(request):
 def edit_request(request):
     if request.method == 'POST':
         data = json.loads(request.body)
+        # print(data)
         id = data['id']
+        id = id[0]
         title = data['title']
+        title = title[0]
         author = data['author']
+        author = author[0]
         year = data['year']
+        year = year[0]
         language = data['language']
+        language = language[0]
         subjects = data['subjects']
         book = BookRequest.objects.get(pk=id)
+        print(book.title)
         book.title = title
         book.author = author
         book.year = year
         book.language = language
-        book.subjects.set(subjects)
         book.save()
+        book.subjects.clear()
+        for genre in subjects:
+            book.subjects.add(Subject.objects.get(name=genre))
         return JsonResponse({
             "status": 'success',
             "message": "Request edited successfully!"
@@ -203,13 +212,20 @@ def edit_request(request):
 @csrf_exempt
 def delete_request(request):
     if request.method == 'POST':
-        id = request.POST.get('id')
-        book = BookRequest.objects.get(pk=id)
-        book.delete()
-        return JsonResponse({
-            "status": 'success',
-            "message": "Request deleted successfully!"
-        }, status=200)
+        data = json.loads(request.body)
+        id = data['id']
+        if (BookRequest.objects.filter(pk=id).exists() == False):
+            return JsonResponse({
+                "status": 'failed',
+                "message": "Request has been deleted or does not exist."
+            }, status=400)
+        else:
+            book = BookRequest.objects.get(pk=id)
+            book.delete()
+            return JsonResponse({
+                "status": 'success',
+                "message": "Request deleted successfully!"
+            }, status=200)
     else:
         return JsonResponse({
             "status": False,
