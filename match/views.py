@@ -142,9 +142,6 @@ def get_match_json(request):
 def accept_flutter(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        name = data['name']
-
-        bio = data['bio']
         matching_id = data['matching_id']
         recommendation = Matching.objects.get(pk=matching_id)
                                             #   matched_member=Member.objects(account=name))
@@ -155,7 +152,8 @@ def accept_flutter(request):
 
             if is_receiver(recommendation.user, recommendation.matched_member):
                 recommendation.user.match_received.add(recommendation.matched_member)
-                recommendation.matched_member.match_received.add(recommendation.user.match_received)
+                print(recommendation.matched_member.match_received.all())
+                recommendation.matched_member.match_received.add(recommendation.user)
 
             if not is_receiver(recommendation.user, recommendation.matched_member):
                 recommendation.user.match_sent.add(recommendation.matched_member)
