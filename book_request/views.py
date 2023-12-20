@@ -177,7 +177,7 @@ def requesting_flutter(request):
 def edit_request(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        print(data)
+        # print(data)
         id = data['id']
         id = id[0]
         title = data['title']
@@ -214,13 +214,18 @@ def delete_request(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         id = data['id']
-        
-        book = BookRequest.objects.get(pk=id)
-        book.delete()
-        return JsonResponse({
-            "status": 'success',
-            "message": "Request deleted successfully!"
-        }, status=200)
+        if (BookRequest.objects.filter(pk=id).exists() == False):
+            return JsonResponse({
+                "status": 'failed',
+                "message": "Request has been deleted or does not exist."
+            }, status=400)
+        else:
+            book = BookRequest.objects.get(pk=id)
+            book.delete()
+            return JsonResponse({
+                "status": 'success',
+                "message": "Request deleted successfully!"
+            }, status=200)
     else:
         return JsonResponse({
             "status": False,
